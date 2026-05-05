@@ -1,22 +1,30 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel
 
-class Product(SQLModel, table=True):
-    id: int= Field(default=None, primary_key=True)
+# Order Bestellung
+class OrderRequest(SQLModel):
+    artikel_id: int
+    menge: int
+    
+    class Config:
+        from_attributes = True
+
+
+# Order Response
+class Artikel(SQLModel):
+    id: int
     name: str
-    cost: float
-    size: str
-    colour: str
-    collection: str
+    beschreibung: str
+    preis: float
+    lagerbestand: int
 
-class User(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    username: str
-    email: str
-    password: str
+    class Config:
+        from_attributes = True
 
-class Order(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    user_id: int = Field(foreign_key="user.id")
-    product_id: int = Field(foreign_key="product.id")
-    quantity: int
+# Collection Response  
+class Kollektion(SQLModel):
+    id: int
+    name: str
+    beschreibung: str
 
+    class Config:
+        from_attributes = True
