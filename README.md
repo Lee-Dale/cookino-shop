@@ -45,4 +45,37 @@ Projektvorstellung: 22. Mai 2026
   - Kollektionen erstellt. Wuschel, Cookino, Moniki 
   - Produkterstellung Kleidung, Accessoires, Tasse
   - Webcam Hintergrund erstellung 
-  - Charakter bearbeitung 
+  - Charakter bearbeitung
+  - Dokumentation
+
+##### *5.Mai*  
+######  Bendix:  
+  - 6 weitere Artikel dem frontend zugefügt.
+  - Cookie-Mauszeiger integriert.
+  - Flexblock-Ausrichtung und Symmetrie-Platzhalter für cleane Optik aller Artikel und Buttons hinzugefügt.
+  - Funktion für fliegende Cookies im hintergrund hinzugefügt.
+######  Chris:  
+  - Konto_shop.py erstellt mit rollen verwaltung und warenkorb.py erstellt.
+  - feat: Implementiere Nutzerkonten und Warenkorb-Logik
+  - Registrierung, Login und Rollenverwaltung hinzugefügt
+  - Warenkorb-Funktionen mit Prüfung des Lagerbestands aufgebaut
+  - Warenkorb-Funktionen mit Prüfung des Lagerbestands aufgebaut
+  - Bugfix: Fremdschlüssel-Konflikt bei der artikel_id über zwei getrennte Datenbanken hinweg behoben
+######  Lee:   
+  - folgende Endpunkte hinzugefügt  
+      - GET/kollektionen  
+      - GET/artikel/{kollektion_name}  
+      - POST/order
+  -  Begonnen auth.py Datei for Registration und Login authorisation
+######  Ramona: 
+  - README Projektbeschreibung & "Cookie Crew" hinzugefügt + Bild eingefügt
+  - Charaktere erstellt
+  - Charakter Legenden geschrieben
+  - Dokumentation 
+
+
+
+
+    
+
+
