@@ -15,8 +15,8 @@
             --white: #FFFFFF;
         }
 
-        /* GLOBALE STILE: Mac-optimierte Standardschrift */
-        body { 
+        /* GLOBALE STILE & KEKS-MAUSZEIGER */
+        body, a, button { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -24,6 +24,9 @@
             padding: 0;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased; /* Macht die Schrift auf dem Mac weicher */
+            
+            /* Der Keks-Mauszeiger (funktioniert ohne Bilddatei!) */
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🍪</text></svg>") 12 12, auto !important;
         }
 
         /* HEADER & NAVIGATION */
@@ -87,13 +90,19 @@
             gap: 40px; 
         }
 
-        /* MINIMALISTISCHE PRODUKTKARTE */
+        /* MINIMALISTISCHE PRODUKTKARTE (Optimiert mit Flexbox) */
         .product-card { 
             background: var(--white); 
             border-radius: 20px; /* Sehr runde, weiche Ecken */
             padding: 25px; 
             text-align: center; 
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            
+            /* Aktiviert Flexbox vertikal, damit wir Inhalte nach unten schieben können */
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-sizing: border-box;
         }
 
         .product-card:hover {
@@ -112,11 +121,30 @@
             font-size: 1.1rem;
             font-weight: 600;
             margin: 0 0 10px 0; 
+            min-height: 50px; /* Garantiert, dass 1- und 2-zeilige Titel gleich viel Platz einnehmen */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .sizes {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 15px;
         }
 
         .price { 
             font-size: 1.1rem; 
             color: #888; 
+            /* Dieser Befehl schiebt Preis + Button automatisch an den untersten Kartenrand! */
+            margin-top: auto; 
             margin-bottom: 20px; 
         }
 
@@ -131,6 +159,8 @@
             border-radius: 30px; /* Pillenform */
             cursor: pointer;
             transition: background-color 0.3s ease;
+            width: 100%; /* Sorgt für einheitlich breite Buttons */
+            box-sizing: border-box;
         }
 
         .btn:hover {
@@ -168,23 +198,119 @@
         <div class="shop-grid">
             
             <div class="product-card">
-                <img class="product-image" src="mhoodie.png" alt="Kapuzenpullover">
-                <h3>Monster Hoodie</h3>
+                <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.42.32.png" alt="Kapuzenpullover">
+                <h3>Unisex Hoodie Dunkelblau: “Cookie Crusader” </h3>
+                <div class="description">
+                    <p>Ein stylisches Unisex-Hoodie in dunkelblau mit dem Motiv "Cookie Crusader".</p>
+                </div>
+                <div class="sizes">
+                    <p>Größen: XS - XXL</p>
+                </div>
                 <div class="price">€49.90</div>
                 <button class="btn">Hinzufügen</button>
             </div>
 
             <div class="product-card">
-                <img class="product-image" src="cookie hello.png" alt="Tasse">
-                <h3>Kaffee Tasse</h3>
-                <div class="price">€14.90</div>
+                <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.42.22.png" alt="Basecap">
+                <h3>Unisex Basecap Schwarz </h3>
+                <div class="description">
+                    <p>Ein stylisches Unisex-Basecap in schwarz.</p>
+                </div>
+                <div class="sizes">
+                    <p>Größen: Unisex</p>
+                </div>
+                <div class="price">€23.90</div>
                 <button class="btn">Hinzufügen</button>
             </div>
 
             <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-04 um 11.36.58.png" alt="Basecap">
-                <h3>Cookie Basecap</h3>
-                <div class="price">€24.90</div>
+                <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.34.52.png" alt="Tasse">
+                <h3>Tasse “Cookie Crew” Wuschel</h3>
+                <div class="description">
+                    <p>Eine süße Tasse mit dem Motiv "Cookie Crew" Wuschel. Perfekt für den Kakao zu deinen Cookies.</p>
+                </div>
+                <div class="sizes" style="opacity: 0; user-select: none;">
+                    <p>Größen: -</p>
+                </div>
+                <div class="price">€19.50</div>
+                <button class="btn">Hinzufügen</button>
+            </div>    
+        
+            <div class="product-card">
+                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.51.57.png" alt="Moniki-Hoodie">
+                <h3>Unisex Hoodie Moosgrün “Moniki Kicherkrähe”</h3>
+                <div class="description">
+                    <p>Ein stylisches Unisex-Hoodie in moosgrün mit dem Motiv "Moniki Kicherkrähe".</p>
+                </div>
+                <div class="sizes">
+                    <p>Größen: XS - XXL</p>
+                </div>
+                <div class="price">€49.90</div>
+                <button class="btn">Hinzufügen</button>
+            </div>  
+
+            <div class="product-card">
+                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.10.png" alt="Moniki_Basecap">
+                <h3>Unisex Basecap Moosgrün “Moniki Kicherkrähe”</h3>
+                <div class="description">
+                    <p>Ein stylisches Unisex-Basecap in moosgrün mit dem Motiv "Moniki Kicherkrähe".</p>
+                </div>
+                <div class="sizes">
+                    <p>Größen: Unisex</p>
+                </div>
+                <div class="price">€23.90</div>
+                <button class="btn">Hinzufügen</button>
+            </div>
+
+            <div class="product-card">
+                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.18.png" alt="Moniki-Tasse">
+                <h3>Tasse “Cookie Crew” “Moniki Kicherkrähe”</h3>
+                <div class="description">
+                    <p>Eine süße Tasse mit dem Motiv "Cookie Crew" Moniki Kicherkrähe. Perfekt für den Kakao zu deinen Cookies.</p>
+                </div>
+                <div class="sizes" style="opacity: 0; user-select: none;">
+                    <p>Größen: -</p>
+                </div>
+                <div class="price">€19.50</div>
+                <button class="btn">Hinzufügen</button>
+            </div>
+
+            <div class="product-card">
+                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.28.png" alt="Coockie-Hoodie">
+                <h3>Unisex Hoodie soft Beige “Cookino”</h3>
+                <div class="description">
+                    <p>Ein stylisches Unisex-Hoodie in soft beigem Ton mit dem Motiv "Cookino".</p>
+                </div>
+                <div class="sizes">
+                    <p>Größen: XS - XXL</p>
+                </div>
+                <div class="price">€49.90</div>
+                <button class="btn">Hinzufügen</button>
+            </div>
+
+            <div class="product-card">
+                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.40.png" alt="Cookie-Basecap">
+                <h3>Unisex Basecap Dunkelblau “Cookino”</h3>
+                <div class="description">
+                    <p>Ein stylisches Unisex-Basecap in dunkelblau mit dem Motiv "Cookino".</p>
+                </div>
+                <div class="sizes">
+                    <p>Größen: Unisex</p>
+                </div>
+                <div class="price">€23.90</div>
+                <button class="btn">Hinzufügen</button>
+            </div>
+
+            <div class="product-card">
+                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.50.png" alt="Cookie-Tasse">
+                <h3>Tasse “Cookie Crew” “Cookino”</h3>
+                <div class="description">
+                    <p>Eine süße Tasse mit dem Motiv "Cookie Crew" Cookino. Perfekt für den Kakao zu deinen Cookies.</p>
+                </div>
+                <div class="sizes" style="opacity: 0; user-select: none;">
+                    <p>Größen: -</p>
+                </div>
+                <div class="price">€19.50</div>
                 <button class="btn">Hinzufügen</button>
             </div>
 
@@ -192,7 +318,8 @@
     </main>
 
     <footer>
-        <p>© 2026 Cookie Crew</p>
+        <p>© 2026 Cookie Crew 🍪Ramona 🍪Chris 🍪Lee 🍪Bendix</p>
     </footer>
 
 </body>
+</html>
