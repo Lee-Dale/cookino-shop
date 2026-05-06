@@ -23,13 +23,13 @@ Projektvorstellung: 22. Mai 2026
 
 
 ### Dokumentation
-##### *4.Mai*
+#### *4.Mai*
 * Grober Ablaufplan
 * Features festlegen
 * Diagramm erstellung, was ist mit was verbunden
 * Besprechung wer macht was, ideen Sammlung
 
-##### *5.Mai*
+#### *5.Mai*
 ######  Bendix:
   - s3 Bucket neu verfasst.
   - erste Bilder in Website integriert
@@ -48,7 +48,7 @@ Projektvorstellung: 22. Mai 2026
   - Charakter bearbeitung
   - Dokumentation
 
-##### *5.Mai*  
+#### *6.Mai*  
 ######  Bendix:  
   - 6 weitere Artikel dem frontend zugefügt.
   - Cookie-Mauszeiger integriert.
