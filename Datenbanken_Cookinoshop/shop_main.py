@@ -4,7 +4,7 @@ from datetime import datetime
 DB_NAME = "cookinoshop.db"
 
 
-#Verbindung und Tabellen
+# ── Verbindung und Tabellen ──────────────────────────────────────────────────
 
 def get_connection():
     conn = sqlite3.connect(DB_NAME)
@@ -16,8 +16,8 @@ def create_tables():
     with get_connection() as conn:
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS kollektionen (
-                id        INTEGER PRIMARY KEY AUTOINCREMENT,
-                name      TEXT NOT NULL UNIQUE,
+                id           INTEGER PRIMARY KEY AUTOINCREMENT,
+                name         TEXT NOT NULL UNIQUE,
                 beschreibung TEXT
             );
  
@@ -40,16 +40,19 @@ def create_tables():
                 status       TEXT DEFAULT 'offen'
             );
 
+            -- HIER IST DIE WICHTIGE ÄNDERUNG FÜR DIE SYNCHRONISATION
             CREATE TABLE IF NOT EXISTS user (
-                id       INTEGER PRIMARY KEY AUTOINCREMENT,
-                email    TEXT NOT NULL UNIQUE,
-                username TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL
+                id      INTEGER PRIMARY KEY,  -- WICHTIG: KEIN AUTOINCREMENT!
+                vorname TEXT NOT NULL,
+                email   TEXT NOT NULL,
+                aktiv   INTEGER DEFAULT 1
             );
         """)
-    print(" Tabellen erstellt.")
+    print("OK: Shop-Tabellen erstellt.")
 
-    # Daten einfügen
+
+# ── Daten einfügen ───────────────────────────────────────────────────────────
+
 def insert_beispieldaten():
     kollektionen = [
         ("Wuschel Witznase",    "Flauschige Charaktere mit Witz"),
@@ -102,9 +105,11 @@ def insert_beispieldaten():
                        VALUES (?, ?, ?, ?, ?)""",
                     (koll_id, a_name, beschr, preis, lager)
                 )
-    print(" Daten eingefügt.")
+    print("OK: Daten eingefügt.")
 
-#Hilfsfunktionen
+
+# ── Hilfsfunktionen ──────────────────────────────────────────────────────────
+
 def alle_kollektionen():
     with get_connection() as conn:
         rows = conn.execute("SELECT * FROM kollektionen ORDER BY name").fetchall()
@@ -137,7 +142,7 @@ def bestellung_aufgeben(artikel_id: int, menge: int = 1):
             (menge, artikel_id)
         ) 
         b_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
-    print(f" Besttellung #{b_id} aufgegeben.") 
+    print(f" Bestellung #{b_id} aufgegeben.") 
     return b_id
 
 def shop_uebersicht():
@@ -160,7 +165,9 @@ def shop_uebersicht():
             f"{r['preis_ab']:>8.2f} {r['gesamt_lager']:>8}"
         )
 
-# Hauptprogramm     
+
+# ── Hauptprogramm ────────────────────────────────────────────────────────────
+
 if __name__ == "__main__":
     create_tables()
     insert_beispieldaten()
@@ -175,3 +182,4 @@ if __name__ == "__main__":
     print("\n=== Testbestellung ===")
     erster_artikel = artikel_nach_kollektion("Wuschel Witznase")[0]
     bestellung_aufgeben(erster_artikel["id"], menge=2)
+    

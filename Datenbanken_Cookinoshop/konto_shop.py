@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 
 DB_NAME = "konto_shop.db"
+SHOP_DB = "cookinoshop.db"  # Hinzugefügt für die Synchronisation
 
 
 # ── Verbindung ───────────────────────────────────────────────────────────────
@@ -63,11 +64,11 @@ def passwort_pruefen(passwort: str, gespeicherter_hash: str, salt: str):
     return gehashed == gespeicherter_hash
 
 
-# ── Registrierung ────────────────────────────────────────────────────────────
+# ── Registrierung (mit Synchronisation) ──────────────────────────────────────
 
 def registrieren(vorname: str, nachname: str, email: str, passwort: str, rollen_id: int = 4):
     """
-    Neuen Nutzer registrieren.
+    Neuen Nutzer registrieren und im Shop spiegeln.
     Standardrolle: 4 = Gast
     """
     # Passwort validieren
@@ -85,6 +86,18 @@ def registrieren(vorname: str, nachname: str, email: str, passwort: str, rollen_
                 (vorname, nachname, email.lower(), passwort_hash, salt, rollen_id)
             )
             nutzer_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+            
+        # --- NEU: Synchronisation in die cookinoshop.db ---
+        try:
+            with sqlite3.connect(SHOP_DB) as shop_conn:
+                shop_conn.execute(
+                    "INSERT INTO user (id, vorname, email, aktiv) VALUES (?, ?, ?, 1)",
+                    (nutzer_id, vorname, email.lower())
+                )
+        except sqlite3.Error as e:
+            print(f"HINWEIS Shop-User konnte nicht synchronisiert werden: {e}")
+        # --------------------------------------------------
+
         print(f"OK Konto erstellt für {vorname} {nachname} (ID: {nutzer_id})")
         return nutzer_id
     except sqlite3.IntegrityError:
@@ -120,11 +133,11 @@ def login(email: str, passwort: str):
     return dict(nutzer)
 
 
-# ── Konto ändern ─────────────────────────────────────────────────────────────
+# ── Konto ändern (mit Synchronisation) ───────────────────────────────────────
 
 def konto_aendern(nutzer_id: int, vorname: str = None, nachname: str = None,
                   email: str = None, neues_passwort: str = None):
-    """Nutzerdaten aktualisieren — nur übergebene Felder werden geändert"""
+    """Nutzerdaten aktualisieren — in beiden Datenbanken"""
     with get_connection() as conn:
         nutzer = conn.execute(
             "SELECT * FROM nutzer WHERE id = ? AND aktiv = 1", (nutzer_id,)
@@ -160,14 +173,28 @@ def konto_aendern(nutzer_id: int, vorname: str = None, nachname: str = None,
 
         conn.execute(f"UPDATE nutzer SET {set_clause} WHERE id = ?", werte)
 
+        # --- NEU: Änderungen auch im Shop speichern ---
+        if vorname or email:
+            try:
+                with sqlite3.connect(SHOP_DB) as shop_conn:
+                    if vorname and email:
+                        shop_conn.execute("UPDATE user SET vorname=?, email=? WHERE id=?", (vorname, email.lower(), nutzer_id))
+                    elif vorname:
+                        shop_conn.execute("UPDATE user SET vorname=? WHERE id=?", (vorname, nutzer_id))
+                    elif email:
+                        shop_conn.execute("UPDATE user SET email=? WHERE id=?", (email.lower(), nutzer_id))
+            except sqlite3.Error:
+                pass
+        # ----------------------------------------------
+
     print(f"OK Konto (ID: {nutzer_id}) erfolgreich aktualisiert.")
     return True
 
 
-# ── Konto löschen ────────────────────────────────────────────────────────────
+# ── Konto löschen (mit Synchronisation) ──────────────────────────────────────
 
 def konto_loeschen(nutzer_id: int, passwort: str):
-    """Konto deaktivieren (Soft Delete) — Daten bleiben erhalten"""
+    """Konto deaktivieren (Soft Delete) in BEIDEN Datenbanken"""
     with get_connection() as conn:
         nutzer = conn.execute(
             "SELECT * FROM nutzer WHERE id = ? AND aktiv = 1", (nutzer_id,)
@@ -185,6 +212,14 @@ def konto_loeschen(nutzer_id: int, passwort: str):
             "UPDATE nutzer SET aktiv = 0, geaendert_am = ? WHERE id = ?",
             (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nutzer_id)
         )
+
+        # --- NEU: Im Shop ebenfalls deaktivieren ---
+        try:
+            with sqlite3.connect(SHOP_DB) as shop_conn:
+                shop_conn.execute("UPDATE user SET aktiv = 0 WHERE id = ?", (nutzer_id,))
+        except sqlite3.Error:
+            pass
+        # -------------------------------------------
 
     print(f"OK Konto (ID: {nutzer_id}) wurde deaktiviert.")
     return True
