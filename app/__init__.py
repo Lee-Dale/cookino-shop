@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import shop
+from app.routes import auth
 
 
 app = FastAPI()
 app.include_router(shop.router)
+app.include_router(auth.router)
 
 origins = [
     "http://cookieno-shop.s3-website.eu-central-1.amazonaws.com",

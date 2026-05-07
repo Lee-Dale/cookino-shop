@@ -1,6 +1,6 @@
 
 from fastapi import APIRouter
-from shop_main import alle_kollektionen, artikel_nach_kollektion, bestellung_aufgeben
+from Datenbanken_Cookinoshop.shop_main import alle_kollektionen, artikel_nach_kollektion, bestellung_aufgeben
 from app.models import Artikel, Kollektion, OrderRequest
 
 

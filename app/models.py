@@ -1,4 +1,5 @@
-from sqlmodel import SQLModel
+from pydantic import EmailStr
+from sqlmodel import SQLModel, Field
 
 # Order Bestellung
 class OrderRequest(SQLModel):
@@ -28,3 +29,21 @@ class Kollektion(SQLModel):
 
     class Config:
         from_attributes = True
+
+class User(SQLModel, table=True):
+    id: int= Field(default=None, primary_key=True)
+    email: EmailStr
+    username: str
+    password: str = Field(min_length=8)
+
+    class Config:
+        from_attributes = True
+
+class UserRegister(SQLModel):
+    email: EmailStr
+    username: str
+    password: str = Field(min_length=8)
+
+class UserLogin(SQLModel): 
+    username: str
+    password: str = Field(min_length=8)
