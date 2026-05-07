@@ -39,6 +39,13 @@ def create_tables():
                 bestellt_am  TEXT DEFAULT (datetime('now')),
                 status       TEXT DEFAULT 'offen'
             );
+
+            CREATE TABLE IF NOT EXISTS user (
+                id       INTEGER PRIMARY KEY AUTOINCREMENT,
+                email    TEXT NOT NULL UNIQUE,
+                username TEXT NOT NULL UNIQUE,
+                password TEXT NOT NULL
+            );
         """)
     print(" Tabellen erstellt.")
 
@@ -168,4 +175,3 @@ if __name__ == "__main__":
     print("\n=== Testbestellung ===")
     erster_artikel = artikel_nach_kollektion("Wuschel Witznase")[0]
     bestellung_aufgeben(erster_artikel["id"], menge=2)
-    
