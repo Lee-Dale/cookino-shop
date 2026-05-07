@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime
 
 DB_NAME  = "konto_shop.db"
-SHOP_DB  = "cokinoshop.db"
+SHOP_DB  = "cookinoshop.db"
 
 
 # ── Verbindung ───────────────────────────────────────────────────────────────
