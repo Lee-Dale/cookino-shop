@@ -74,6 +74,32 @@ Projektvorstellung: 22. Mai 2026
   - Dokumentation 
 
 
+#### *7.Mai*   
+######  Bendix:  
+  - Recherche für die “Hochzeit” der Datenbanken, lee´s python codes und der index.html.  
+  - Kleines Monster integriert, welches die Artikel beim kauf festhalten möchte.  
+  - Impressum hinzugefügt.  
+######  Chris: 
+  - haupt_main erstellst verbindet alle Moodle zu einem interaktiven Shop system.  
+  - Verbindet konto_shop.py, shop_main.py und warenkorb.py  
+  - Menüführung fuer Gast, Kunde, Leiter und Admin  
+  - Session-Verwaltung (Login/Logout)  
+  - Verwaltungsbereich fuer Leiter & Admin    
+  - (Bestellstatus, Lagerbestand, Artikel deaktivieren)  
+  - Eingabe-Validierung gegen Abstürze  
+  - Starten mit: python haupt_main.py  
+  - README.md hinzugefügt  
+  - Projektdokumentation mit Dateistruktur, Rollensystem, 
+  - Rechtsübersicht und Datenbankstruktur für den Cookie Crew Shop.
+######  Lee:  
+  - Auth.py gebaut mit  
+  - User registration  
+  - user login   
+  - habe /order geändert, so nur logged-in, was der User bestellen kann.   
+######  Ramona:  
+  - Charakter Legenden gekürzt   
+  - Charakter bilder erstellt    
+  - Dokumentation   
 
 
     
