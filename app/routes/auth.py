@@ -1,11 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from passlib.context import CryptContext
 from jose import jwt
 from Datenbanken_Cookinoshop.shop_main import get_connection
 from app.models import User, UserRegister, UserLogin
+from fastapi.security import OAuth2PasswordBearer
+
+
 
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 SECRET_KEY = "your-secret-key"
 ALGORITHM = "HS256"
@@ -34,5 +38,15 @@ def user_login(user: UserLogin):
         if not pwd_context.verify(user.password, row["password"]):
             raise HTTPException(status_code=401, detail="Password Falsch")
         token = jwt.encode({"sub": user.username}, SECRET_KEY, algorithm=ALGORITHM)
-        
-    
+        return {"access_token": token, "token_type": "bearer"}
+
+# Token-Überprüfung für geschützte Routen  
+def verify_token(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Ungültiger Token")
+        return username
+    except:
+        raise HTTPException(status_code=401, detail="Ungültiger Token")

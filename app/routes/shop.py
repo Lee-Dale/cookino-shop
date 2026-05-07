@@ -2,6 +2,8 @@
 from fastapi import APIRouter
 from Datenbanken_Cookinoshop.shop_main import alle_kollektionen, artikel_nach_kollektion, bestellung_aufgeben
 from app.models import Artikel, Kollektion, OrderRequest
+from fastapi import Depends
+from app.routes.auth import verify_token
 
 
 router = APIRouter()
@@ -16,6 +18,6 @@ def get_kollektion_name(kollektion_name: str):
     return {"kollektion_name": [Artikel(**k) for k in artikel_nach_kollektion(kollektion_name)]}
 
 @router.post("/order")
-def place_order(order: OrderRequest):
+def place_order(order: OrderRequest, username: str = Depends(verify_token)):
     result = bestellung_aufgeben(order.artikel_id, order.menge)
-    return {"bestell_id": result}
+    return {"bestell_id": result, "ordered_by": username}
