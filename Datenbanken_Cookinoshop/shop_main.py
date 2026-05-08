@@ -45,6 +45,7 @@ def create_tables():
                 id      INTEGER PRIMARY KEY,  -- WICHTIG: KEIN AUTOINCREMENT!
                 vorname TEXT NOT NULL,
                 email   TEXT NOT NULL,
+                username TEXT NOT NULL,            
                 aktiv   INTEGER DEFAULT 1
             );
         """)
