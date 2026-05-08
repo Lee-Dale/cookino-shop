@@ -99,7 +99,38 @@ Projektvorstellung: 22. Mai 2026
 ######  Ramona:  
   - Charakter Legenden gekürzt   
   - Charakter bilder erstellt    
-  - Dokumentation   
+  - Dokumentation
+
+#### *8.Mai*  
+######  Bendix:  
+  - Slides für die Hauptpage integriert  
+  - Überschrift angepasst  
+  - cookino als fliegenden hintergrund eingebaut  
+  - Sprechblasen zu jedem Artikel hinzugefügt  
+  - kleines “Cookie”-Fenster eingefügt zum einmaligen akzeptieren. Nur lokal.
+######  Chris: 
+  - debugging code- Haupt main py   
+  - fest artikel shop eingefügt   
+  - fehlerbehebung shop.main.py    
+  - ergänzung shop.main.py ( username hinzugefügt)   
+  - vorplanung woche 2 begonnen
+######  Lee:  
+  - Debugging code - models.py und auth.py  
+  - Gemacht eine Testbestellung (und funktioniert!)  
+  - vorbereitung für nächte Woche  
+  - Hat ändern, löschen und logout endpoints und classes gebaut
+######  Ramona:  
+  - Legende Moniki Kicherkrähe   
+  - Bildere Moniki Kicherkrähe
+  - Dokumentation
+  - Woche 2 geplant
+  - Recap woche 1
+  - Was muss noch gemacht werden - Dokumentation 
+
+
+ 
+
+
 
 
     
