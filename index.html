@@ -5,321 +5,464 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookie Crew | Merch</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    
     <style>
-        /* FARBPALETTE: Minimalistisch & Süß */
+        /* FARBPALETTE */
         :root {
-            --bg-color: #FAFAFA;       /* Sehr weiches Off-White */
-            --text-color: #4A4A4A;     /* Sanftes Dunkelgrau statt hartem Schwarz */
-            --monster-blue: #A2DFF7;   /* Pastelliges Hellblau */
-            --cookie-brown: #C9A68F;   /* Sanftes Keks-Beige */
+            --bg-color: #FAFAFA;
+            --text-color: #4A4A4A;
+            --monster-blue: #A2DFF7;
+            --cookie-brown: #C9A68F;
             --white: #FFFFFF;
         }
 
-        /* GLOBALE STILE & KEKS-MAUSZEIGER */
+        /* GLOBALE STILE */
         body, a, button { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased; /* Macht die Schrift auf dem Mac weicher */
-            
-            /* Der Keks-Mauszeiger (funktioniert ohne Bilddatei!) */
+            margin: 0; padding: 0; line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🍪</text></svg>") 12 12, auto !important;
         }
 
-        /* HEADER & NAVIGATION */
-        header { 
-            background-color: var(--white);
-            padding: 1.5rem 2rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03); /* Sehr subtiler Schatten */
-        }
+        body { background-color: var(--bg-color); color: var(--text-color); position: relative; overflow-x: hidden; }
+
+        /* HINTERGRUND: FLIEGENDE BILDER */
+        #cookie-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         
-        .logo {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--text-color);
-            text-decoration: none;
-            letter-spacing: 1px;
+        @keyframes flyCookie {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
         }
 
-        nav a { 
-            color: var(--text-color); 
-            text-decoration: none; 
-            margin-left: 25px;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
+        .flying-cookie { 
+            position: absolute; 
+            opacity: 0; 
+            user-select: none; 
+            animation: flyCookie linear infinite; 
+            object-fit: contain;
         }
 
-        nav a:hover { 
-            color: var(--cookie-brown); 
+        /* HEADER */
+        header { 
+            background-color: var(--white); padding: 1.5rem 2rem; 
+            display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: relative; z-index: 100;
         }
+        .logo { font-weight: 700; font-size: 1.2rem; color: var(--text-color); text-decoration: none; letter-spacing: 1px; }
+        nav a { color: var(--text-color); text-decoration: none; margin-left: 25px; font-size: 0.95rem; transition: color 0.3s ease; }
+        nav a:hover { color: var(--cookie-brown); }
 
         /* MAIN LAYOUT */
-        main { 
-            max-width: 1000px; 
-            margin: 60px auto; 
-            padding: 0 20px; 
+        main { max-width: 1100px; margin: 60px auto; padding: 0 20px; position: relative; z-index: 10; }
+        
+        /* ANPASSUNG ÜBERSCHRIFT */
+        .hero-text { text-align: center; margin-bottom: 60px; }
+        
+        .hero-text h1 { 
+            font-size: 3.2rem; /* Größer */
+            font-weight: 600; 
+            margin-bottom: 15px; 
+            color: #333; 
+            display: inline-block;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.5); /* Hebt sich vom Hintergrund ab */
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .hero-text {
-            text-align: center;
-            margin-bottom: 60px;
+        /* Graffiti Buchstaben Style */
+        .graffiti-letter {
+            font-family: 'Luckiest Guy', cursive;
+            color: var(--cookie-brown);
+            display: inline-block;
+            font-size: 1.2em;
+            transform: rotate(-5deg) translateY(5px);
+            text-shadow: 
+                3px 3px 0px #fff, 
+                -1px -1px 0px #fff, 
+                1px -1px 0px #fff, 
+                -1px 1px 0px #fff,
+                4px 4px 10px rgba(0,0,0,0.2);
+            margin-right: -2px;
         }
 
-        .hero-text h1 {
-            font-size: 2.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #333;
+        .hero-text p { color: #555; font-size: 1.2rem; font-weight: 500; }
+
+        /* CAROUSEL STYLES */
+        .carousel-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
         }
 
-        .hero-text p {
-            color: #777;
-            font-size: 1.1rem;
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 20px;
+            padding-top: 60px;
+            margin-top: -60px;
         }
 
-        /* SHOP GRID */
-        .shop-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 40px; 
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+            width: 100%;
         }
 
-        /* MINIMALISTISCHE PRODUKTKARTE (Optimiert mit Flexbox) */
+        .slide {
+            flex: 0 0 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* NAVIGATION PFEILE */
+        .nav-btn {
+            background-color: var(--white);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 110;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+            cursor: pointer !important;
+        }
+
+        .nav-btn:hover { background-color: var(--monster-blue); transform: translateY(-50%) scale(1.1); }
+        .nav-btn:disabled { opacity: 0; pointer-events: none; }
+        .prev-btn { left: -60px; }
+        .next-btn { right: -60px; }
+
+        /* PRODUKTKARTE */
         .product-card { 
             background: var(--white); 
-            border-radius: 20px; /* Sehr runde, weiche Ecken */
+            border-radius: 20px; 
             padding: 25px; 
             text-align: center; 
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            
-            /* Aktiviert Flexbox vertikal, damit wir Inhalte nach unten schieben können */
             display: flex;
             flex-direction: column;
             height: 100%;
             box-sizing: border-box;
+            position: relative;
         }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(162, 223, 247, 0.3); /* Sanfter blauer Schatten beim Hover */
+        .hover-monster {
+            position: absolute;
+            top: -40px;
+            right: 20px;
+            width: 100px; 
+            height: auto;
+            opacity: 0;
+            z-index: 50;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
         }
 
-        .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: contain;
-            margin-bottom: 20px;
-        }
-
-        .product-card h3 { 
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0 0 10px 0; 
-            min-height: 50px; /* Garantiert, dass 1- und 2-zeilige Titel gleich viel Platz einnehmen */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .description {
-            font-size: 0.9rem;
+        /* DEZENTE SPRECHBLASE */
+        .speech-bubble {
+            position: absolute;
+            top: -25px;
+            right: 35px;
+            background: var(--white);
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 400;
             color: #666;
-            margin-bottom: 10px;
+            opacity: 0;
+            z-index: 60;
+            transform: scale(0.8);
+            transition: all 0.4s ease;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .sizes {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #555;
-            margin-bottom: 15px;
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 15px;
+            border-width: 5px 5px 0;
+            border-style: solid;
+            border-color: #ddd transparent;
         }
 
-        .price { 
-            font-size: 1.1rem; 
-            color: #888; 
-            /* Dieser Befehl schiebt Preis + Button automatisch an den untersten Kartenrand! */
-            margin-top: auto; 
-            margin-bottom: 20px; 
-        }
+        .product-card:hover .hover-monster { opacity: 1; top: -15px; transform: rotate(-5deg); }
+        .product-card:hover .speech-bubble { opacity: 1; transform: scale(1); top: -45px; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(162, 223, 247, 0.3); }
 
-        /* SÜSSER, CLEANER BUTTON */
+        .product-image { width: 100%; height: 220px; object-fit: contain; margin-bottom: 20px; }
+        .product-card h3 { font-size: 1.1rem; font-weight: 600; margin: 0 0 10px 0; min-height: 50px; display: flex; align-items: center; justify-content: center; }
+        .description { font-size: 0.9rem; color: #666; margin-bottom: 10px; }
+        .sizes { font-size: 0.9rem; font-weight: 500; color: #555; margin-bottom: 15px; }
+        .price { font-size: 1.1rem; color: #888; margin-top: auto; margin-bottom: 20px; }
+
         .btn {
             background-color: var(--monster-blue);
             color: #333;
             font-weight: 600;
-            font-size: 0.9rem;
             padding: 12px 25px;
             border: none;
-            border-radius: 30px; /* Pillenform */
+            border-radius: 30px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: 100%; /* Sorgt für einheitlich breite Buttons */
-            box-sizing: border-box;
+            transition: 0.3s ease;
+            width: 100%;
+        }
+        .btn:hover { background-color: var(--cookie-brown); color: var(--white); }
+
+        /* FOOTER & IMPRESSUM */
+        footer { 
+            text-align: center; 
+            padding: 60px 20px; 
+            margin-top: 80px; 
+            background-color: var(--white); 
+            position: relative; 
+            z-index: 100; 
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
 
-        .btn:hover {
-            background-color: var(--cookie-brown);
-            color: var(--white);
-        }
+        .footer-logo { font-weight: 600; color: #999; margin-bottom: 15px; display: block; }
 
-        /* FOOTER */
-        footer {
+        .impressum-text {
+            font-size: 0.75rem;
+            color: var(--text-color);
+            opacity: 0.6;
+            max-width: 700px;
+            margin: 20px auto 0;
+            line-height: 1.6;
             text-align: center;
-            padding: 40px;
-            margin-top: 80px;
-            color: #999;
-            font-size: 0.85rem;
+        }
+
+        .impressum-text a { color: inherit; text-decoration: underline; }
+
+        @media (max-width: 1000px) {
+            .slide { grid-template-columns: 1fr; }
+            .nav-btn { display: none; }
+            .carousel-container { overflow-x: auto; }
+            main { padding: 0 10px; }
         }
     </style>
 </head>
 <body>
 
+    <div id="cookie-background"></div>
+
     <header>
         <a href="#" class="logo">COOKIE CREW</a>
         <nav>
-            <a href="#">Kollektion</a>
-            <a href="#">Login</a>
-            <a href="#">Warenkorb</a>
+            <a href="#">Kollektion</a><a href="#">Login</a><a href="#">Warenkorb</a>
         </nav>
     </header>
 
     <main>
         <div class="hero-text">
-            <h1>Unsere Lieblingsteile</h1>
+            <h1><span class="graffiti-letter">U</span>nsere <span class="graffiti-letter">L</span>ieblingsteile</h1>
             <p>Süße Monster, weiche Stoffe.</p>
         </div>
         
-        <div class="shop-grid">
+        <div class="carousel-wrapper">
+            <button class="nav-btn prev-btn" id="prevBtn">❮</button>
             
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.42.32.png" alt="Kapuzenpullover">
-                <h3>Unisex Hoodie Dunkelblau: “Cookie Crusader” </h3>
-                <div class="description">
-                    <p>Ein stylisches Unisex-Hoodie in dunkelblau mit dem Motiv "Cookie Crusader".</p>
+            <div class="carousel-container">
+                <div class="carousel-track" id="track">
+                    
+                    <div class="slide">
+                        <div class="product-card">
+                            <div class="speech-bubble">Den trage ich am liebsten!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.42.32.png" alt="Hoodie">
+                            <h3>Unisex Hoodie Dunkelblau: “Cookie Crusader” </h3>
+                            <div class="description"><p>Ein stylisches Unisex-Hoodie mit dem Motiv "Cookie Crusader".</p></div>
+                            <div class="sizes"><p>Größen: XS - XXL</p></div>
+                            <div class="price">€49.90</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="speech-bubble">Beste Cap der Welt!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.42.22.png" alt="Basecap">
+                            <h3>Unisex Basecap Schwarz </h3>
+                            <div class="description"><p>Ein stylisches Unisex-Basecap in schwarz.</p></div>
+                            <div class="sizes"><p>Größen: Unisex</p></div>
+                            <div class="price">€23.90</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="speech-bubble">Das bin ich auf der Tasse!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.34.52.png" alt="Tasse">
+                            <h3>Tasse “Cookie Crew” Wuschel</h3>
+                            <div class="description"><p>Süße Tasse mit dem Motiv "Cookie Crew" Wuschel.</p></div>
+                            <div class="sizes" style="opacity: 0; user-select: none;"><p>Größen: -</p></div>
+                            <div class="price">€19.50</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+                    </div>
+
+                    <div class="slide">
+                        <div class="product-card">
+                            <div class="speech-bubble">Das ist der letzte und der gehört mir!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.51.57.png" alt="Moniki-Hoodie">
+                            <h3>Unisex Hoodie Moosgrün “Moniki Kicherkrähe”</h3>
+                            <div class="description"><p>Ein moosgrünes Unisex-Hoodie mit dem Motiv "Moniki Kicherkrähe".</p></div>
+                            <div class="sizes"><p>Größen: XS - XXL</p></div>
+                            <div class="price">€49.90</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="speech-bubble">Reserviert für einen Freund!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.10.png" alt="Moniki_Basecap">
+                            <h3>Unisex Basecap Moosgrün “Moniki Kicherkrähe”</h3>
+                            <div class="description"><p>Ein moosgrünes Unisex-Basecap mit dem Motiv "Moniki Kicherkrähe".</p></div>
+                            <div class="sizes"><p>Größen: Unisex</p></div>
+                            <div class="price">€23.90</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="speech-bubble">Mit dieser Tasse fliegt dir nur der Kakao weg!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.18.png" alt="Moniki-Tasse">
+                            <h3>Tasse “Cookie Crew” “Moniki Kicherkrähe”</h3>
+                            <div class="description"><p>Süße Tasse mit dem Motiv "Cookie Crew" Moniki Kicherkrähe.</p></div>
+                            <div class="sizes" style="opacity: 0; user-select: none;"><p>Größen: -</p></div>
+                            <div class="price">€19.50</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+                    </div>
+
+                    <div class="slide">
+                        <div class="product-card">
+                            <div class="speech-bubble">Flauschig? Nein! Super-Flauschig!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.28.png" alt="Coockie-Hoodie">
+                            <h3>Unisex Hoodie soft Beige “Cookino”</h3>
+                            <div class="description"><p>Ein beiges Unisex-Hoodie mit dem Motiv "Cookino".</p></div>
+                            <div class="sizes"><p>Größen: XS - XXL</p></div>
+                            <div class="price">€49.90</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="speech-bubble">Die Mütze schmeckt am besten!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.40.png" alt="Cookie-Basecap">
+                            <h3>Unisex Basecap Dunkelblau “Cookino”</h3>
+                            <div class="description"><p>Ein dunkelblaues Unisex-Basecap mit dem Motiv "Cookino".</p></div>
+                            <div class="sizes"><p>Größen: Unisex</p></div>
+                            <div class="price">€23.90</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="speech-bubble">Hmmmmm Cookinoooos!</div>
+                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
+                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.50.png" alt="Cookie-Tasse">
+                            <h3>Tasse “Cookie Crew” “Cookino”</h3>
+                            <div class="description"><p>Süße Tasse mit dem Motiv "Cookie Crew" Cookino.</p></div>
+                            <div class="sizes" style="opacity: 0; user-select: none;"><p>Größen: -</p></div>
+                            <div class="price">€19.50</div>
+                            <button class="btn">Hinzufügen</button>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="sizes">
-                    <p>Größen: XS - XXL</p>
-                </div>
-                <div class="price">€49.90</div>
-                <button class="btn">Hinzufügen</button>
             </div>
 
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.42.22.png" alt="Basecap">
-                <h3>Unisex Basecap Schwarz </h3>
-                <div class="description">
-                    <p>Ein stylisches Unisex-Basecap in schwarz.</p>
-                </div>
-                <div class="sizes">
-                    <p>Größen: Unisex</p>
-                </div>
-                <div class="price">€23.90</div>
-                <button class="btn">Hinzufügen</button>
-            </div>
-
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.34.52.png" alt="Tasse">
-                <h3>Tasse “Cookie Crew” Wuschel</h3>
-                <div class="description">
-                    <p>Eine süße Tasse mit dem Motiv "Cookie Crew" Wuschel. Perfekt für den Kakao zu deinen Cookies.</p>
-                </div>
-                <div class="sizes" style="opacity: 0; user-select: none;">
-                    <p>Größen: -</p>
-                </div>
-                <div class="price">€19.50</div>
-                <button class="btn">Hinzufügen</button>
-            </div>    
-        
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.51.57.png" alt="Moniki-Hoodie">
-                <h3>Unisex Hoodie Moosgrün “Moniki Kicherkrähe”</h3>
-                <div class="description">
-                    <p>Ein stylisches Unisex-Hoodie in moosgrün mit dem Motiv "Moniki Kicherkrähe".</p>
-                </div>
-                <div class="sizes">
-                    <p>Größen: XS - XXL</p>
-                </div>
-                <div class="price">€49.90</div>
-                <button class="btn">Hinzufügen</button>
-            </div>  
-
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.10.png" alt="Moniki_Basecap">
-                <h3>Unisex Basecap Moosgrün “Moniki Kicherkrähe”</h3>
-                <div class="description">
-                    <p>Ein stylisches Unisex-Basecap in moosgrün mit dem Motiv "Moniki Kicherkrähe".</p>
-                </div>
-                <div class="sizes">
-                    <p>Größen: Unisex</p>
-                </div>
-                <div class="price">€23.90</div>
-                <button class="btn">Hinzufügen</button>
-            </div>
-
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.18.png" alt="Moniki-Tasse">
-                <h3>Tasse “Cookie Crew” “Moniki Kicherkrähe”</h3>
-                <div class="description">
-                    <p>Eine süße Tasse mit dem Motiv "Cookie Crew" Moniki Kicherkrähe. Perfekt für den Kakao zu deinen Cookies.</p>
-                </div>
-                <div class="sizes" style="opacity: 0; user-select: none;">
-                    <p>Größen: -</p>
-                </div>
-                <div class="price">€19.50</div>
-                <button class="btn">Hinzufügen</button>
-            </div>
-
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.28.png" alt="Coockie-Hoodie">
-                <h3>Unisex Hoodie soft Beige “Cookino”</h3>
-                <div class="description">
-                    <p>Ein stylisches Unisex-Hoodie in soft beigem Ton mit dem Motiv "Cookino".</p>
-                </div>
-                <div class="sizes">
-                    <p>Größen: XS - XXL</p>
-                </div>
-                <div class="price">€49.90</div>
-                <button class="btn">Hinzufügen</button>
-            </div>
-
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.40.png" alt="Cookie-Basecap">
-                <h3>Unisex Basecap Dunkelblau “Cookino”</h3>
-                <div class="description">
-                    <p>Ein stylisches Unisex-Basecap in dunkelblau mit dem Motiv "Cookino".</p>
-                </div>
-                <div class="sizes">
-                    <p>Größen: Unisex</p>
-                </div>
-                <div class="price">€23.90</div>
-                <button class="btn">Hinzufügen</button>
-            </div>
-
-            <div class="product-card">
-                <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.50.png" alt="Cookie-Tasse">
-                <h3>Tasse “Cookie Crew” “Cookino”</h3>
-                <div class="description">
-                    <p>Eine süße Tasse mit dem Motiv "Cookie Crew" Cookino. Perfekt für den Kakao zu deinen Cookies.</p>
-                </div>
-                <div class="sizes" style="opacity: 0; user-select: none;">
-                    <p>Größen: -</p>
-                </div>
-                <div class="price">€19.50</div>
-                <button class="btn">Hinzufügen</button>
-            </div>
-
+            <button class="nav-btn next-btn" id="nextBtn">❯</button>
         </div>
     </main>
 
     <footer>
-        <p>© 2026 Cookie Crew 🍪Ramona 🍪Chris 🍪Lee 🍪Bendix</p>
+        <span class="footer-logo">© 2026 Cookie Crew 🍪 Ramona 🍪 Chris 🍪 Lee 🍪 Bendix</span>
+        
+        <div class="impressum-text">
+            <strong>Impressum</strong><br>
+            Angaben gemäß § 5 TMG: Bendix Steffen, Zelterstraße 117, 16341 Panketal<br>
+            Kontakt: E-Mail: bendix.steffen@student.syntax-institut.de<br>
+            Vertreten durch: Ramona Eichert, Chris Jahn, Lee Stephen Dale | Redaktionell verantwortlich: Ramona Eichert<br><br>
+            <small>
+                EU-Streitschlichtung: Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
+                <a href="https://ec.europa.eu/consumers/odr/" target="_blank">https://ec.europa.eu/consumers/odr/</a>.<br>
+                Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+            </small>
+        </div>
     </footer>
+
+    <script>
+        const track = document.getElementById('track');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let index = 0;
+
+        function updateSlider() {
+            track.style.transform = `translateX(-${index * 100}%)`;
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === 2;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (index < 2) { index++; updateSlider(); }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (index > 0) { index--; updateSlider(); }
+        });
+
+        updateSlider();
+
+        // FLIEGENDE BILDER LOGIK
+        function createFlyingCookies() {
+            const container = document.getElementById('cookie-background');
+            const cookieCount = 30; 
+
+            const imageSources = [
+                'bild1.png', 
+                'bild2.png', 
+                'bild3.png'
+            ];
+
+            for (let i = 0; i < cookieCount; i++) {
+                const cookie = document.createElement('img');
+                cookie.className = 'flying-cookie';
+                const randomImg = imageSources[Math.floor(Math.random() * imageSources.length)];
+                cookie.src = randomImg;
+                cookie.style.left = Math.random() * 100 + 'vw';
+                const duration = Math.random() * 10 + 12; 
+                cookie.style.animationDuration = duration + 's';
+                cookie.style.animationDelay = Math.random() * 15 + 's';
+                const size = Math.random() * 30 + 30;
+                cookie.style.width = size + 'px';
+                cookie.style.height = 'auto';
+                container.appendChild(cookie);
+            }
+        }
+        window.addEventListener('load', createFlyingCookies);
+    </script>
 
 </body>
 </html>
