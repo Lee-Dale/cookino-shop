@@ -63,25 +63,20 @@ def insert_beispieldaten():
  
     artikel_pro_kollektion = {
         "Wuschel Witznase": [
-            ("Wuschel Groß",        "Große Plüschfigur",          12.99, 50),
-            ("Wuschel Klein",       "Mini-Version für unterwegs",  6.99, 100),
-            ("Wuschel Clip",        "Anhänger mit roter Nase",     3.49,  80),
-            ("Wuschel Duo-Set",     "Zwei Figuren im Set",        19.99,  30),
-            ("Wuschel Tasse",       "Keramiktasse mit Motiv",      9.99,  60),
+            ("Cookie Crusader",     "Unisex Hoodie Dunkelblau",     49.90, 50),
+            ("Wuschel Cap",         "Unisex Basecap Schwarz",       23.90, 100),
+            ("Wuschel Tasse",       "Keramiktasse mit Motiv",       19.50, 60),
         ],
         "Cookino": [
-            ("Cookino Figur",       "Keksförmige Hauptfigur",      5.99,  70),
-            ("Cookino Backset",     "Backzubehör mit Motiv",      14.99,  40),
-            ("Cookino Mini-Set",    "3 Mini-Figuren",              9.49,  55),
-            ("Cookino Schokoform",  "Schokoladenform Cookino",    11.99,  35),
-            ("Cookino Sticker",     "Aufkleber-Set 10-tlg.",       4.99,  90),
+            ("Cookino Hoodie",      "Unisex Hoodie soft Beige",     49.90,  50),
+            ("Cookino Cap",         "Unisex Basecap Dunkelblau ",   23.90,  40),
+            ("Cookino Tasse",       "Tasse Cookie Crew Cookino",    19.50,  55),
+            
         ],
         "Moniki Kicherkrähe": [
-            ("Kicherkrähe Figur",   "Krähe mit Lachsound",        13.99,  45),
-            ("Krähen-Anhänger",     "Kleine Krähe am Band",        4.99,  90),
-            ("Kicherkrähe Set",     "Figur + 2 Miniaturen",       22.99,  20),
-            ("Moniki Postkarte",    "Postkarte mit Krähen-Witz",   1.99, 200),
-            ("Krähen-Tasse",        "Tasse mit Kicherkrähe",       9.99,  50),
+            ("Kicherkrähe Hoodie",  "Unisex Hoodie Moosgrün",       49.90,  50),
+            ("Krähen Cap",          "Unisex Basecap Moosgrün",      23.90,  90),
+            ("Krähen-Tasse",        "Tasse mit Kicherkrähe",        19.50,  50),
         ],
     }
  
