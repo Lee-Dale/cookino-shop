@@ -40,10 +40,11 @@ class User(SQLModel, table=True):
         from_attributes = True
 
 class UserRegister(SQLModel):
+    vorname: str
+    nachname: str
     email: EmailStr
-    username: str
     password: str = Field(min_length=8)
 
 class UserLogin(SQLModel): 
-    username: str
+    email: EmailStr
     password: str = Field(min_length=8)

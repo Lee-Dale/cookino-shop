@@ -4,9 +4,11 @@ from app.routes import shop
 from app.routes import auth
 
 
-app = FastAPI()
+
+app = FastAPI(swagger_ui_parameters={"persistAuthorization": True})
 app.include_router(shop.router)
 app.include_router(auth.router)
+
 
 origins = [
     "http://cookieno-shop.s3-website.eu-central-1.amazonaws.com",

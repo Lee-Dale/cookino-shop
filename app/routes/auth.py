@@ -1,14 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends
-from passlib.context import CryptContext
+from app.models import UserRegister, UserLogin
 from jose import jwt
-from Datenbanken_Cookinoshop.shop_main import get_connection
-from app.models import User, UserRegister, UserLogin
 from fastapi.security import OAuth2PasswordBearer
-
+from Datenbanken_Cookinoshop.konto_shop import registrieren, login as konto_login
 
 
 router = APIRouter()
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 SECRET_KEY = "your-secret-key"
@@ -16,29 +13,18 @@ ALGORITHM = "HS256"
 
 @router.post("/register")
 def user_registration(user: UserRegister):
-    hashed_password = pwd_context.hash(user.password)
-    new_user = User(
-        email=user.email,
-        username=user.username,
-        password=hashed_password
-    )
-    with get_connection() as conn:
-        conn.execute(
-            "INSERT INTO user (email, username, password) VALUES (?, ?, ?)",
-            (new_user.email, new_user.username, new_user.password)
-        )
-    return {"message": "User Registration Bestätigt!" }
+    result = registrieren(user.vorname, user.nachname, user.email, user.password)
+    if result is None:
+        raise HTTPException(status_code=400, detail="Registrierung fehlgeschlagen")
+    return {"message": "Registrierung erfolgreich!"}
 
 @router.post("/login")
 def user_login(user: UserLogin):
-    with get_connection() as conn:
-        row = conn.execute("SELECT * FROM user WHERE username = ?", (user.username,)).fetchone()
-        if not row:
-            raise HTTPException(status_code=404, detail="User nicht gefuden. Bitte Registrien!")
-        if not pwd_context.verify(user.password, row["password"]):
-            raise HTTPException(status_code=401, detail="Password Falsch")
-        token = jwt.encode({"sub": user.username}, SECRET_KEY, algorithm=ALGORITHM)
-        return {"access_token": token, "token_type": "bearer"}
+    nutzer = konto_login(user.email, user.password)
+    if nutzer is None:
+        raise HTTPException(status_code=401, detail="Login fehlgeschlagen")
+    token = jwt.encode({"sub": nutzer["email"]}, SECRET_KEY, algorithm=ALGORITHM)
+    return {"access_token": token, "token_type": "bearer"}
 
 # Token-Überprüfung für geschützte Routen  
 def verify_token(token: str = Depends(oauth2_scheme)):
