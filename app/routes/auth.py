@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.models import UserRegister, UserLogin
 from jose import jwt
+from app.models import UserRegister, UserLogin, KontoAendern, KontoLoeschen
 from fastapi.security import OAuth2PasswordBearer
-from Datenbanken_Cookinoshop.konto_shop import registrieren, login as konto_login
+from Datenbanken_Cookinoshop.konto_shop import registrieren, login as konto_login, konto_aendern, konto_loeschen, logout, get_connection as konto_connection
 
 
 router = APIRouter()
@@ -10,6 +10,20 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 SECRET_KEY = "your-secret-key"
 ALGORITHM = "HS256"
+
+# Token-Überprüfung für geschützte Routen  
+
+def verify_token(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Ungültiger Token")
+        return username
+    except:
+        raise HTTPException(status_code=401, detail="Ungültiger Token")
+
+
 
 @router.post("/register")
 def user_registration(user: UserRegister):
@@ -26,13 +40,34 @@ def user_login(user: UserLogin):
     token = jwt.encode({"sub": nutzer["email"]}, SECRET_KEY, algorithm=ALGORITHM)
     return {"access_token": token, "token_type": "bearer"}
 
-# Token-Überprüfung für geschützte Routen  
-def verify_token(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username = payload.get("sub")
-        if username is None:
-            raise HTTPException(status_code=401, detail="Ungültiger Token")
-        return username
-    except:
-        raise HTTPException(status_code=401, detail="Ungültiger Token")
+@router.post("/logout")
+def user_logout(email: str = Depends(verify_token)):
+    row = konto_connection().execute("SELECT id FROM nutzer WHERE email = ?", (email,)).fetchone()
+    logout(nutzer_id=row["id"])
+    return {"message": "Logout erfolgreich!"}
+
+@router.put("/konto/aendern")
+def update_konto(konto_daten: KontoAendern, email: str = Depends(verify_token)):
+    row = konto_connection().execute("SELECT id FROM nutzer WHERE email = ?", (email,)).fetchone()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Nutzer nicht gefunden")
+    konto_aendern(
+        row["id"],
+        vorname=konto_daten.vorname,
+        nachname=konto_daten.nachname,
+        email=konto_daten.email,
+        neues_passwort=konto_daten.neues_password
+    )
+    return {"message": "Kontodaten erfolgreich geändert!"}
+
+@router.delete("/konto/loeschen")
+def delete_konto(konto_daten: KontoLoeschen, email: str = Depends(verify_token)):
+    row = konto_connection().execute("SELECT id FROM nutzer WHERE email = ?", (email,)).fetchone()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Nutzer nicht gefunden")
+    konto_loeschen(row["id"], konto_daten.password)
+    return {"message": "Konto erfolgreich gelöscht!"}
+
+
+
+

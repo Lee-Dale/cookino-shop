@@ -1,5 +1,6 @@
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Field
+from typing import Optional
 
 # Order Bestellung
 class OrderRequest(SQLModel):
@@ -47,4 +48,13 @@ class UserRegister(SQLModel):
 
 class UserLogin(SQLModel): 
     email: EmailStr
+    password: str = Field(min_length=8)
+
+class KontoAendern(SQLModel):
+    vorname: Optional[str] = None
+    nachname: Optional[str] = None
+    email: Optional[EmailStr] = None
+neues_password: Optional[str] = Field(default=None, min_length=8)
+
+class KontoLoeschen(SQLModel):
     password: str = Field(min_length=8)
