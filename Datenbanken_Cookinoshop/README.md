@@ -66,13 +66,13 @@ Die Datenbanken werden beim ersten Start automatisch erstellt und mit Beispielda
 
 ## Datenbankstruktur
 
-### rollen
+### Rollen
 | Feld | Typ     | Beschreibung            |
 |------|---------|-------------------------|
 | id   | INTEGER | Primärschlüssel         |
 | name | TEXT    | admin/leiter/kunde/gast |
 
-### nutzer
+### Nutzer
 | Feld        | Typ     | Beschreibung                |
 |-------------|---------|-----------------------------|
 | id          | INTEGER | Primärschlüssel             |
@@ -84,14 +84,14 @@ Die Datenbanken werden beim ersten Start automatisch erstellt und mit Beispielda
 | rollen_id   | INTEGER | Fremdschlüssel → rollen     |
 | aktiv       | INTEGER | 1 = aktiv, 0 = deaktiviert  |
 
-### kollektionen
+### Kollektionen
 | Feld         | Typ     | Beschreibung    |
 |--------------|---------|-----------------|
 | id           | INTEGER | Primärschlüssel |
 | name         | TEXT    | eindeutig       |
 | beschreibung | TEXT    |                 |
 
-### artikel
+### Artikel
 | Feld          | Typ     | Beschreibung            |
 |---------------|---------|-------------------------|
 | id            | INTEGER | Primärschlüssel         |
@@ -102,7 +102,7 @@ Die Datenbanken werden beim ersten Start automatisch erstellt und mit Beispielda
 | bild_url      | TEXT    | Link zum S3-Bild        |
 | aktiv         | INTEGER | 1 = aktiv, 0 = gelöscht |
 
-### warenkorb
+### Warenkorb
 | Feld       | Typ     | Beschreibung              |
 |------------|---------|---------------------------|
 | id         | INTEGER | Primärschlüssel           |
@@ -110,7 +110,7 @@ Die Datenbanken werden beim ersten Start automatisch erstellt und mit Beispielda
 | artikel_id | INTEGER | Fremdschlüssel → artikel  |
 | menge      | INTEGER |                           |
 
-### bestellungen
+### Bestellungen
 | Feld         | Typ     | Beschreibung                            |
 |--------------|---------|-----------------------------------------|
 | id           | INTEGER | Primärschlüssel                         |
