@@ -3,12 +3,15 @@ from jose import jwt
 from app.models import UserRegister, UserLogin, KontoAendern, KontoLoeschen
 from fastapi.security import OAuth2PasswordBearer
 from Datenbanken_Cookinoshop.konto_shop import registrieren, login as konto_login, konto_aendern, konto_loeschen, logout, get_connection as konto_connection
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-SECRET_KEY = "your-secret-key"
 ALGORITHM = "HS256"
 
 # Token-Überprüfung für geschützte Routen  
