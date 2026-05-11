@@ -125,7 +125,35 @@ Projektvorstellung: 22. Mai 2026
   - Dokumentation
   - Woche 2 geplant
   - Recap woche 1
-  - Was muss noch gemacht werden - Dokumentation 
+  - Was muss noch gemacht werden - Dokumentation
+      
+#### *11.Mai* 
+
+######  Bendix: 
+  - Ich durfte heute der Bräutigam sein und hab den ganzen Tag sehnlichst auf   
+     meinen Kuss gewartet. Mit Erfolg! Danke Chris <3
+  - kleinere anpassungen des frontends  
+######  Chris: 
+  Fix: Supabase Intregration vollständig repariert   
+  - Korrekter API-Key  
+  - Warenkorb lädt jetzt Name und Preis per Datenbankabfrage   
+  - Fehler beim doppelten Hinzufügen behoben  
+  - Datenbankrechte und -Sicherheitsregeln korrigiert  
+  - Email-Login aktiviert  
+  - Slider-Anzahl dynamisch   
+  - Enter-Taste im Login, automatische Entsperrung nach Fehlversuchen   
+######  Lee:  
+  Die Warenkorb-Endpunkte wurden vollständig implementiert und mit JWT-Authentifizierung geschützt.
+  Der SECRET_KEY wurde aus dem Code in eine .env-Datei ausgelagert, um die Sicherheit zu erhöhen.
+
+
+
+######  Ramona:  
+  - Legende Moniki, Cookinos  
+  - Bild erstellung Cookinos → Legenden Titelbild   
+  - Bild erstellung Moniki → Legenden Titelbild  
+  - 403 Statuscode grafik erstellt  
+  - 201 Statuscode grafik erstellt  
 
 
  
