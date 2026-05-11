@@ -58,3 +58,16 @@ neues_password: Optional[str] = Field(default=None, min_length=8)
 
 class KontoLoeschen(SQLModel):
     password: str = Field(min_length=8)
+
+# Warenkorb Schemas 
+
+class ArtikelHinzufuegen(SQLModel):
+    artikel_id: int
+    menge: int
+
+class ArtikelAendern(SQLModel):
+    artikel_id: int
+    neue_menge: int
+
+
+
