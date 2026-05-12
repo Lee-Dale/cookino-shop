@@ -132,7 +132,19 @@ Projektvorstellung: 22. Mai 2026
 ######  Bendix: 
   - Ich durfte heute der Bräutigam sein und hab den ganzen Tag sehnlichst auf   
      meinen Kuss gewartet. Mit Erfolg! Danke Chris <3
-  - kleinere anpassungen des frontends  
+  - kleinere anpassungen des frontends
+  - Die Domain cookino-shop.de wurde über AWS Route 53 registriert.  
+  - Erstellung einer Hosted Zone zur Verwaltung der DNS-Einträge.  
+  - Beantragung eines kostenlosen SSL-Zertifikats in der Region us-east-1 (Voraussetzung für CloudFront)  
+  - Erfolgreiche Validierung der Inhaberschaft via DNS-Eintrag in Route 53.  
+  - Erstellung einer CloudFront-Distribution zur weltweiten Auslieferung und HTTPS-Erzwingung.  
+  - Einrichtung eines sicheren Zugriffs, bei dem der S3-Bucket privat bleibt und nur CloudFront darauf zugreifen darf.  
+  - Konfiguration des Unterordners als Pfad und Festlegung der Neu.html als Standard-Startseite.  
+  - Implementierung einer restriktiven JSON-Policy, die ausschließlich Anfragen der CloudFront-Distribution erlaubt.  
+  - Deaktivierung des öffentlichen S3-Zugriffs (Security Best Practice).  
+  - In Route 53 wurde ein Alias-Eintrag erstellt, der die Domain cookino-shop.de direkt mit der CloudFront-URL verknüpft.  
+
+ 
 ######  Chris: 
   Fix: Supabase Intregration vollständig repariert   
   - Korrekter API-Key  
