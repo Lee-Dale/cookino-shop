@@ -3,6 +3,10 @@ import hashlib
 import os
 from datetime import datetime
 
+# ── NEU: Login Versuche Tracker ───────────────────────────────────────────────
+_login_versuche = {}   # {email: anzahl_versuche}
+MAX_LOGIN_VERSUCHE = 3
+
 DB_NAME = "konto_shop.db"
 SHOP_DB = "cookinoshop.db"  # Hinzugefügt für die Synchronisation
 
@@ -109,9 +113,16 @@ def registrieren(vorname: str, nachname: str, email: str, passwort: str, rollen_
 
 def login(email: str, passwort: str):
     """
-    Nutzer einloggen.
+    Nutzer einloggen — max. 3 Versuche dann gesperrt.
     Gibt Nutzerdaten zurück wenn erfolgreich, sonst None.
     """
+    # NEU: Login Versuche prüfen
+    versuche = _login_versuche.get(email.lower(), 0)
+    if versuche >= MAX_LOGIN_VERSUCHE:
+        print(f"Cookinofehler Konto gesperrt nach {MAX_LOGIN_VERSUCHE} Fehlversuchen bitte warten oder kontaktiere einen Cookino Master.")
+        print("Cookinobruch wende dich an einen Cookino Master.")
+        return None
+
     with get_connection() as conn:
         nutzer = conn.execute(
             """SELECT n.*, r.name AS rolle
@@ -126,10 +137,18 @@ def login(email: str, passwort: str):
         return None
 
     if not passwort_pruefen(passwort, nutzer["passwort"], nutzer["salt"]):
-        print("FEHLER Falsches Passwort.")
+        # NEU: Fehlversuch zählen
+        _login_versuche[email.lower()] = versuche + 1
+        verbleibend = MAX_LOGIN_VERSUCHE - _login_versuche[email.lower()]
+        if verbleibend <= 0:
+            print("Cookino traurig Falsches Passwort. Konto ist jetzt gesperrt!")
+        else:
+            print(f"Cookino traurig Falsches Passwort. Noch {verbleibend} Versuch(e).")
         return None
 
-    print(f"OK Willkommen, {nutzer['vorname']}! (Rolle: {nutzer['rolle']})")
+    # NEU: Erfolgreich eingeloggt → Versuche zurücksetzen
+    _login_versuche[email.lower()] = 0
+    print(f"Happy Hacking, {nutzer['vorname']}! (Rolle: {nutzer['rolle']})")
     return dict(nutzer)
 
 
