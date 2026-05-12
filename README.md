@@ -143,8 +143,6 @@ Projektvorstellung: 22. Mai 2026
   - Implementierung einer restriktiven JSON-Policy, die ausschließlich Anfragen der CloudFront-Distribution erlaubt.  
   - Deaktivierung des öffentlichen S3-Zugriffs (Security Best Practice).  
   - In Route 53 wurde ein Alias-Eintrag erstellt, der die Domain cookino-shop.de direkt mit der CloudFront-URL verknüpft.  
-
- 
 ######  Chris: 
   Fix: Supabase Intregration vollständig repariert   
   - Korrekter API-Key  
@@ -157,15 +155,29 @@ Projektvorstellung: 22. Mai 2026
 ######  Lee:  
   Die Warenkorb-Endpunkte wurden vollständig implementiert und mit JWT-Authentifizierung geschützt.
   Der SECRET_KEY wurde aus dem Code in eine .env-Datei ausgelagert, um die Sicherheit zu erhöhen.
-
-
-
 ######  Ramona:  
   - Legende Moniki, Cookinos  
   - Bild erstellung Cookinos → Legenden Titelbild   
   - Bild erstellung Moniki → Legenden Titelbild  
   - 403 Statuscode grafik erstellt  
   - 201 Statuscode grafik erstellt  
+#### *12.Mai*
+###### Bendix:   
+  - neue “Über uns” html gebaut und die verlinkung zwischen main und side page hergestellt
+##### Chris:  
+  - Login-Versuchszähler in konto_shop.py hinzugefügt  
+    - Max. 3 Fehlversuche dann wird das Konto gesperrt  
+    - Versuche werden bei erfolgreichem Login zurückgesetzt  
+    - Fehlermeldung zeigt verbleibende Versuche an
+##### Lee:  
+  - Admin panel routes gebaut
+
+##### Ramona:  
+  - “Über uns” texte für jedes Cookie - Crew mitglied geschrieben   
+  - Dokumentation
+  - Brainstorming
+  - Woche 2 / 3 Planung 
+
 
 
  
