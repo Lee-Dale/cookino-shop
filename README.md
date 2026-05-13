@@ -176,7 +176,19 @@ Projektvorstellung: 22. Mai 2026
   - “Über uns” texte für jedes Cookie - Crew mitglied geschrieben   
   - Dokumentation
   - Brainstorming
-  - Woche 2 / 3 Planung 
+  - Woche 2 / 3 Planung
+
+#### *13.Mai*  
+##### Bendix:   
+  - "Über uns" ausgebaut und alle Charaktere hinzugefügt
+##### Ramona:
+  - Charakter bilder überarbeitet / Größenanpassung "Über uns"
+
+##### Alle:  
+   - Präsentationsablauf  
+   - Präsentations aufteilung
+   - Präsentation Design besprechen
+   - Präsentation wording grob geplant → Jeder für sich 
 
 
 
