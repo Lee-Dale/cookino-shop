@@ -188,7 +188,8 @@ Projektvorstellung: 22. Mai 2026
    - Präsentationsablauf  
    - Präsentations aufteilung
    - Präsentation Design besprechen
-   - Präsentation wording grob geplant → Jeder für sich 
+   - Präsentation wording grob geplant → Jeder für sich
+   - Eigene Hausaufgabe besprochen 💙
 
 
 
