@@ -191,9 +191,10 @@ Projektvorstellung: 22. Mai 2026
    - Präsentation wording grob geplant → Jeder für sich
    - Eigene Hausaufgabe besprochen 💙
 
-
-
- 
+#### *18.Mai*   
+##### Alle:  
+  - Präsentations Folien erarbeitet.
+  - Folien inhalt besprochen/abgesprochen 
 
 
 
