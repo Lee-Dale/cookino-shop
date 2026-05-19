@@ -194,7 +194,15 @@ Projektvorstellung: 22. Mai 2026
 #### *18.Mai*   
 ##### Alle:  
   - Präsentations Folien erarbeitet.
-  - Folien inhalt besprochen/abgesprochen 
+  - Folien inhalt besprochen/abgesprochen
+
+#### *19.Mai*   
+##### Alle:  
+  - Präsentations Folien feinschliff.  
+  - Präsentation mehrfach geübt, mit Zeit stoppen
+  - Wording überarbeitung  
+
+
 
 
 
