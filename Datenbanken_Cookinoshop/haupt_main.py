@@ -59,7 +59,7 @@ def artikel_lagerbestand_aendern(nutzer_id: int, artikel_id: int, neuer_bestand:
         print("FEHLER: Keine Berechtigung.")
         return False
  
-    with sqlite3.connect("cokinoshop.db") as conn:
+    with sqlite3.connect("cookinoshop.db") as conn:
         conn.execute(
             "UPDATE artikel SET lagerbestand = ? WHERE id = ?",
             (neuer_bestand, artikel_id)
@@ -73,7 +73,7 @@ def artikel_deaktivieren(nutzer_id: int, artikel_id: int):
         print("FEHLER: Keine Berechtigung. Nur Admin darf Artikel deaktivieren.")
         return False
  
-    with sqlite3.connect("cokinoshop.db") as conn:
+    with sqlite3.connect("cookinoshop.db") as conn:
         conn.execute(
             "UPDATE artikel SET aktiv = 0 WHERE id = ?", (artikel_id,)
         )
