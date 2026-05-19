@@ -295,7 +295,7 @@ def main():
             elif wahl == "4":
                 menue_registrieren()
             elif wahl == "0":
-                print("\nTschuess!")
+                print("\nHappy Hacking Licht und Frieden!")
                 break
  
  
