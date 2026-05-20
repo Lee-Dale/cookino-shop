@@ -202,6 +202,13 @@ Projektvorstellung: 22. Mai 2026
   - Präsentation mehrfach geübt, mit Zeit stoppen
   - Wording überarbeitung  
 
+#### *20.Mai*     
+##### Alle:  
+  - ein letztes mal Präsentation im Team geübt  
+  - Präsentationen der anderen Teams gehört  
+  - Präsentation gehalten vor dem Kurs  
+  - nach besprechung Präsentation  
+  - fein schliff besprochen  
 
 
 
