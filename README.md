@@ -211,7 +211,14 @@ Projektvorstellung: 22. Mai 2026
   - fein schliff besprochen  
 
 
+#### *21.Mai*     
+##### Alle:  
+  - feinschliff der Präsentation
+  - wording bearbeitet
 
+#### *22.Mai*     
+##### Alle:  
+  - Abschluss Präsentation gehalten
 
 
     
