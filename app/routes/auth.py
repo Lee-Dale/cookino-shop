@@ -72,5 +72,9 @@ def delete_konto(konto_daten: KontoLoeschen, email: str = Depends(verify_token))
     return {"message": "Konto erfolgreich gelöscht!"}
 
 
+## Phase-2
 
+@router.get("health")
+def health():
+    return {"status": "Ok"}
 
