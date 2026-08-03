@@ -221,6 +221,37 @@ Projektvorstellung: 22. Mai 2026
   - Abschluss Präsentation gehalten
 
 
-    
+---
 
+## 🚀 Modul 3 – Weiterentwicklung & Erweiterung
 
+### 📝 Projektfortschritt
+In Modul 3 bauen wir auf den Grundlagen des Cookino Shops auf und heben die Plattform auf das nächste Level.
+Nachdem die Identität der **Cookie Crew** und die ersten Kollektionen erfolgreich etabliert wurden, liegt der Fokus in diesem Modul auf der technischen Vertiefung, Optimierung der User Experience und der Vorbereitung auf den produktiven Einsatz.
+
+---
+
+### 👥 Cookie Crew im Einsatz
+Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit viel Leidenschaft daran, den Cookino Shop Schritt für Schritt Realität werden zu lassen. 
+
+📅 **Nächster Meilenstein:** Projektvorstellung am 14. August 2026!
+
+### Dokumentation
+
+#### *3.August*
+######  Bendix:
+  - Ordnerstruktur mit allen Dateien als Grundgerüst erstellt
+  - Vorhandene bilder konvertiert und eingefügt
+  - 
+######  Chris:
+  - Datenbanken aus Supabase ausgelagert nach PostgreSQL und MongoDB
+  - Docker ymal geschrieben
+  - Datenbanken erstellt
+
+######  Lee:
+  - Health API-Endpoint eingebaut
+
+######  Ramona: 
+  - Design Ideen
+  - Charakter brainstorming
+  - Dokumentation aufbau
