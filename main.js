@@ -1,12 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ==========================================================================
-       1. INTRO SLIDESHOW & SKIP BUTTON
+       1. AUDIO STEUERUNG (SCHALTET AUDIO DURCH USER-KLICK FREI)
+       ========================================================================== */
+    const bgAudio = document.getElementById('bgAudio');
+    const musicToggleBtn = document.getElementById('musicToggleBtn');
+    let isMusicPlaying = false;
+
+    function playAudio() {
+        if (!bgAudio) return;
+        bgAudio.play().then(() => {
+            isMusicPlaying = true;
+            if (musicToggleBtn) {
+                musicToggleBtn.textContent = '🔊';
+                musicToggleBtn.classList.remove('muted');
+                musicToggleBtn.setAttribute('title', 'Musik ausschalten');
+            }
+        }).catch(err => {
+            console.log("Audio-Wiedergabe blockiert oder fehlgeschlagen:", err);
+        });
+    }
+
+    function pauseAudio() {
+        if (!bgAudio) return;
+        bgAudio.pause();
+        isMusicPlaying = false;
+        if (musicToggleBtn) {
+            musicToggleBtn.textContent = '🔇';
+            musicToggleBtn.classList.add('muted');
+            musicToggleBtn.setAttribute('title', 'Musik einschalten');
+        }
+    }
+
+    if (musicToggleBtn) {
+        musicToggleBtn.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                pauseAudio();
+            } else {
+                playAudio();
+            }
+        });
+    }
+
+    /* ==========================================================================
+       2. INTRO SLIDESHOW & START-OVERLAY
        ========================================================================== */
     const introViewport = document.getElementById('intro-viewport');
-    const appWrapper = document.getElementById('app-wrapper');
+    const startOverlay = document.getElementById('start-overlay');
+    const startJourneyBtn = document.getElementById('startJourneyBtn');
+    const introWelcomeText = document.getElementById('introWelcomeText');
     const skipBtn = document.getElementById('skipBtn');
-    const slides = document.querySelectorAll('.intro-slide');
+    const appWrapper = document.getElementById('app-wrapper');
 
     let introFinished = false;
 
@@ -32,9 +76,27 @@ document.addEventListener('DOMContentLoaded', () => {
             tl.to('.slide-4', { opacity: 1, duration: 1.2, scale: 1.05 }, "-=0.4")
               .to('.slide-4', { duration: 1.5 });
         } else {
-            // Fallback wenn GSAP nicht geladen ist
-            setTimeout(finishIntro, 3000);
+            setTimeout(finishIntro, 4000);
         }
+    }
+
+    // Beim Klick auf "Reise starten" Start-Overlay ausblenden & Musik + Intro starten
+    if (startJourneyBtn) {
+        startJourneyBtn.addEventListener('click', () => {
+            playAudio(); // Startet Musik direkt im Klick-Event
+
+            if (startOverlay) {
+                startOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    startOverlay.style.display = 'none';
+                    if (introWelcomeText) introWelcomeText.style.opacity = '1';
+                    if (skipBtn) skipBtn.style.display = 'block';
+                    startIntroAnimation();
+                }, 500);
+            } else {
+                startIntroAnimation();
+            }
+        });
     }
 
     function finishIntro() {
@@ -62,56 +124,51 @@ document.addEventListener('DOMContentLoaded', () => {
         skipBtn.addEventListener('click', finishIntro);
     }
 
-    startIntroAnimation();
-
     /* ==========================================================================
-       2. FLIEGENDE COOKIES / COOKINOS ANIMATION GENERATOR
+       3. FLIEGENDE COOKIES / COOKINOS ANIMATION GENERATOR
        ========================================================================== */
     function initCookieBackground() {
-    const container = document.getElementById('cookie-background');
-    if (!container) return;
+        const container = document.getElementById('cookie-background');
+        if (!container) return;
 
-    const cookieTypes = [
-        '../assets/bild1.webp',
-        '../assets/bild2.webp',
-        '../assets/bild3.webp'
-    ];
-    const numCookies = 16;
+        const cookieTypes = [
+            'assets/bild1.webp',
+            'assets/bild2.webp',
+            'assets/bild3.webp'
+        ];
+        const numCookies = 16;
 
-    for (let i = 0; i < numCookies; i++) {
-        const cookie = document.createElement('div');
-        cookie.className = 'flying-cookie';
+        for (let i = 0; i < numCookies; i++) {
+            const cookie = document.createElement('div');
+            cookie.className = 'flying-cookie';
 
-        // Zufälliges Bild wählen
-        const randomImg = cookieTypes[Math.floor(Math.random() * cookieTypes.length)];
-        cookie.innerHTML = `<img src="${randomImg}" alt="Cookie">`;
+            const randomImg = cookieTypes[Math.floor(Math.random() * cookieTypes.length)];
+            cookie.innerHTML = `<img src="${randomImg}" alt="Cookie">`;
 
-        // Zufallswerte für die Animation
-        const leftPos = Math.random() * 95;                   // X-Position (0-95%)
-        const size = 45 + Math.random() * 30;                 // moderate Größe (45px bis 75px)
-        const duration = 10 + Math.random() * 12;             // Zufallsgeschwindigkeit (10s bis 22s)
-        const delay = Math.random() * 10;                     // Startverzögerung (0s bis 10s)
-        const rotDirection = Math.random() > 0.5 ? 360 : -360;// Rechts- oder Linksdrehung
+            const leftPos = Math.random() * 95;
+            const size = 45 + Math.random() * 30;
+            const duration = 10 + Math.random() * 12;
+            const delay = Math.random() * 10;
+            const rotDirection = Math.random() > 0.5 ? 360 : -360;
 
-        // Styles zuweisen
-        cookie.style.left = `${leftPos}%`;
-        cookie.style.width = `${size}px`;
-        cookie.style.animationDuration = `${duration}s`;
-        cookie.style.animationDelay = `${delay}s`;
-        cookie.style.setProperty('--target-rotation', `${rotDirection}deg`);
+            cookie.style.left = `${leftPos}%`;
+            cookie.style.width = `${size}px`;
+            cookie.style.animationDuration = `${duration}s`;
+            cookie.style.animationDelay = `${delay}s`;
+            cookie.style.setProperty('--target-rotation', `${rotDirection}deg`);
 
-        container.appendChild(cookie);
+            container.appendChild(cookie);
+        }
     }
-}
+
     /* ==========================================================================
-       3. VIEW & TAB NAVIGATION (INKL. TÜREN-ÖFFNEN ANIMATION)
+       4. VIEW & TAB NAVIGATION (INKL. TÜREN-ÖFFNEN ANIMATION)
        ========================================================================== */
     const navTabs = document.querySelectorAll('.nav-tab');
     const viewSections = document.querySelectorAll('.view-section');
     const doorFrames = document.querySelectorAll('.door-frame');
 
     function switchView(targetId) {
-        // Active Status in der Navigatio anpassen
         navTabs.forEach(tab => {
             if (tab.getAttribute('data-target') === targetId) {
                 tab.classList.add('active-tab');
@@ -120,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Views ein-/ausblenden
         viewSections.forEach(section => {
             if (section.id === targetId) {
                 section.classList.remove('hidden-view');
@@ -131,14 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Zurückgesetzte Türanimationen
         doorFrames.forEach(frame => frame.classList.remove('door-opening'));
-
-        // Sanftes Hochscrollen
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Event Listener für Navigations-Header Tabs
     navTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const target = tab.getAttribute('data-target');
@@ -146,15 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Event Listener für die verwunschenen Türen im Hub
     doorFrames.forEach(frame => {
         frame.addEventListener('click', () => {
             const target = frame.getAttribute('data-target');
-
-            // Tür-Öffnungs-Animation auslösen
             frame.classList.add('door-opening');
 
-            // Nach kurzem Verzug sauber zum Ziel-Tab wechseln
             setTimeout(() => {
                 switchView(target);
             }, 550);
@@ -162,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ==========================================================================
-       4. PRODUCT CAROUSEL (KOLLEKTION)
+       5. PRODUCT CAROUSEL (KOLLEKTION)
        ========================================================================== */
     const track = document.getElementById('track');
     const prevBtn = document.getElementById('prevBtn');
@@ -173,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const slides = Array.from(track.children);
         let currentIndex = 0;
 
-        // Dots generieren
         slides.forEach((_, idx) => {
             const dot = document.createElement('button');
             dot.className = `carousel-dot ${idx === 0 ? 'active-dot' : ''}`;
@@ -219,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       5. GAME SUB-TABS (SPIELE-ECKE)
+       6. GAME SUB-TABS (SPIELE-ECKE)
        ========================================================================== */
     const subtabs = document.querySelectorAll('.subtab');
     const gamePanels = document.querySelectorAll('.game-panel');
@@ -244,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ==========================================================================
-       6. PIXEL MEMORY GAME LOGIC
+       7. PIXEL MEMORY GAME LOGIC
        ========================================================================== */
     const memoryBoard = document.getElementById('memory-board');
     const movesDisplay = document.getElementById('memory-moves');
@@ -279,7 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (matchesDisplay) matchesDisplay.textContent = matches;
             if (victoryModal) victoryModal.classList.add('hidden-view');
 
-            // Paare verdoppeln und mischen
             cardsArray = [...memoryImages, ...memoryImages]
                 .sort(() => 0.5 - Math.random());
 
