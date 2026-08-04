@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+*.db
+final_version.html
+index.html
+.gitignore
+/Datenbanken_Cookinoshop
