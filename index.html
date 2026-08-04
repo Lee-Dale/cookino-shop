@@ -3,821 +3,544 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookie Crew | Merch</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    
-    <!-- ═══════════════════════════════════════════════════════
-         NEU: Supabase SDK — verbindet das Frontend mit der Datenbank
-         ═══════════════════════════════════════════════════════ -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <style>
-        /* ── ORIGINAL: Farbpalette ── */
-        :root {
-            --bg-color: #FAFAFA;
-            --text-color: #4A4A4A;
-            --monster-blue: #A2DFF7;
-            --cookie-brown: #C9A68F;
-            --white: #FFFFFF;
-        }
+    <title>Cookie Crew | Pixel Plüschwald Abenteuer</title>
 
-        /* ── ORIGINAL: Globale Stile ── */
-        body, a, button { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; padding: 0; line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🍪</text></svg>") 12 12, auto !important;
-        }
+    <!-- Preloading für flüssigen Start -->
+    <link rel="preload" as="image" href="assets/hintergrund.webp">
+    <link rel="preload" as="image" href="assets/tree-left.webp">
+    <link rel="preload" as="image" href="assets/trees-mid.webp">
+    <link rel="preload" as="image" href="assets/tree-right.webp">
+    <link rel="preload" as="image" href="assets/clearing-bg.webp">
 
-        body { background-color: var(--bg-color); color: var(--text-color); position: relative; overflow-x: hidden; }
-
-        /* ── ORIGINAL: Hintergrund fliegende Bilder ── */
-        #cookie-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        
-        @keyframes flyCookie {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
-        }
-
-        .flying-cookie { position: absolute; opacity: 0; user-select: none; animation: flyCookie linear infinite; object-fit: contain; }
-
-        /* ── ORIGINAL: Header ── */
-        header { 
-            background-color: var(--white); padding: 1.5rem 2rem; 
-            display: flex; justify-content: space-between; align-items: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: relative; z-index: 100;
-        }
-        .logo { font-weight: 700; font-size: 1.2rem; color: var(--text-color); text-decoration: none; letter-spacing: 1px; }
-        nav { display: flex; align-items: center; }
-        nav a { color: var(--text-color); text-decoration: none; margin-left: 25px; font-size: 0.95rem; transition: color 0.3s ease; }
-        nav a:hover { color: var(--cookie-brown); }
-
-        /* ── NEU: Warenkorb Badge — zeigt Anzahl der Artikel im Warenkorb ── */
-        #warenkorb-btn { position: relative; }
-        #warenkorb-count {
-            background: var(--cookie-brown); color: white; border-radius: 50%;
-            width: 18px; height: 18px; font-size: 0.7rem; font-weight: 700;
-            display: none; align-items: center; justify-content: center;
-            position: absolute; top: -8px; right: -12px;
-        }
-
-        /* ── NEU: User Info — zeigt Email und Logout Button wenn eingeloggt ── */
-        #user-info { display: none; align-items: center; gap: 10px; margin-left: 25px; }
-        #user-name { font-size: 0.85rem; color: #888; }
-        #logout-btn { font-size: 0.85rem; color: #e74c3c; cursor: pointer; text-decoration: none; }
-
-        /* ── ORIGINAL: Main Layout ── */
-        main { max-width: 1100px; margin: 60px auto; padding: 0 20px; position: relative; z-index: 10; }
-        
-        /* ── ORIGINAL: Überschrift Graffiti ── */
-        .hero-text { text-align: center; margin-bottom: 60px; }
-        .hero-text h1 { 
-            font-size: 3.2rem; font-weight: 600; margin-bottom: 15px; color: #333; 
-            display: inline-block; padding: 15px 40px; background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px); border-radius: 60px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-        .graffiti-letter {
-            font-family: 'Luckiest Guy', cursive; color: var(--cookie-brown); display: inline-block;
-            font-size: 1.2em; transform: rotate(-5deg) translateY(5px);
-            text-shadow: 3px 3px 0px #fff, -1px -1px 0px #fff, 1px -1px 0px #fff, -1px 1px 0px #fff, 4px 4px 10px rgba(0,0,0,0.2);
-            margin-right: -2px;
-        }
-        .hero-text p { color: #555; font-size: 1.5rem; font-weight: 500; }
-
-        /* ── ORIGINAL: Carousel ── */
-        .carousel-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
-        .carousel-container { width: 100%; overflow: hidden; border-radius: 20px; padding-top: 60px; margin-top: -60px; }
-        .carousel-track { display: flex; transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1); width: 100%; }
-        .slide { flex: 0 0 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 10px; box-sizing: border-box; }
-
-        /* ── ORIGINAL: Navigation Pfeile ── */
-        .nav-btn {
-            background-color: var(--white); border: none; width: 50px; height: 50px; border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: absolute; top: 50%; transform: translateY(-50%);
-            z-index: 110; font-size: 1.2rem; display: flex; justify-content: center; align-items: center;
-            transition: all 0.3s ease; color: var(--text-color); cursor: pointer !important;
-        }
-        .nav-btn:hover { background-color: var(--monster-blue); transform: translateY(-50%) scale(1.1); }
-        .nav-btn:disabled { opacity: 0; pointer-events: none; }
-        .prev-btn { left: -60px; }
-        .next-btn { right: -60px; }
-
-        /* ── ORIGINAL: Produktkarte ── */
-        .product-card { 
-            background: var(--white); border-radius: 20px; padding: 25px; text-align: center; 
-            transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column;
-            height: 100%; box-sizing: border-box; position: relative;
-        }
-        .hover-monster {
-            position: absolute; top: -40px; right: 20px; width: 100px; height: auto;
-            opacity: 0; z-index: 50; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;
-        }
-        .speech-bubble {
-            position: absolute; top: -25px; right: 35px; background: var(--white); border: 1px solid #ddd;
-            padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 400; color: #666;
-            opacity: 0; z-index: 60; transform: scale(0.8); transition: all 0.4s ease; white-space: nowrap;
-            pointer-events: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .speech-bubble::after {
-            content: ''; position: absolute; bottom: -5px; right: 15px; border-width: 5px 5px 0;
-            border-style: solid; border-color: #ddd transparent;
-        }
-        .product-card:hover .hover-monster { opacity: 1; top: -15px; transform: rotate(-5deg); }
-        .product-card:hover .speech-bubble { opacity: 1; transform: scale(1); top: -45px; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(162, 223, 247, 0.3); }
-
-        .product-image { width: 100%; height: 220px; object-fit: contain; margin-bottom: 20px; }
-        .product-card h3 { font-size: 1.1rem; font-weight: 600; margin: 0 0 10px 0; height: 3.5rem; display: flex; align-items: center; justify-content: center; }
-        .description { font-size: 0.9rem; color: #666; margin-bottom: 10px; height: 3.5rem; display: flex; align-items: center; justify-content: center; }
-        .sizes { font-size: 0.9rem; font-weight: 500; color: #555; margin-bottom: 15px; height: 1.5rem; display: flex; align-items: center; justify-content: center; }
-        .price { font-size: 1.1rem; color: #888; margin-top: auto; margin-bottom: 20px; }
-
-        .btn {
-            background-color: var(--monster-blue); color: #333; font-weight: 600; padding: 12px 25px;
-            border: none; border-radius: 30px; cursor: pointer; transition: 0.3s ease; width: 100%;
-        }
-        .btn:hover { background-color: var(--cookie-brown); color: var(--white); }
-
-        /* ── ORIGINAL: Cookie Banner ── */
-        #cookie-banner {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px; background: var(--white); border-radius: 20px;
-            padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 2000; 
-            display: flex; align-items: center; justify-content: space-between;
-            border: 2px solid var(--monster-blue); transition: all 0.5s ease;
-        }
-        .hidden-banner { opacity: 0 !important; pointer-events: none !important; transform: translate(-50%, 50px) !important; }
-        .cookie-content { display: flex; align-items: center; gap: 15px; }
-        .cookie-text { font-size: 0.85rem; color: var(--text-color); text-align: left; }
-        .cookie-btn { background: var(--cookie-brown); color: white; border: none; padding: 8px 15px; border-radius: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-
-        /* ── NEU: Modal Styles — für Login, Registrierung und Warenkorb ── */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        .modal-overlay.active { display: flex; }
-        .modal {
-            background: var(--white); border-radius: 20px; padding: 40px;
-            width: 100%; max-width: 420px; position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-        .modal h2 { margin: 0 0 25px 0; font-size: 1.5rem; color: #333; }
-        .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
-        .modal input {
-            width: 100%; padding: 12px 15px; border: 1.5px solid #eee;
-            border-radius: 10px; font-size: 0.95rem; margin-bottom: 15px;
-            box-sizing: border-box; transition: border 0.3s;
-        }
-        .modal input:focus { outline: none; border-color: var(--monster-blue); }
-        .modal .btn { margin-bottom: 10px; }
-        .modal-switch { text-align: center; font-size: 0.9rem; color: #888; }
-        .modal-switch a { color: var(--cookie-brown); cursor: pointer; text-decoration: underline; }
-        .modal-error { color: #e74c3c; font-size: 0.85rem; margin-bottom: 10px; display: none; }
-        .modal-success { color: #27ae60; font-size: 0.85rem; margin-bottom: 10px; display: none; }
-
-        /* ── NEU: Warenkorb Modal Styles ── */
-        .warenkorb-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
-        .warenkorb-item:last-child { border-bottom: none; }
-        .warenkorb-item-name { font-weight: 500; font-size: 0.95rem; }
-        .warenkorb-item-preis { color: #888; font-size: 0.9rem; }
-        .warenkorb-remove { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1.1rem; }
-        .warenkorb-gesamt { font-weight: 700; font-size: 1.1rem; margin-top: 15px; text-align: right; }
-        .warenkorb-leer { text-align: center; color: #aaa; padding: 30px 0; }
-
-        /* ── NEU: Toast — kleine Benachrichtigung unten rechts ── */
-        .toast {
-            position: fixed; bottom: 100px; right: 30px; background: #333; color: white;
-            padding: 12px 25px; border-radius: 30px; font-size: 0.9rem; z-index: 9999;
-            opacity: 0; transform: translateY(20px); transition: all 0.3s ease; pointer-events: none;
-        }
-        .toast.show { opacity: 1; transform: translateY(0); }
-
-        /* ── ORIGINAL: Footer ── */
-        footer { 
-            text-align: center; padding: 60px 20px; margin-top: 80px; background-color: var(--white); 
-            position: relative; z-index: 100; border-top: 1px solid rgba(0,0,0,0.05);
-        }
-        .footer-logo { font-weight: 600; color: #999; margin-bottom: 15px; display: block; }
-        .impressum-text { font-size: 0.75rem; color: var(--text-color); opacity: 0.6; max-width: 700px; margin: 20px auto 0; line-height: 1.6; text-align: center; }
-        .impressum-text a { color: inherit; text-decoration: underline; }
-
-        @media (max-width: 1000px) {
-            .slide { grid-template-columns: 1fr; }
-            .nav-btn { display: none; }
-            .carousel-container { overflow-x: auto; }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 <body>
 
-    <!-- ORIGINAL: Hintergrund -->
-    <div id="cookie-background"></div>
-
-    <!-- ORIGINAL: Cookie Banner -->
-    <div id="cookie-banner">
-        <div class="cookie-content">
-            <img src="dein-bild.png" alt="Cookie" style="width: 45px; height: auto;">
-            <div class="cookie-text">
-                <strong>Cookie-Alarm!</strong><br>
-                Die Cookie Crew nutzt Cookies.<br> 
-                Erlaubst du uns zu mampfen?
-            </div>
+    <!-- 1. INTRO: DIE REISE DURCH DEN PIXEL PLÜSCHWALD (DIASHOW-WALDSPAZIERGANG) -->
+    <div id="intro-viewport">
+        <div class="intro-slideshow">
+            <div class="intro-slide slide-1"></div>
+            <div class="intro-slide slide-2"></div>
+            <div class="intro-slide slide-3"></div>
+            <div class="intro-slide slide-4"></div>
         </div>
-        <button class="cookie-btn" onclick="acceptCookies()">Mampf!</button>
+
+        <div class="intro-welcome-text">
+            <h2>Willkommen im</h2>
+            <h1>Pixel Plüschwald ✨</h1>
+        </div>
+
+        <button id="skipBtn" class="skip-btn">Hüpf zur Lichtung! 🐇</button>
     </div>
 
-    <!-- ORIGINAL: Header — NEU: Login Button + Warenkorb Badge + User Info ergänzt -->
-    <header>
-        <a href="#" class="logo">COOKIE CREW</a>
-        <nav>
-            <a href="#">Kollektion</a>
+    <!-- 2. HAUPT-APP: DIE ZAUBERLICHTUNG -->
+    <div id="app-wrapper" class="content-hidden">
 
-            <!-- NEU: Login Button — öffnet Login Modal -->
-            <a href="#" id="login-btn">Login</a>
+        <!-- FLIEGENDE COOKIES / COOKINOS HINTERGRUND -->
+        <div id="cookie-background" class="cookie-background" aria-hidden="true"></div>
 
-            <!-- NEU: Warenkorb Button mit Badge der Artikelanzahl zeigt -->
-            <a href="#" id="warenkorb-btn" style="position:relative;">
-                Warenkorb
-                <span id="warenkorb-count"></span>
-            </a>
+        <!-- OBERER HEADER MIT NAVIGATION, LOGIN & WARENKORB -->
+        <header class="playful-header">
+            
+            <nav class="main-nav" aria-label="Hauptnavigation">
+                <button class="nav-tab active-tab" data-target="view-hub">
+                    <img src="assets/Die Reise beginnt.webp" alt="" class="nav-tab-icon">
+                    <span>Die Reise beginnt</span>
+                </button>
+                <button class="nav-tab" data-target="view-stories">
+                    <img src="assets/Die Gefährten.webp" alt="" class="nav-tab-icon">
+                    <span>Die Gefährten</span>
+                </button>
+                <button class="nav-tab" data-target="view-collection">
+                    <img src="assets/Die Schatzkammer.webp" alt="" class="nav-tab-icon">
+                    <span>Die Schatzkammer</span>
+                </button>
+                <button class="nav-tab" data-target="view-game">
+                    <img src="assets/Die Rätselkammer.webp" alt="" class="nav-tab-icon">
+                    <span>Die Rätselkammer</span>
+                </button>
+                <button class="nav-tab" data-target="view-crew">
+                    <img src="assets/Die Hüter des Reiches .webp" alt="" class="nav-tab-icon">
+                    <span>Die Hüter des Reiches</span>
+                </button>
+            </nav>
 
-            <!-- NEU: User Info — wird sichtbar wenn eingeloggt -->
-            <div id="user-info">
-                <span id="user-name"></span>
-                <a href="#" id="logout-btn">Logout</a>
+            <div class="header-user-actions">
+                <button class="header-action-btn login-btn" id="loginBtn">👤 Login</button>
+                <button class="header-action-btn cart-btn" id="cartBtn">🛒 Warenkorb (<span id="cartCount">0</span>)</button>
             </div>
-        </nav>
-    </header>
+        </header>
 
-    <main>
-        <!-- ORIGINAL: Überschrift -->
-        <div class="hero-text">
-            <h1><span class="graffiti-letter">U</span>nsere <span class="graffiti-letter">L</span>ieblingsteile</h1>
-            <p>Süße Monster, weiche Stoffe.</p>
-        </div>
-        
-        <div class="carousel-wrapper">
-            <button class="nav-btn prev-btn" id="prevBtn">❮</button>
-            <div class="carousel-container">
-                <div class="carousel-track" id="track">
-                    
-                    <!-- ORIGINAL: Slide 1 — Wuschel Witznase -->
-                    <!-- NEU: Hinzufügen Buttons haben jetzt data-artikel-id, data-name, data-preis
-                         damit Supabase weiß welcher Artikel in den Warenkorb soll -->
-                    <div class="slide">
-                        <div class="product-card">
-                            <div class="speech-bubble">Den trage ich am liebsten!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.42.32.png" alt="Hoodie">
-                            <h3>Unisex Hoodie Dunkelblau: "Cookie Crusader"</h3>
-                            <div class="description">Ein stylisches Unisex-Hoodie mit dem Motiv "Cookie Crusader".</div>
-                            <div class="sizes">Größen: XS - XXL</div>
-                            <div class="price">€49.90</div>
-                            <!-- NEU: data-artikel-id="1" = ID in Supabase Datenbank -->
-                            <button class="btn add-to-cart" data-artikel-id="1" data-name="Cookie Crusader" data-preis="49.90">Hinzufügen</button>
-                        </div>
-                        <div class="product-card">
-                            <div class="speech-bubble">Beste Cap der Welt!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.42.22.png" alt="Basecap">
-                            <h3>Unisex Basecap Schwarz "Wuschel"</h3>
-                            <div class="description">Ein stylisches Unisex-Basecap in schwarz mit dem Motiv "Wuschel".</div>
-                            <div class="sizes">Größen: Unisex</div>
-                            <div class="price">€23.90</div>
-                            <!-- NEU: data-artikel-id="2" = ID in Supabase Datenbank -->
-                            <button class="btn add-to-cart" data-artikel-id="2" data-name="Wuschel Cap" data-preis="23.90">Hinzufügen</button>
-                        </div>
-                        <div class="product-card">
-                            <div class="speech-bubble">Das bin ich auf der Tasse!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-05 um 11.34.52.png" alt="Tasse">
-                            <h3>Tasse "Cookie Crew" Wuschel</h3>
-                            <div class="description">Süße Tasse mit dem Motiv "Cookie Crew" Wuschel.</div>
-                            <div class="sizes">Größen: -</div>
-                            <div class="price">€19.50</div>
-                            <!-- NEU: data-artikel-id="3" = ID in Supabase Datenbank -->
-                            <button class="btn add-to-cart" data-artikel-id="3" data-name="Wuschel Tasse" data-preis="19.50">Hinzufügen</button>
-                        </div>
-                    </div>
+        <main id="main-container">
 
-                    <!-- ORIGINAL: Slide 2 — Moniki Kicherkrähe -->
-                    <div class="slide">
-                        <div class="product-card">
-                            <div class="speech-bubble">Das ist der letzte und der gehört mir!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.51.57.png" alt="Moniki-Hoodie">
-                            <h3>Unisex Hoodie Moosgrün "Moniki Kicherkrähe"</h3>
-                            <div class="description">Ein moosgrünes Unisex-Hoodie mit dem Motiv "Moniki Kicherkrähe".</div>
-                            <div class="sizes">Größen: XS - XXL</div>
-                            <div class="price">€49.90</div>
-                            <button class="btn add-to-cart" data-artikel-id="7" data-name="Kicherkrähe Hoodie" data-preis="49.90">Hinzufügen</button>
-                        </div>
-                        <div class="product-card">
-                            <div class="speech-bubble">Reserviert für einen Freund!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.10.png" alt="Moniki_Basecap">
-                            <h3>Unisex Basecap Moosgrün "Moniki Kicherkrähe"</h3>
-                            <div class="description">Ein moosgrünes Unisex-Basecap mit dem Motiv "Moniki Kicherkrähe".</div>
-                            <div class="sizes">Größen: Unisex</div>
-                            <div class="price">€23.90</div>
-                            <button class="btn add-to-cart" data-artikel-id="8" data-name="Krähen Cap" data-preis="23.90">Hinzufügen</button>
-                        </div>
-                        <div class="product-card">
-                            <div class="speech-bubble">Mit dieser Tasse fliegt dir nur der Kakao weg!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.18.png" alt="Moniki-Tasse">
-                            <h3>Tasse "Cookie Crew" "Moniki Kicherkrähe"</h3>
-                            <div class="description">Süße Tasse mit dem Motiv "Cookie Crew" Moniki Kicherkrähe.</div>
-                            <div class="sizes">Größen: -</div>
-                            <div class="price">€19.50</div>
-                            <button class="btn add-to-cart" data-artikel-id="9" data-name="Krähen-Tasse" data-preis="19.50">Hinzufügen</button>
-                        </div>
-                    </div>
-
-                    <!-- ORIGINAL: Slide 3 — Cookino -->
-                    <div class="slide">
-                        <div class="product-card">
-                            <div class="speech-bubble">Flauschig? Nein! Super-Flauschig!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.28.png" alt="Cookie-Hoodie">
-                            <h3>Unisex Hoodie soft Beige "Cookino"</h3>
-                            <div class="description">Ein beiges Unisex-Hoodie mit dem Motiv "Cookino".</div>
-                            <div class="sizes">Größen: XS - XXL</div>
-                            <div class="price">€49.90</div>
-                            <button class="btn add-to-cart" data-artikel-id="4" data-name="Cookino Hoodie" data-preis="49.90">Hinzufügen</button>
-                        </div>
-                        <div class="product-card">
-                            <div class="speech-bubble">Die Mütze schmeckt am besten!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.40.png" alt="Cookie-Basecap">
-                            <h3>Unisex Basecap Dunkelblau "Cookino"</h3>
-                            <div class="description">Ein dunkelblaues Unisex-Basecap mit dem Motiv "Cookino".</div>
-                            <div class="sizes">Größen: Unisex</div>
-                            <div class="price">€23.90</div>
-                            <button class="btn add-to-cart" data-artikel-id="5" data-name="Cookino Cap" data-preis="23.90">Hinzufügen</button>
-                        </div>
-                        <div class="product-card">
-                            <div class="speech-bubble">Hmmmmm Cookinoooos!</div>
-                            <img src="monster_peek.png" class="hover-monster" alt="Monster">
-                            <img class="product-image" src="Bildschirmfoto 2026-05-06 um 09.52.50.png" alt="Cookie-Tasse">
-                            <h3>Tasse "Cookie Crew" "Cookino"</h3>
-                            <div class="description">Süße Tasse mit dem Motiv "Cookie Crew" Cookino.</div>
-                            <div class="sizes">Größen: -</div>
-                            <div class="price">€19.50</div>
-                            <button class="btn add-to-cart" data-artikel-id="6" data-name="Cookino Tasse" data-preis="19.50">Hinzufügen</button>
-                        </div>
-                    </div>
-
+            <!-- ================================================= -->
+            <!-- HUB / DIE ZAUBERLICHTUNG (4 VERWUNSCHENE TÜREN)   -->
+            <!-- ================================================= -->
+            <section id="view-hub" class="view-section active-view">
+                <div class="hub-hero">
+                    <span class="badge-tag">✨ Entdecke den Plüschwald ✨</span>
+                    <h1>Wo soll die Reise hingehen?</h1>
+                    <p>Klicke auf eine der verwunschenen Holztüren, um das Portal zur nächsten Welt zu öffnen!</p>
                 </div>
-            </div>
-            <button class="nav-btn next-btn" id="nextBtn">❯</button>
-        </div>
-    </main>
 
-    <!-- ORIGINAL: Footer -->
-    <footer>
-        <span class="footer-logo">© 2026 Cookie Crew 🍪 Ramona 🍪 Chris 🍪 Lee 🍪 Bendix</span>
-        <div class="impressum-text">
-            <strong>Impressum</strong><br>
-            Angaben gemäß § 5 TMG: Cookie Crew, Teigweg 5, 787 Keks Town City<br>
-            Kontakt: E-Mail: bendix.steffen@student.syntax-institut.de<br>
-            Vertreten durch: Ramona Eichert, Chris Jahn, Lee Stephen Dale<br>
-            Redaktionell verantwortlich: Ramona Eichert<br><br>
-            <small>
-                EU-Streitschlichtung: Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
-                <a href="https://ec.europa.eu/consumers/odr/" target="_blank">https://ec.europa.eu/consumers/odr/</a>.<br>
-                Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
-            </small>
-        </div>
-    </footer>
+                <div class="adventure-grid">
+                    <!-- Tür 1: Geschichten / Die Gefährten (Moos-bewachsen) -->
+                    <div class="door-frame" data-target="view-stories">
+                        <div class="door-portal-glow glow-moss"></div>
+                        <div class="door door-mossy">
+                            <div class="door-hinge hinge-top"></div>
+                            <div class="door-hinge hinge-bottom"></div>
+                            <div class="door-knob"></div>
+                            <div class="wooden-sign">
+                                <div class="card-icon"><img src="assets/Die Gefährten.webp" alt="Geschichten"></div>
+                                <h3>Die Gefährten</h3>
+                                <p>Lies spannende Abenteuer aus dem Pixel Plüschwald!</p>
+                                <span class="card-action-btn">Tür öffnen ➔</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         NEU: Login Modal — öffnet sich beim Klick auf Login
-         Enthält Login Formular + Registrierung Formular
-         ═══════════════════════════════════════════════════════ -->
-    <div class="modal-overlay" id="login-modal">
-        <div class="modal">
-            <button class="modal-close" id="close-login">×</button>
-            <h2 id="modal-title">Login</h2>
-            <!-- NEU: Fehler und Erfolgsmeldungen -->
-            <div class="modal-error" id="modal-error"></div>
-            <div class="modal-success" id="modal-success"></div>
-            <!-- NEU: Login Formular -->
-            <div id="login-form">
-                <input type="email" id="login-email" placeholder="E-Mail">
-                <input type="password" id="login-password" placeholder="Passwort">
-                <button class="btn" id="login-submit">Einloggen</button>
-                <div class="modal-switch">Noch kein Konto? <a id="switch-to-register">Registrieren</a></div>
+                    <!-- Tür 2: Kollektion / Die Schatzkammer (Goldene Magie) -->
+                    <div class="door-frame" data-target="view-collection">
+                        <div class="door-portal-glow glow-gold"></div>
+                        <div class="door door-gold">
+                            <div class="door-hinge hinge-top"></div>
+                            <div class="door-hinge hinge-bottom"></div>
+                            <div class="door-knob"></div>
+                            <div class="wooden-sign">
+                                <div class="card-icon"><img src="assets/Die Schatzkammer.webp" alt="Kollektion"></div>
+                                <h3>Die Schatzkammer</h3>
+                                <p>Entdecke kuschelige Hoodies, Mützen & Tassen!</p>
+                                <span class="card-action-btn">Tür öffnen ➔</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tür 3: Rätselkammer (Mystisches Violett) -->
+                    <div class="door-frame" data-target="view-game">
+                        <div class="door-portal-glow glow-mystic"></div>
+                        <div class="door door-mystic">
+                            <div class="door-hinge hinge-top"></div>
+                            <div class="door-hinge hinge-bottom"></div>
+                            <div class="door-knob"></div>
+                            <div class="wooden-sign">
+                                <div class="card-icon"><img src="assets/Die Rätselkammer.webp" alt="Rätselkammer"></div>
+                                <h3>Die Rätselkammer</h3>
+                                <p>Findest du alle Plüschmonster-Pärchen?</p>
+                                <span class="card-action-btn">Tür öffnen ➔</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tür 4: Cookie Crew (Warmes Ofen-Holz) -->
+                    <div class="door-frame" data-target="view-crew">
+                        <div class="door-portal-glow glow-warm"></div>
+                        <div class="door door-warm">
+                            <div class="door-hinge hinge-top"></div>
+                            <div class="door-hinge hinge-bottom"></div>
+                            <div class="door-knob"></div>
+                            <div class="wooden-sign">
+                                <div class="card-icon"><img src="assets/Die Hüter des Reiches .webp" alt="Hüter des Reiches"></div>
+                                <h3>Die Hüter des Reiches</h3>
+                                <p>Lerne Ramona, Chris, Lee & Bendix kennen!</p>
+                                <span class="card-action-btn">Tür öffnen ➔</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- 1. GESCHICHTEN SECTION                            -->
+            <!-- ================================================= -->
+            <section id="view-stories" class="view-section hidden-view">
+                <div class="section-title">
+                    <h2><img src="assets/Die Gefährten.webp" alt="Die Gefährten Icon" class="section-icon"> 
+                        Geschichten aus dem Plüschwald</h2>
+                    <p>Setz dich ans Lagerfeuer und lausche den Geschichten!</p>
+                </div>
+
+                <!-- CHARAKTERE SECTION -->
+                <div class="hero-text" style="margin-top: 50px;">
+                    <h1 style="font-size: 2.3rem;"><span class="graffiti-letter">D</span>ie <span class="graffiti-letter">C</span>haraktere</h1>
+                </div>
+
+                <!-- Mixelmoos: Spotlight-Karte -->
+                <div class="product-card spotlight-card">
+                    <div class="speech-bubble">Bärtig!</div>
+                    <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                    <img src="assets/Mixelmoos.webp" alt="Mixelmoos" class="product-image">
+                    <span class="card-title">Mixelmoos</span>
+                    <span class="card-role">Der Alte</span>
+                    <p class="description">Tief im mystischen Cookino-Pixel-Plüschwald lebt Mixelmoos der Alte, ein uralter Baumgeist, entstanden aus einem Funken reinen Wissens. In seinem Inneren leuchtet das grüne Herz des Waldes und durch seine Äste fließen flüsternde Datenfunken, die alles Leben miteinander verbinden. Er ist ein geduldiger Lehrer für alle, die lernen wollen. Den Wissbegierigen zeigt er verborgene Pfade, schenkt Erkenntnis und bewahrt das Gleichgewicht des Waldes.</p>
+                    <p class="description">Doch wer sein Wissen missachtet, den Wandel verweigert oder nicht zuhört, spürt seine andere Seite: Das Licht in ihm wird kalt, die Wege verschlingen sich und Verbindungen brechen. Mixelmoos entzieht den Zugang - bis sie sich im stillen Netz des Waldes verlieren.</p>
+                    <span class="bold-label">Denn im Wald gilt:</span>
+                    <p class="description">Alles ist verbunden - doch nur wer versteht, findet seinen Weg</p>
+                    <span class="quote">"Dem Suchenden öffne ich das Herz des Waldes und teile das Licht meiner uralten Weisheit. Doch wer die Lehre verschmäht, dem begegne ich als unnachgiebiger Wächter im dichten Schatten der Dornen."</span>
+                </div>
+
+                <div class="monster-grid character-grid">
+                    <!-- Wuschel Witznase -->
+                    <div class="product-card">
+                        <div class="speech-bubble">Der kommt mir bekannt vor!</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Wuschel.webp" alt="Wuschel" class="product-image">
+                        <span class="card-title">Wuschel Witznase</span>
+                        <span class="card-role">Hüter des Schabernacks</span>
+                        <p class="description">Bevor der Wald seinen heutigen Namen trug, war er ein ernster Ort. Das änderte sich in einer Nacht, als eine kichernde Gewitterwolke platzte. Aus blauem Flausch, Blaubeersaft und Mondlicht entstand das "Kuschel-Krümel-Monster" Wuschel Witznase.</p>
+                        <p class="description">Wuschel brachte den Schabernack in den Wald. Mit funkelnden Augen und einem riesigen Lächeln sorgt er für Wirbel durch Kitzel-Fallen, den Nuss-Tausch und seine unbändige Keks-Liebe. Er beweist, dass Freude und ein kleiner Streich zur rechten Zeit selbst den ernstesten Wald zum Blühen bringen.</p>
+                        <span class="quote">"Wahre Größe misst man nicht in Ellen, sondern in der Anzahl der Krümel, die man beim Lachen hinterlässt, und dem Schalk, der in den Augen blitzt."</span>
+                    </div>
+
+                    <!-- Moniki Kicherkrähe -->
+                    <div class="product-card">
+                        <div class="speech-bubble">Gruselig!</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Moniki.webp" alt="Moniki" class="product-image">
+                        <span class="card-title">Moniki Kicherkrähe</span>
+                        <span class="card-role">Die Fröhliche Hexe</span>
+                        <p class="description">In der unberührten Frühzeit des Großen Waldes war die junge Hexe Moniki Kicherkrähe als die fröhlichste Gastgeberin am Pixelplätscher-See bekannt. Als sie dem grimmigen Großen Nordsturm Gastfreundschaft gewährte, bog sich ihr Haus vor dessen Sturmlachen dauerhaft zur Seite – eine bleibende „Verbeugung vor der Freude".</p>
+                        <span class="quote">"Warum sollte ich mein Haus jemals wieder gerade rücken? Es hat vor Jahrhunderten eine Verbeugung vor Freude gemacht – und wer bin ich, diese Höflichkeit rückgängig zu machen?"</span>
+                    </div>
+
+                    <!-- Die Cookinos -->
+                    <div class="product-card">
+                        <div class="speech-bubble">Lecker!</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Cookino.webp" alt="Cookino" class="product-image">
+                        <span class="card-title">Die Cookinos</span>
+                        <span class="card-role">Die Admins des Waldes</span>
+                        <p class="description">Die Cookinos sind ein emsiges, keksrundes Volk im Pixel-Plüschwald. Als herzliche Admins des Waldes sorgen sie mit Herzen aus Gold und Schokolade dafür, dass die Welt „kompatibel" bleibt. Über das „WLAN des Herzens" führen sie allnächtlich eine „Große Synchronisation" durch und schützen den Wald mit ihrer Firewall gegen den Kummer.</p>
+                        <span class="quote">"Ein Cookino allein ist nur ein Krümel. Aber wenn wir uns alle an den Händchen halten, werden wir zum Quellcode der Freude und das WLAN unseres Herzens stürzt nie ab."</span>
+                    </div>
+
+                    <!-- Annora Hexa Hex -->
+                    <div class="product-card">
+                        <div class="speech-bubble">Hex! Hex!</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Annora.webp" alt="Annora" class="product-image">
+                        <span class="card-title">Annora Hexa Hex</span>
+                        <span class="card-role">Hüterin des Lichtes</span>
+                        <p class="description">Annora Hexa Hex ist die Hüterin der Geheimnisse im magischen Wald, geboren aus einem Sonnenstrahl und einem vergessenen Zauberspruch. Ihre Brille aus gefrorenen Tautropfen erlaubt es ihr, unsichtbare magische Muster zu sehen. Als unermüdliche Forscherin sucht sie stets nach dem "Warum" und "Wie" der Welt.</p>
+                        <span class="quote">"Wo das Licht auf den vergessenen Zauberspruch trifft, beginnt der Pfad der Erkenntnis; Annora lehrt uns, dass wahre Macht nicht im Zauber selbst liegt, sondern im unermüdlichen Suchen nach dem ‚Warum' hinter den Geheimnissen des Waldes."</span>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- 2. KOLLEKTION SECTION (PRODUCT SLIDER)            -->
+            <!-- ================================================= -->
+            <section id="view-collection" class="view-section hidden-view">
+                <div class="section-title">
+                    <h2><img src="assets/Die Schatzkammer.webp" alt="Die Schatzkammer Icon" class="section-icon"> 
+                        Die Cookie Plüsch Kollektion</h2>
+                    <p>Unsere flauschigen Stoffe für kleine & große Abenteurer.</p>
+                </div>
+
+                <div class="carousel-wrapper">
+                    <button class="nav-btn prev-btn" id="prevBtn" aria-label="Vorherige">❮</button>
+
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="track">
+
+                            <!-- SLIDE 1 -->
+                            <div class="slide">
+                                <div class="product-card">
+                                    <div class="speech-bubble">Den trage ich am liebsten!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-05 um 11.42.32.webp" alt="Hoodie">
+                                    <h3>Unisex Hoodie Dunkelblau: "Cookie Crusader"</h3>
+                                    <p class="description">Ein stylisches Unisex-Hoodie mit dem Motiv "Cookie Crusader".</p>
+                                    <p class="sizes">Größen: XS - XXL</p>
+                                    <div class="price">€49.90</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+
+                                <div class="product-card">
+                                    <div class="speech-bubble">Beste Cap der Welt!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-05 um 11.42.22.webp" alt="Basecap">
+                                    <h3>Unisex Basecap Schwarz</h3>
+                                    <p class="description">Ein stylisches Unisex-Basecap in schwarz.</p>
+                                    <p class="sizes size-placeholder">Größen: Unisex</p>
+                                    <div class="price">€23.90</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+
+                                <div class="product-card">
+                                    <div class="speech-bubble">Das bin ich auf der Tasse!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-05 um 11.34.52.webp" alt="Tasse">
+                                    <h3>Tasse "Cookie Crew" Wuschel</h3>
+                                    <p class="description">Süße Tasse mit dem Motiv "Cookie Crew" Wuschel.</p>
+                                    <p class="sizes size-placeholder">Größen: -</p>
+                                    <div class="price">€19.50</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 2 -->
+                            <div class="slide">
+                                <div class="product-card">
+                                    <div class="speech-bubble">Das gehört mir!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.51.57.webp" alt="Moniki Hoodie">
+                                    <h3>Unisex Hoodie Moosgrün "Moniki"</h3>
+                                    <p class="description">Ein moosgrünes Unisex-Hoodie mit "Moniki Kicherkrähe".</p>
+                                    <p class="sizes">Größen: XS - XXL</p>
+                                    <div class="price">€49.90</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+
+                                <div class="product-card">
+                                    <div class="speech-bubble">Reserviert für dich!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.10.webp" alt="Basecap">
+                                    <h3>Unisex Basecap Moosgrün "Moniki"</h3>
+                                    <p class="description">Moosgrünes Basecap mit "Moniki Kicherkrähe".</p>
+                                    <p class="sizes size-placeholder">Größen: Unisex</p>
+                                    <div class="price">€23.90</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+
+                                <div class="product-card">
+                                    <div class="speech-bubble">Kein Kakao verschüttet!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.18.webp" alt="Moniki Tasse">
+                                    <h3>Tasse "Moniki Kicherkrähe"</h3>
+                                    <p class="description">Süße Tasse für warme Kakao-Momente.</p>
+                                    <p class="sizes size-placeholder">Größen: -</p>
+                                    <div class="price">€19.50</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 3 -->
+                            <div class="slide">
+                                <div class="product-card">
+                                    <div class="speech-bubble">Flauschig? Nein! Super-Flauschig!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.28.webp" alt="Cookie-Hoodie">
+                                    <h3>Unisex Hoodie soft Beige "Cookino"</h3>
+                                    <p class="description">Ein beiges Unisex-Hoodie mit dem Motiv "Cookino".</p>
+                                    <p class="sizes">Größen: XS - XXL</p>
+                                    <div class="price">€49.90</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+
+                                <div class="product-card">
+                                    <div class="speech-bubble">Die Mütze schmeckt am besten!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.40.webp" alt="Cookie-Basecap">
+                                    <h3>Unisex Basecap Dunkelblau "Cookino"</h3>
+                                    <p class="description">Ein dunkelblaues Unisex-Basecap mit dem Motiv "Cookino".</p>
+                                    <p class="sizes size-placeholder">Größen: Unisex</p>
+                                    <div class="price">€23.90</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+
+                                <div class="product-card">
+                                    <div class="speech-bubble">Hmmmmm Cookinoooos!</div>
+                                    <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
+                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.50.webp" alt="Cookie-Tasse">
+                                    <h3>Tasse "Cookie Crew" "Cookino"</h3>
+                                    <p class="description">Süße Tasse mit dem Motiv "Cookie Crew" Cookino.</p>
+                                    <p class="sizes size-placeholder">Größen: -</p>
+                                    <div class="price">€19.50</div>
+                                    <button class="btn">In den Beutel 🛍️</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <button class="nav-btn next-btn" id="nextBtn" aria-label="Nächste">❯</button>
+                </div>
+
+                <div class="carousel-dots" id="carouselDots"></div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- 3. PIXEL-GAME (MEMORY + DOWNLOADS)                 -->
+            <!-- ================================================= -->
+            <section id="view-game" class="view-section hidden-view">
+                <div class="section-title">
+                    <h2><img src="assets/Die Rätselkammer.webp" alt="Die Rätselkammer Icon" class="section-icon">
+                         Die Spiele-Ecke</h2>
+                    <p>Spiel eine Runde Memory oder schnapp dir ein paar Cookie-Crew-Bilder!</p>
+                </div>
+
+                <div class="game-subnav">
+                    <button class="subtab active-subtab" data-subtarget="panel-memory">🎮 Spielen</button>
+                    <button class="subtab" data-subtarget="panel-downloads">📥 Downloads</button>
+                </div>
+
+                <!-- MEMORY PANEL -->
+                <div id="panel-memory" class="game-panel active-panel">
+                    <div class="memory-stats">
+                        <div class="stat-box">Versuche: <span id="memory-moves">0</span></div>
+                        <div class="stat-box">Gefunden: <span id="memory-matches">0</span> / 6</div>
+                        <button id="memory-restart-btn" class="restart-btn">Neu starten 🔄</button>
+                    </div>
+
+                    <!-- Das Memory Spielfeld -->
+                    <div id="memory-board" class="memory-grid"></div>
+
+                    <div id="memory-victory-modal" class="victory-modal hidden-view">
+                        🎉 Super gemacht! Du hast alle Monster-Freunde gefunden! 🍪✨
+                    </div>
+                </div>
+
+                <!-- DOWNLOADS PANEL -->
+                <div id="panel-downloads" class="game-panel hidden-panel">
+                    <p class="downloads-intro">Lade dir deine Lieblings-Plüschmonster als Bild herunter – zum Ausmalen, als Hintergrund oder einfach zum Verschenken!</p>
+                    <div class="downloads-grid">
+                        <a class="download-card" href="assets/Mixelmoos.webp" download="Mixelmoos.webp">
+                            <img src="assets/Mixelmoos.webp" alt="Mixelmoos">
+                            <span class="download-name">Mixelmoos</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                        <a class="download-card" href="assets/Wuschel.webp" download="Wuschel.webp">
+                            <img src="assets/Wuschel.webp" alt="Wuschel Witznase">
+                            <span class="download-name">Wuschel Witznase</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                        <a class="download-card" href="assets/Moniki.webp" download="Moniki.webp">
+                            <img src="assets/Moniki.webp" alt="Moniki Kicherkrähe">
+                            <span class="download-name">Moniki Kicherkrähe</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                        <a class="download-card" href="assets/Cookino.webp" download="Cookino.webp">
+                            <img src="assets/Cookino.webp" alt="Cookino">
+                            <span class="download-name">Cookino</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                        <a class="download-card" href="assets/Annora.webp" download="Annora.webp">
+                            <img src="assets/Annora.webp" alt="Annora Hexa Hex">
+                            <span class="download-name">Annora Hexa Hex</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                        <a class="download-card" href="assets/Bendix.webp" download="Bendix.webp">
+                            <img src="assets/Bendix.webp" alt="Bendix">
+                            <span class="download-name">Bendix</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                        <a class="download-card" href="assets/Ramona.webp" download="Ramona.webp">
+                            <img src="assets/Ramona.webp" alt="Ramona">
+                            <span class="download-name">Ramona</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                        <a class="download-card" href="assets/Chris.webp" download="Chris.webp">
+                            <img src="assets/Chris.webp" alt="Chris">
+                            <span class="download-name">Chris</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                        <a class="download-card" href="assets/Lee.webp" download="Lee.webp">
+                            <img src="assets/Lee.webp" alt="Lee">
+                            <span class="download-name">Lee</span>
+                            <span class="download-btn">⬇ Download</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- 4. DIE COOKIE CREW SECTION                        -->
+            <!-- ================================================= -->
+            <section id="view-crew" class="view-section hidden-view">
+
+                <!-- MISSION SECTION -->
+                <div class="hero-text">
+                    <h1><span class="graffiti-letter">U</span>nsere <span class="graffiti-letter">M</span>ission</h1>
+                    <p class="hero-subtitle">Mehr als nur Krümel im System.</p>
+                </div>
+
+                <div class="story-content">
+                    <p>Wir verwandeln Code in Charakter!</p>
+                    <p>Wir glauben nicht an Standardlösungen. Wir glauben daran, dass hinter jeder Datenbank, jeder Zeile Python und jedem Frontend-Pixel eine Geschichte steckt, die erzählt werden will.</p>
+                </div>
+
+                <!-- CREW SECTION -->
+                <div class="hero-text">
+                    <h1 style="font-size: 2.3rem;"><span class="graffiti-letter">D</span>ie <span class="graffiti-letter">C</span>rew</h1>
+                </div>
+
+                <div class="monster-grid crew-grid">
+                    <!-- Bendix -->
+                    <div class="product-card">
+                        <div class="speech-bubble">Feuriger Frontend Frosch🐸</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Bendix.webp" alt="Bendix" class="product-image">
+                        <span class="card-title">Bendix</span>
+                        <span class="card-role">Frontend-Entwicklung & AWS</span>
+                        <span class="quote">"Der frühe Vogel fängt den Wurm - und der schlaue Wurm schläft etwas länger!"</span>
+                        <p class="description">Bendix schlägt die Brücke zwischen dem, was man sieht, und der Power, die dahintersteckt. Als Experte für Frontend und AWS sorgt er dafür, dass unsere Anwendung nicht nur glänzend aussieht, sondern auch in der Cloud eine perfekte Figur macht. Sein Antrieb? Das direkte Feedback: Er liebt es am Ende des Tages Schwarz auf weiß (oder in Pixeln) zu sehen, wie sich das Produkt durch seinen Code weiterentwickelt hat.</p>
+                        <span class="bold-label">Was Bendix ausmacht:</span>
+                        <p class="description">Wer glaubt, dass Entwickler immer nur nach starren Plänen arbeiten, kennt Bendix noch nicht. Er kombiniert technische Präzision mit einer gesunden Portion Gelassenheit. Sein größtes Projekt aktuell? Der perfekte Fun Fact. Bendix arbeitet nämlich noch akribisch daran - und wir sind uns sicher: Wenn er fertig ist, wird er legendär. Bis dahin lassen wir ihn einfach weiter am Code (und am Wurm-Ausschlafen) tüfteln.</p>
+                    </div>
+
+                    <!-- Ramona -->
+                    <div class="product-card">
+                        <div class="speech-bubble">Penible Pixel Prinzessin👸</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Ramona.webp" alt="Ramona" class="product-image">
+                        <span class="card-title">Ramona</span>
+                        <span class="card-role">Kreativ-Abteilung & Charakter-Design</span>
+                        <span class="quote">"Fehler sind Helfer – nur anders buchstabiert."</span>
+                        <p class="description">Ramona ist das kreative Herzstück unserer Charakter-Entwicklung. Mit viel Liebe zum Detail und einem feinen Gespür für Persönlichkeiten schafft sie es, Skizzen zum Leben zu erwecken und ihnen eine ganz eigene Seele einzuhauchen. Für sie ist der kreative Prozess ein Abenteuer, bei dem auch Umwege oft zu den besten Ergebnissen führen.</p>
+                        <span class="bold-label">Was Ramona ausmacht:</span>
+                        <p class="description">Wenn sie nicht gerade an neuen Charakteren tüftelt, findet man sie höchstwahrscheinlich in ihrem Gemüsegarten. Dort, zwischen Kräutern und Beeten, fließen ihre Gedanken am besten und die kreativsten Ideen entstehen. Aber Vorsicht: Bevor der erste Kaffee nicht getrunken ist, bleibt die Charakter-Schmiede geschlossen!</p>
+                    </div>
+
+                    <!-- Chris -->
+                    <div class="product-card">
+                        <div class="speech-bubble">Blubbernder Backend Bär🐻</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Chris.webp" alt="Chris" class="product-image">
+                        <span class="card-title">Chris</span>
+                        <span class="card-role">Backend & Datenbank-Architektur</span>
+                        <span class="quote">"Wo ein Fehler ist, ist auch ein Weg, Du Birne!"</span>
+                        <p class="description">Während andere sich an der Oberfläche bewegen, taucht Chris tief in die Welt der Daten ab. Er ist unser Meister der Logik und sorgt dafür, dass im Hintergrund alles stabil läuft. Für Chris gibt es nichts Befriedigenderes als ein System, in dem jedes Zahnrad perfekt in das andere greift und am Ende alles einen logischen Sinn ergibt.</p>
+                        <span class="bold-label">Was Chris ausmacht:</span>
+                        <p class="description">Chris hat ein besonderes Talent dafür, Fehler nicht nur zu finden, sondern sie mit einer gewissen Prise Humor (und manchmal einem Augenzwinkern) aus dem Weg zu räumen. Wer im Backend arbeitet, braucht starke Nerven - oder ein riesiges Archiv an GIFs. Letztere bekommt vor allem Ramona zu spüren: Wenn Chris einen Lauf hat oder die Stimmung am Gipfel ist, wird ihr Postfach kurzerhand mit einer GIF-Spam-Welle geflutet.</p>
+                    </div>
+
+                    <!-- Lee -->
+                    <div class="product-card">
+                        <div class="speech-bubble">Perfekter Python Profi🐍</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Lee.webp" alt="Lee" class="product-image">
+                        <span class="card-title">Lee</span>
+                        <span class="card-role">Python Master</span>
+                        <span class="quote">"Only those who try will become"</span>
+                        <p class="description">Wenn es im Code kompliziert wird, schlägt Lees Stunde. Als unser Python Master liebt Lee die Herausforderung, komplexe Probleme in elegante, funktionierende Lösungen zu verwandeln. Für Lee gibt es keine Sackgassen - getreu dem Motto "Wo ein Wille ist, ist auch ein Weg!", wird so lange getüftelt, bis die Logik perfekt sitzt.</p>
+                        <span class="bold-label">Was Lee ausmacht:</span>
+                        <p class="description">Wer glaubt, Python sei Lees einzige Sprache, der irrt sich gewaltig. Lee ist nämlich absolut "Fluent in GIFs". Damit ist Lee die perfekte Ergänzung zu Chris - man munkelt, die interne Kommunikation der beiden besteht zu 90% aus animierten Bildern. Wenn Lee also gerade kein Problem löst, wird wahrscheinlich gerade das nächste perfekte GIF für den Team-Chat ausgewählt.</p>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer>
+            <span class="footer-logo">© 2026 Cookie Crew 🍪 Ramona 🍪 Chris 🍪 Lee 🍪 Bendix</span>
+
+            <div class="impressum-text">
+                <strong>Impressum</strong><br>
+                Angaben gemäß § 5 TMG:<br>
+                Das ist ein Schulprojekt und dient ausschliesslich Bildungszwecken.<br>
+                <br><br>
+                <small>
+                    EU-Streitschlichtung: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a>
+                </small>
             </div>
-            <!-- NEU: Registrierung Formular -->
-            <div id="register-form" style="display:none;">
-                <input type="text" id="reg-vorname" placeholder="Vorname">
-                <input type="text" id="reg-nachname" placeholder="Nachname">
-                <input type="email" id="reg-email" placeholder="E-Mail">
-                <input type="password" id="reg-password" placeholder="Passwort (min. 8 Zeichen)">
-                <button class="btn" id="register-submit">Konto erstellen</button>
-                <div class="modal-switch">Bereits registriert? <a id="switch-to-login">Einloggen</a></div>
-            </div>
-        </div>
+        </footer>
+
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         NEU: Warenkorb Modal — öffnet sich beim Klick auf Warenkorb
-         Zeigt alle Artikel + Gesamt + Checkout Button
-         ═══════════════════════════════════════════════════════ -->
-    <div class="modal-overlay" id="warenkorb-modal">
-        <div class="modal" style="max-width:500px;">
-            <button class="modal-close" id="close-warenkorb">×</button>
-            <h2>🛒 Warenkorb</h2>
-            <div id="warenkorb-inhalt"></div>
-            <button class="btn" id="checkout-btn" style="margin-top:20px;">Jetzt kaufen</button>
-        </div>
-    </div>
-
-    <!-- NEU: Toast — kleine Benachrichtigung (z.B. "Artikel hinzugefügt") -->
-    <div class="toast" id="toast"></div>
-
-    <script>
-        // ════════════════════════════════════════════════════════
-        // NEU: SUPABASE VERBINDUNG
-        // URL und Key verbinden das Frontend mit der Datenbank
-        // ════════════════════════════════════════════════════════
-        const SUPABASE_URL = 'https://ohbogmvdrokadpikguqk.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oYm9nbXZkcm9rYWRwaWtndXFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODMwNDMsImV4cCI6MjA5MzU1OTA0M30.PvvTtby-HGQGbbP_7uMj52cXjmBCotcT8LdNuewoLZs';
-        const { createClient } = supabase;
-        window.sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-        const sb = window.sb;
-
-        // NEU: State — speichert eingeloggten Nutzer, Warenkorb und Login Versuche
-        let currentUser = null;
-        let warenkorb = [];
-        let loginVersuche = 0;
-
-        // ════════════════════════════════════════════════════════
-        // NEU: TOAST — zeigt kurze Benachrichtigungen
-        // ════════════════════════════════════════════════════════
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
-        }
-
-        // ════════════════════════════════════════════════════════
-        // NEU: AUTH STATE — prüft ob jemand ein- oder ausgeloggt ist
-        // Wird automatisch aufgerufen wenn sich der Login Status ändert
-        // ════════════════════════════════════════════════════════
-        sb.auth.onAuthStateChange(async (event, session) => {
-            if (session) {
-                currentUser = session.user;
-                // Login Button verstecken, User Info zeigen
-                document.getElementById('login-btn').style.display = 'none';
-                document.getElementById('user-info').style.display = 'flex';
-                document.getElementById('user-name').textContent = currentUser.email;
-                // Lokalen Warenkorb (Gast) in Supabase übertragen
-                if (warenkorb.length > 0) await syncWarenkorbToSupabase();
-                await ladeWarenkorb();
-            } else {
-                currentUser = null;
-                document.getElementById('login-btn').style.display = 'inline';
-                document.getElementById('user-info').style.display = 'none';
-                document.getElementById('user-name').textContent = '';
-            }
-        });
-
-        // ════════════════════════════════════════════════════════
-        // NEU: LOGIN — max. 3 Versuche dann gesperrt
-        // ════════════════════════════════════════════════════════
-        document.getElementById('login-submit').addEventListener('click', async () => {
-            if (loginVersuche >= 3) {
-                zeigeFehler('Zu viele Versuche! Bitte warte einen Moment.');
-                return;
-            }
-            const email = document.getElementById('login-email').value;
-            const pw = document.getElementById('login-password').value;
-            const { error } = await sb.auth.signInWithPassword({ email, password: pw });
-            if (error) {
-                loginVersuche++;
-                const verbleibend = 3 - loginVersuche;
-                zeigeFehler(loginVersuche >= 3
-                    ? 'Zu viele Fehlversuche! Bitte warte 60 Sekunden.'
-                    : `Falsches Passwort. Noch ${verbleibend} Versuch(e).`
-                );
-                if (loginVersuche >= 3) {
-                    setTimeout(() => { loginVersuche = 0; }, 60000); // Bug 7: nach 60s automatisch entsperren
-                }
-            } else {
-                loginVersuche = 0;
-                schliesseModal('login-modal');
-                showToast('Willkommen zurück! 🍪');
-            }
-        });
-
-        // ════════════════════════════════════════════════════════
-        // NEU: REGISTRIEREN — neues Konto erstellen
-        // ════════════════════════════════════════════════════════
-        document.getElementById('register-submit').addEventListener('click', async () => {
-            const vorname = document.getElementById('reg-vorname').value.trim();
-            const nachname = document.getElementById('reg-nachname').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const pw = document.getElementById('reg-password').value;
-            if (!vorname || !nachname || !email || !pw) { zeigeFehler('Bitte alle Felder ausfüllen.'); return; }
-            if (pw.length < 8) { zeigeFehler('Passwort muss mindestens 8 Zeichen haben.'); return; }
-            const { error } = await sb.auth.signUp({ email, password: pw, options: { data: { vorname, nachname } } });
-            if (error) { zeigeFehler(error.message); }
-            else { zeigeErfolg('Konto erstellt! Du bist jetzt eingeloggt. 🎉'); setTimeout(() => schliesseModal('login-modal'), 2000); }
-        });
-
-        // ════════════════════════════════════════════════════════
-        // NEU: LOGOUT — "Licht und Frieden" Nachricht
-        // ════════════════════════════════════════════════════════
-        document.getElementById('logout-btn').addEventListener('click', async (e) => {
-            e.preventDefault();
-            await sb.auth.signOut();
-            warenkorb = [];
-            updateWarenkorbCount();
-            showToast('Bis bald! Licht und Frieden ✌️');
-        });
-
-        // ════════════════════════════════════════════════════════
-        // NEU: WARENKORB FUNKTIONEN
-        // ════════════════════════════════════════════════════════
-
-        // Warenkorb aus Supabase laden (wenn eingeloggt) — JOIN auf artikel für name & preis
-        async function ladeWarenkorb() {
-            if (!currentUser) return;
-
-            // Versuch 1: JOIN auf artikel-Tabelle
-            const { data, error } = await sb
-                .from('warenkorb')
-                .select('artikel_id, menge, artikel(name, preis)')
-                .eq('nutzer_id', currentUser.id);
-
-            if (error) {
-                console.warn('JOIN fehlgeschlagen, lade Rohdaten:', error.message);
-                // Fallback: artikel_id + menge laden, dann Artikeldaten separat holen
-                const { data: raw } = await sb
-                    .from('warenkorb')
-                    .select('artikel_id, menge')
-                    .eq('nutzer_id', currentUser.id);
-                if (raw && raw.length > 0) {
-                    const ids = raw.map(r => r.artikel_id);
-                    const { data: artikelData } = await sb
-                        .from('artikel')
-                        .select('id, name, preis')
-                        .in('id', ids);
-                    warenkorb = raw.map(row => {
-                        const art = artikelData?.find(a => a.id === row.artikel_id);
-                        return {
-                            artikel_id: row.artikel_id,
-                            menge: row.menge,
-                            name: art?.name ?? 'Artikel #' + row.artikel_id,
-                            preis: art?.preis ?? 0
-                        };
-                    });
-                } else {
-                    warenkorb = raw ?? [];
-                }
-            } else if (data) {
-                warenkorb = data.map(row => ({
-                    artikel_id: row.artikel_id,
-                    menge: row.menge,
-                    name: row.artikel?.name ?? 'Artikel #' + row.artikel_id,
-                    preis: row.artikel?.preis ?? 0
-                }));
-            }
-
-            updateWarenkorbCount();
-            // Fix Bug 4: Modal-Inhalt sofort aktualisieren wenn Modal offen ist
-            if (document.getElementById('warenkorb-modal').classList.contains('active')) {
-                zeigeWarenkorb();
-            }
-        }
-
-        // Lokalen Gast-Warenkorb in Supabase übertragen (nach Login)
-        async function syncWarenkorbToSupabase() {
-            if (!currentUser || warenkorb.length === 0) return;
-            for (const item of warenkorb) {
-                // Bug 5 fix: name & preis werden hier NICHT in die DB geschrieben
-                // (die warenkorb-Tabelle hat diese Spalten nicht) — sie kommen per JOIN
-                await sb.from('warenkorb').upsert(
-                    { nutzer_id: currentUser.id, artikel_id: item.artikel_id, menge: item.menge },
-                    { onConflict: 'nutzer_id,artikel_id' }
-                );
-            }
-        }
-
-        // Badge Anzahl aktualisieren
-        function updateWarenkorbCount() {
-            const count = warenkorb.reduce((sum, i) => sum + (i.menge || 1), 0);
-            const badge = document.getElementById('warenkorb-count');
-            badge.textContent = count;
-            badge.style.display = count > 0 ? 'flex' : 'none';
-        }
-
-        // NEU: Artikel hinzufügen — funktioniert auch als Gast (lokal gespeichert)
-        document.querySelectorAll('.add-to-cart').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const artikelId = parseInt(btn.dataset.artikelId);
-                const name = btn.dataset.name;
-                const preis = parseFloat(btn.dataset.preis);
-
-                if (currentUser) {
-                    // Eingeloggt → direkt in Supabase speichern
-                    const { data: vorh } = await sb.from('warenkorb')
-                        .select('*').eq('nutzer_id', currentUser.id).eq('artikel_id', artikelId).maybeSingle();
-                    if (vorh) {
-                        await sb.from('warenkorb').update({ menge: vorh.menge + 1 })
-                            .eq('nutzer_id', currentUser.id).eq('artikel_id', artikelId);
-                    } else {
-                        await sb.from('warenkorb').insert({ nutzer_id: currentUser.id, artikel_id: artikelId, menge: 1 });
-                    }
-                    await ladeWarenkorb();
-                } else {
-                    // Gast → lokal im Browser speichern
-                    const vorh = warenkorb.find(i => i.artikel_id === artikelId);
-                    if (vorh) { vorh.menge++; }
-                    else { warenkorb.push({ artikel_id: artikelId, name, preis, menge: 1 }); }
-                    updateWarenkorbCount();
-                }
-                showToast(`${name} zum Warenkorb hinzugefügt! 🍪`);
-            });
-        });
-
-        // Warenkorb Modal öffnen
-        document.getElementById('warenkorb-btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            zeigeWarenkorb();
-            oeffneModal('warenkorb-modal');
-        });
-
-        // Warenkorb Inhalt anzeigen
-        function zeigeWarenkorb() {
-            const inhalt = document.getElementById('warenkorb-inhalt');
-            if (warenkorb.length === 0) {
-                inhalt.innerHTML = '<div class="warenkorb-leer">Dein Warenkorb ist leer 🍪</div>';
-                return;
-            }
-            let gesamt = 0;
-            let html = '';
-            warenkorb.forEach(item => {
-                const preis = item.preis || 0;
-                const summe = preis * item.menge;
-                gesamt += summe;
-                html += `
-                    <div class="warenkorb-item">
-                        <div>
-                            <div class="warenkorb-item-name">${item.name || 'Artikel #' + item.artikel_id}</div>
-                            <div class="warenkorb-item-preis">€${preis.toFixed(2)} × ${item.menge}</div>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <span>€${summe.toFixed(2)}</span>
-                            <button class="warenkorb-remove" data-id="${item.artikel_id}">×</button>
-                        </div>
-                    </div>`;
-            });
-            html += `<div class="warenkorb-gesamt">Gesamt: €${gesamt.toFixed(2)}</div>`;
-            inhalt.innerHTML = html;
-
-            inhalt.querySelectorAll('.warenkorb-remove').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const id = parseInt(btn.dataset.id);
-                    if (currentUser) {
-                        await sb.from('warenkorb').delete().eq('nutzer_id', currentUser.id).eq('artikel_id', id);
-                        await ladeWarenkorb();
-                    } else {
-                        warenkorb = warenkorb.filter(i => i.artikel_id !== id);
-                        updateWarenkorbCount();
-                    }
-                    zeigeWarenkorb();
-                });
-            });
-        }
-
-        // NEU: CHECKOUT — Gäste werden zum Login weitergeleitet
-        document.getElementById('checkout-btn').addEventListener('click', async () => {
-            if (!currentUser) {
-                // Gast → Login Modal öffnen
-                schliesseModal('warenkorb-modal');
-                oeffneModal('login-modal');
-                setTimeout(() => zeigeFehler('Bitte erst anmelden um zu kaufen!'), 300); // Bug 9: warte auf Modal-Animation
-                return;
-            }
-            if (warenkorb.length === 0) { showToast('Dein Warenkorb ist leer!'); return; }
-
-            const gesamt = warenkorb.reduce((sum, i) => sum + (i.preis || 0) * i.menge, 0);
-            const { data: bestellung } = await sb.from('bestellungen').insert({
-                nutzer_id: currentUser.id, gesamt_preis: gesamt, status: 'offen'
-            }).select().single();
-
-            if (bestellung) {
-                await sb.from('warenkorb').delete().eq('nutzer_id', currentUser.id);
-                warenkorb = [];
-                updateWarenkorbCount();
-                schliesseModal('warenkorb-modal');
-                // NEU: Happy Hacking Nachricht beim Checkout
-                showToast('Happy Hacking! Vielen Dank für deinen Einkauf! 🍪');
-            }
-        });
-
-        // ════════════════════════════════════════════════════════
-        // NEU: MODAL HILFSFUNKTIONEN
-        // ════════════════════════════════════════════════════════
-        function oeffneModal(id) { document.getElementById(id).classList.add('active'); }
-        function schliesseModal(id) { document.getElementById(id).classList.remove('active'); }
-        function zeigeFehler(msg) {
-            const el = document.getElementById('modal-error');
-            el.textContent = msg; el.style.display = 'block';
-            setTimeout(() => el.style.display = 'none', 4000);
-        }
-        function zeigeErfolg(msg) {
-            const el = document.getElementById('modal-success');
-            el.textContent = msg; el.style.display = 'block';
-        }
-
-        document.getElementById('login-btn').addEventListener('click', (e) => { e.preventDefault(); oeffneModal('login-modal'); });
-        document.getElementById('close-login').addEventListener('click', () => schliesseModal('login-modal'));
-        document.getElementById('close-warenkorb').addEventListener('click', () => schliesseModal('warenkorb-modal'));
-
-        // Bug 10: Enter-Taste im Login-Formular
-        ['login-email', 'login-password'].forEach(id => {
-            document.getElementById(id).addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') document.getElementById('login-submit').click();
-            });
-        });
-        document.getElementById('switch-to-register').addEventListener('click', () => {
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('register-form').style.display = 'block';
-            document.getElementById('modal-title').textContent = 'Registrieren';
-        });
-        document.getElementById('switch-to-login').addEventListener('click', () => {
-            document.getElementById('register-form').style.display = 'none';
-            document.getElementById('login-form').style.display = 'block';
-            document.getElementById('modal-title').textContent = 'Login';
-        });
-        // Klick außerhalb schließt Modal
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
-        });
-
-        // ════════════════════════════════════════════════════════
-        // ORIGINAL: CAROUSEL LOGIK — unverändert
-        // ════════════════════════════════════════════════════════
-        const track = document.getElementById('track');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const slides = document.querySelectorAll('.slide');
-        let index = 0;
-
-        function updateSlider() {
-            track.style.transform = `translateX(-${index * 100}%)`;
-            prevBtn.disabled = index === 0;
-            nextBtn.disabled = index === slides.length - 1;
-        }
-        nextBtn.addEventListener('click', () => { if (index < slides.length - 1) { index++; updateSlider(); } });
-        prevBtn.addEventListener('click', () => { if (index > 0) { index--; updateSlider(); } });
-        updateSlider();
-
-        // ════════════════════════════════════════════════════════
-        // ORIGINAL: COOKIE BANNER LOGIK — unverändert
-        // ════════════════════════════════════════════════════════
-        window.onload = () => {
-            const consent = localStorage.getItem('cookiesAccepted');
-            const banner = document.getElementById('cookie-banner');
-            if (consent === 'true') { banner.style.display = 'none'; }
-            else { banner.classList.remove('hidden-banner'); banner.style.display = 'flex'; }
-            createFlyingCookies();
-        }
-
-        function acceptCookies() {
-            const banner = document.getElementById('cookie-banner');
-            banner.classList.add('hidden-banner');
-            localStorage.setItem('cookiesAccepted', 'true');
-            setTimeout(() => { banner.style.display = 'none'; }, 500);
-        }
-
-        // ════════════════════════════════════════════════════════
-        // ORIGINAL: FLIEGENDE BILDER LOGIK — unverändert
-        // ════════════════════════════════════════════════════════
-        function createFlyingCookies() {
-            const container = document.getElementById('cookie-background');
-            const imageSources = ['bild1.png', 'bild2.png', 'bild3.png'];
-            for (let i = 0; i < 30; i++) {
-                const cookie = document.createElement('img');
-                cookie.className = 'flying-cookie';
-                cookie.src = imageSources[Math.floor(Math.random() * imageSources.length)];
-                cookie.style.left = Math.random() * 100 + 'vw';
-                cookie.style.animationDuration = (Math.random() * 10 + 12) + 's';
-                cookie.style.animationDelay = (Math.random() * 15) + 's';
-                cookie.style.width = (Math.random() * 30 + 30) + 'px';
-                container.appendChild(cookie);
-            }
-        }
-    </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
