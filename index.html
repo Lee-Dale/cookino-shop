@@ -17,8 +17,26 @@
 </head>
 <body>
 
-    <!-- 1. INTRO: DIE REISE DURCH DEN PIXEL PLÜSCHWALD (DIASHOW-WALDSPAZIERGANG) -->
+    <!-- HINTERGRUNDMUSIK AUDIO ELEMENT -->
+    <audio id="bgAudio" loop preload="auto" src="assets/audio/hintergrundmusik.mp3"></audio>
+
+    <!-- KOMPAKTER SOUND BUTTON OBEN RECHTS (IMMER ZUGÄNGLICH) -->
+    <button id="musicToggleBtn" class="floating-music-btn" aria-label="Musik an/aus" title="Musik an/aus">🔊</button>
+
+    <!-- 1. INTRO: START-BILDSCHIRM & WALDSPAZIERGANG -->
     <div id="intro-viewport">
+        
+        <!-- START OVERLAY (Schaltet Audio frei & startet Intro) -->
+        <div id="start-overlay" class="start-overlay">
+            <div class="start-content">
+                <span class="badge-tag">✨ Willkommen im ✨</span>
+                <h1>Pixel Plüschwald</h1>
+                <p>Klicke unten, um deine magische Reise durch den Wald zu beginnen!</p>
+                <button id="startJourneyBtn" class="start-journey-btn">Reise starten 🎵</button>
+            </div>
+        </div>
+
+        <!-- DIASHOW (Startet nach Klick auf "Reise starten") -->
         <div class="intro-slideshow">
             <div class="intro-slide slide-1"></div>
             <div class="intro-slide slide-2"></div>
@@ -26,12 +44,12 @@
             <div class="intro-slide slide-4"></div>
         </div>
 
-        <div class="intro-welcome-text">
+        <div class="intro-welcome-text" id="introWelcomeText" style="opacity: 0;">
             <h2>Willkommen im</h2>
             <h1>Pixel Plüschwald ✨</h1>
         </div>
 
-        <button id="skipBtn" class="skip-btn">Hüpf zur Lichtung! 🐇</button>
+        <button id="skipBtn" class="skip-btn" style="display: none;">Hüpf zur Lichtung! 🐇</button>
     </div>
 
     <!-- 2. HAUPT-APP: DIE ZAUBERLICHTUNG -->
@@ -85,7 +103,7 @@
                 </div>
 
                 <div class="adventure-grid">
-                    <!-- Tür 1: Geschichten / Die Gefährten (Moos-bewachsen) -->
+                    <!-- Tür 1: Geschichten / Die Gefährten -->
                     <div class="door-frame" data-target="view-stories">
                         <div class="door-portal-glow glow-moss"></div>
                         <div class="door door-mossy">
@@ -101,7 +119,7 @@
                         </div>
                     </div>
 
-                    <!-- Tür 2: Kollektion / Die Schatzkammer (Goldene Magie) -->
+                    <!-- Tür 2: Kollektion / Die Schatzkammer -->
                     <div class="door-frame" data-target="view-collection">
                         <div class="door-portal-glow glow-gold"></div>
                         <div class="door door-gold">
@@ -117,7 +135,7 @@
                         </div>
                     </div>
 
-                    <!-- Tür 3: Rätselkammer (Mystisches Violett) -->
+                    <!-- Tür 3: Rätselkammer -->
                     <div class="door-frame" data-target="view-game">
                         <div class="door-portal-glow glow-mystic"></div>
                         <div class="door door-mystic">
@@ -133,7 +151,7 @@
                         </div>
                     </div>
 
-                    <!-- Tür 4: Cookie Crew (Warmes Ofen-Holz) -->
+                    <!-- Tür 4: Cookie Crew -->
                     <div class="door-frame" data-target="view-crew">
                         <div class="door-portal-glow glow-warm"></div>
                         <div class="door door-warm">
@@ -161,7 +179,6 @@
                     <p>Setz dich ans Lagerfeuer und lausche den Geschichten!</p>
                 </div>
 
-                <!-- CHARAKTERE SECTION -->
                 <div class="hero-text" style="margin-top: 50px;">
                     <h1 style="font-size: 2.3rem;"><span class="graffiti-letter">D</span>ie <span class="graffiti-letter">C</span>haraktere</h1>
                 </div>
@@ -189,7 +206,7 @@
                         <span class="card-title">Wuschel Witznase</span>
                         <span class="card-role">Hüter des Schabernacks</span>
                         <p class="description">Bevor der Wald seinen heutigen Namen trug, war er ein ernster Ort. Das änderte sich in einer Nacht, als eine kichernde Gewitterwolke platzte. Aus blauem Flausch, Blaubeersaft und Mondlicht entstand das "Kuschel-Krümel-Monster" Wuschel Witznase.</p>
-                        <p class="description">Wuschel brachte den Schabernack in den Wald. Mit funkelnden Augen und einem riesigen Lächeln sorgt er für Wirbel durch Kitzel-Fallen, den Nuss-Tausch und seine unbändige Keks-Liebe. Er beweist, dass Freude und ein kleiner Streich zur rechten Zeit selbst den ernstesten Wald zum Blühen bringen.</p>
+                        <p class="description">Wuschel brought den Schabernack in den Wald. Mit funkelnden Augen und einem riesigen Lächeln sorgt er für Wirbel durch Kitzel-Fallen, den Nuss-Tausch und seine unbändige Keks-Liebe. Er beweist, dass Freude und ein kleiner Streich zur rechten Zeit selbst den ernstesten Wald zum Blühen bringen.</p>
                         <span class="quote">"Wahre Größe misst man nicht in Ellen, sondern in der Anzahl der Krümel, die man beim Lachen hinterlässt, und dem Schalk, der in den Augen blitzt."</span>
                     </div>
 
