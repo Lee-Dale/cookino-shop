@@ -1,0 +1,13 @@
+# Zugangsdaten
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
