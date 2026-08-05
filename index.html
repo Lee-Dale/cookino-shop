@@ -17,26 +17,37 @@
 </head>
 <body>
 
+    <!-- CUSTOM CURSOR & CANVAS FLUID PARTICLES -->
+    <div class="custom-cursor-dot" id="cursorDot"></div>
+    <canvas id="fluid-canvas"></canvas>
+
+    <!-- AURORA & MESH GRADIENT BACKGROUND LAYER -->
+    <div class="aurora-container" aria-hidden="true">
+        <div class="aurora-blob blob-1"></div>
+        <div class="aurora-blob blob-2"></div>
+        <div class="aurora-blob blob-3"></div>
+    </div>
+
     <!-- HINTERGRUNDMUSIK AUDIO ELEMENT -->
     <audio id="bgAudio" loop preload="auto" src="assets/audio/hintergrundmusik.mp3"></audio>
 
-    <!-- KOMPAKTER SOUND BUTTON OBEN RECHTS (IMMER ZUGÄNGLICH) -->
-    <button id="musicToggleBtn" class="floating-music-btn" aria-label="Musik an/aus" title="Musik an/aus">🔊</button>
+    <!-- KOMPAKTER SOUND BUTTON OBEN RECHTS -->
+    <button id="musicToggleBtn" class="floating-music-btn magnetic-element" aria-label="Musik an/aus" title="Musik an/aus">🔊</button>
 
     <!-- 1. INTRO: START-BILDSCHIRM & WALDSPAZIERGANG -->
     <div id="intro-viewport">
         
-        <!-- START OVERLAY (Schaltet Audio frei & startet Intro) -->
+        <!-- START OVERLAY -->
         <div id="start-overlay" class="start-overlay">
-            <div class="start-content">
-                <span class="badge-tag">✨ Willkommen im ✨</span>
-                <h1>Pixel Plüschwald</h1>
+            <div class="start-content glass-card tilt-card spotlight-card">
+                <span class="badge-tag clay-badge">✨ Willkommen im ✨</span>
+                <h1 class="intro-heading">Pixel Plüschwald</h1>
                 <p>Klicke unten, um deine magische Reise durch den Wald zu beginnen!</p>
-                <button id="startJourneyBtn" class="start-journey-btn">Reise starten 🎵</button>
+                <button id="startJourneyBtn" class="start-journey-btn magnetic-element clay-btn">Reise starten 🎵</button>
             </div>
         </div>
 
-        <!-- DIASHOW (Startet nach Klick auf "Reise starten") -->
+        <!-- DIASHOW -->
         <div class="intro-slideshow">
             <div class="intro-slide slide-1"></div>
             <div class="intro-slide slide-2"></div>
@@ -46,123 +57,143 @@
 
         <div class="intro-welcome-text" id="introWelcomeText" style="opacity: 0;">
             <h2>Willkommen im</h2>
-            <h1>Pixel Plüschwald ✨</h1>
+            <h1 class="intro-heading">Pixel Plüschwald ✨</h1>
         </div>
 
-        <button id="skipBtn" class="skip-btn" style="display: none;">Hüpf zur Lichtung! 🐇</button>
+        <button id="skipBtn" class="skip-btn magnetic-element clay-btn" style="display: none;">Hüpf zur Lichtung! 🐇</button>
     </div>
+
+    <!-- MAGISCHER LICHTUNG-ÜBERGANG OVERLAY -->
+    <div id="clearing-light-overlay" class="clearing-light-overlay" aria-hidden="true"></div>
 
     <!-- 2. HAUPT-APP: DIE ZAUBERLICHTUNG -->
     <div id="app-wrapper" class="content-hidden">
 
-        <!-- FLIEGENDE COOKIES / COOKINOS HINTERGRUND -->
+        <!-- FLIEGENDE COOKIES HINTERGRUND -->
         <div id="cookie-background" class="cookie-background" aria-hidden="true"></div>
 
-        <!-- OBERER HEADER MIT NAVIGATION, LOGIN & WARENKORB -->
+        <!-- OBERER HEADER -->
         <header class="playful-header">
             
             <nav class="main-nav" aria-label="Hauptnavigation">
-                <button class="nav-tab active-tab" data-target="view-hub">
+                <button class="nav-tab active-tab magnetic-element" data-target="view-hub">
                     <img src="assets/Die Reise beginnt.webp" alt="" class="nav-tab-icon">
                     <span>Die Reise beginnt</span>
                 </button>
-                <button class="nav-tab" data-target="view-stories">
+                <button class="nav-tab magnetic-element" data-target="view-stories">
                     <img src="assets/Die Gefährten.webp" alt="" class="nav-tab-icon">
                     <span>Die Gefährten</span>
                 </button>
-                <button class="nav-tab" data-target="view-collection">
+                <button class="nav-tab magnetic-element" data-target="view-collection">
                     <img src="assets/Die Schatzkammer.webp" alt="" class="nav-tab-icon">
                     <span>Die Schatzkammer</span>
                 </button>
-                <button class="nav-tab" data-target="view-game">
+                <button class="nav-tab magnetic-element" data-target="view-game">
                     <img src="assets/Die Rätselkammer.webp" alt="" class="nav-tab-icon">
                     <span>Die Rätselkammer</span>
                 </button>
-                <button class="nav-tab" data-target="view-crew">
+                <button class="nav-tab magnetic-element" data-target="view-crew">
                     <img src="assets/Die Hüter des Reiches .webp" alt="" class="nav-tab-icon">
                     <span>Die Hüter des Reiches</span>
                 </button>
             </nav>
 
             <div class="header-user-actions">
-                <button class="header-action-btn login-btn" id="loginBtn">👤 Login</button>
-                <button class="header-action-btn cart-btn" id="cartBtn">🛒 Warenkorb (<span id="cartCount">0</span>)</button>
+                <button class="header-action-btn login-btn magnetic-element neumorphic-btn" id="loginBtn" title="Login" aria-label="Login">👤</button>
+                <button class="header-action-btn cart-btn magnetic-element neumorphic-btn" id="cartBtn" title="Warenkorb" aria-label="Warenkorb">
+                    🛒
+                    <span class="cart-badge" id="cartCount">0</span>
+                </button>
             </div>
         </header>
+
+        <!-- INFINITE MARQUEE TICKER -->
+        <div class="infinite-marquee-wrapper" aria-hidden="true">
+            <div class="marquee-content">
+                <span>✨ WILLKOMMEN IM PIXEL PLÜSCHWALD ✨</span>
+                <span>🍪 FRISCHE COOKINOS ENTDECKEN 🍪</span>
+                <span>🧙‍♀️ ANNORA HEXA HEX MAGIE 🧙‍♀️</span>
+                <span>🎮 BESUCHE DIE RÄTSELKAMMER 🎮</span>
+                <span>✨ WILLKOMMEN IM PIXEL PLÜSCHWALD ✨</span>
+                <span>🍪 FRISCHE COOKINOS ENTDECKEN 🍪</span>
+                <span>🧙‍♀️ ANNORA HEXA HEX MAGIE 🧙‍♀️</span>
+                <span>🎮 BESUCHE DIE RÄTSELKAMMER 🎮</span>
+            </div>
+        </div>
 
         <main id="main-container">
 
             <!-- ================================================= -->
-            <!-- HUB / DIE ZAUBERLICHTUNG (4 VERWUNSCHENE TÜREN)   -->
+            <!-- HUB / DIE ZAUBERLICHTUNG                         -->
             <!-- ================================================= -->
             <section id="view-hub" class="view-section active-view">
-                <div class="hub-hero">
-                    <span class="badge-tag">✨ Entdecke den Plüschwald ✨</span>
-                    <h1>Wo soll die Reise hingehen?</h1>
+                <div class="hub-hero glass-card spotlight-card">
+                    <span class="badge-tag clay-badge">✨ Entdecke den Plüschwald ✨</span>
+                    <h1 class="kinetic-text">Wo soll die Reise hingehen?</h1>
                     <p>Klicke auf eine der verwunschenen Holztüren, um das Portal zur nächsten Welt zu öffnen!</p>
                 </div>
 
                 <div class="adventure-grid">
                     <!-- Tür 1: Geschichten / Die Gefährten -->
-                    <div class="door-frame" data-target="view-stories">
+                    <div class="door-frame tilt-card spotlight-card" data-target="view-stories">
                         <div class="door-portal-glow glow-moss"></div>
                         <div class="door door-mossy">
                             <div class="door-hinge hinge-top"></div>
                             <div class="door-hinge hinge-bottom"></div>
                             <div class="door-knob"></div>
                             <div class="wooden-sign">
-                                <div class="card-icon"><img src="assets/Die Gefährten.webp" alt="Geschichten"></div>
+                                <div class="card-icon"><img src="assets/Die Gefährten.webp" alt="Die Gefährten"></div>
                                 <h3>Die Gefährten</h3>
                                 <p>Lies spannende Abenteuer aus dem Pixel Plüschwald!</p>
-                                <span class="card-action-btn">Tür öffnen ➔</span>
+                                <span class="card-action-btn magnetic-element">Tür öffnen ➔</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tür 2: Kollektion / Die Schatzkammer -->
-                    <div class="door-frame" data-target="view-collection">
+                    <div class="door-frame tilt-card spotlight-card" data-target="view-collection">
                         <div class="door-portal-glow glow-gold"></div>
                         <div class="door door-gold">
                             <div class="door-hinge hinge-top"></div>
                             <div class="door-hinge hinge-bottom"></div>
                             <div class="door-knob"></div>
                             <div class="wooden-sign">
-                                <div class="card-icon"><img src="assets/Die Schatzkammer.webp" alt="Kollektion"></div>
+                                <div class="card-icon"><img src="assets/Die Schatzkammer.webp" alt="Die Schatzkammer"></div>
                                 <h3>Die Schatzkammer</h3>
                                 <p>Entdecke kuschelige Hoodies, Mützen & Tassen!</p>
-                                <span class="card-action-btn">Tür öffnen ➔</span>
+                                <span class="card-action-btn magnetic-element">Tür öffnen ➔</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tür 3: Rätselkammer -->
-                    <div class="door-frame" data-target="view-game">
+                    <div class="door-frame tilt-card spotlight-card" data-target="view-game">
                         <div class="door-portal-glow glow-mystic"></div>
                         <div class="door door-mystic">
                             <div class="door-hinge hinge-top"></div>
                             <div class="door-hinge hinge-bottom"></div>
                             <div class="door-knob"></div>
                             <div class="wooden-sign">
-                                <div class="card-icon"><img src="assets/Die Rätselkammer.webp" alt="Rätselkammer"></div>
+                                <div class="card-icon"><img src="assets/Die Rätselkammer.webp" alt="Die Rätselkammer"></div>
                                 <h3>Die Rätselkammer</h3>
                                 <p>Findest du alle Plüschmonster-Pärchen?</p>
-                                <span class="card-action-btn">Tür öffnen ➔</span>
+                                <span class="card-action-btn magnetic-element">Tür öffnen ➔</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tür 4: Cookie Crew -->
-                    <div class="door-frame" data-target="view-crew">
+                    <!-- Tür 4: Die Hüter des Reiches -->
+                    <div class="door-frame tilt-card spotlight-card" data-target="view-crew">
                         <div class="door-portal-glow glow-warm"></div>
                         <div class="door door-warm">
                             <div class="door-hinge hinge-top"></div>
                             <div class="door-hinge hinge-bottom"></div>
                             <div class="door-knob"></div>
                             <div class="wooden-sign">
-                                <div class="card-icon"><img src="assets/Die Hüter des Reiches .webp" alt="Hüter des Reiches"></div>
+                                <div class="card-icon"><img src="assets/Die Hüter des Reiches .webp" alt="Die Hüter des Reiches"></div>
                                 <h3>Die Hüter des Reiches</h3>
                                 <p>Lerne Ramona, Chris, Lee & Bendix kennen!</p>
-                                <span class="card-action-btn">Tür öffnen ➔</span>
+                                <span class="card-action-btn magnetic-element">Tür öffnen ➔</span>
                             </div>
                         </div>
                     </div>
@@ -170,339 +201,351 @@
             </section>
 
             <!-- ================================================= -->
-            <!-- 1. GESCHICHTEN SECTION                            -->
+            <!-- 1. GESCHICHTEN SECTION (DIE GEFÄHRTEN)            -->
             <!-- ================================================= -->
             <section id="view-stories" class="view-section hidden-view">
-                <div class="section-title">
-                    <h2><img src="assets/Die Gefährten.webp" alt="Die Gefährten Icon" class="section-icon"> 
-                        Geschichten aus dem Plüschwald</h2>
+                <div class="section-title glass-card spotlight-card">
+                    <h2 class="kinetic-text"><img src="assets/Die Gefährten.webp" alt="Die Gefährten Icon" class="section-icon">Die Gefährten</h2>
                     <p>Setz dich ans Lagerfeuer und lausche den Geschichten!</p>
                 </div>
 
-                <div class="hero-text" style="margin-top: 50px;">
-                    <h1 style="font-size: 2.3rem;"><span class="graffiti-letter">D</span>ie <span class="graffiti-letter">C</span>haraktere</h1>
-                </div>
-
-                <!-- Mixelmoos: Spotlight-Karte -->
-                <div class="product-card spotlight-card">
-                    <div class="speech-bubble">Bärtig!</div>
-                    <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                    <img src="assets/Mixelmoos.webp" alt="Mixelmoos" class="product-image">
-                    <span class="card-title">Mixelmoos</span>
-                    <span class="card-role">Der Alte</span>
-                    <p class="description">Tief im mystischen Cookino-Pixel-Plüschwald lebt Mixelmoos der Alte, ein uralter Baumgeist, entstanden aus einem Funken reinen Wissens. In seinem Inneren leuchtet das grüne Herz des Waldes und durch seine Äste fließen flüsternde Datenfunken, die alles Leben miteinander verbinden. Er ist ein geduldiger Lehrer für alle, die lernen wollen. Den Wissbegierigen zeigt er verborgene Pfade, schenkt Erkenntnis und bewahrt das Gleichgewicht des Waldes.</p>
-                    <p class="description">Doch wer sein Wissen missachtet, den Wandel verweigert oder nicht zuhört, spürt seine andere Seite: Das Licht in ihm wird kalt, die Wege verschlingen sich und Verbindungen brechen. Mixelmoos entzieht den Zugang - bis sie sich im stillen Netz des Waldes verlieren.</p>
-                    <span class="bold-label">Denn im Wald gilt:</span>
-                    <p class="description">Alles ist verbunden - doch nur wer versteht, findet seinen Weg</p>
-                    <span class="quote">"Dem Suchenden öffne ich das Herz des Waldes und teile das Licht meiner uralten Weisheit. Doch wer die Lehre verschmäht, dem begegne ich als unnachgiebiger Wächter im dichten Schatten der Dornen."</span>
+                <div class="hero-text glass-card spotlight-card">
+                    <h1 class="kinetic-text">Geschichten aus dem Plüschwald</h1>
                 </div>
 
                 <div class="monster-grid character-grid">
+                    
+                    <!-- Mixelmoos -->
+                    <div class="product-card character-card-clickable tilt-card spotlight-card" data-character="mixelmoos">
+                        <div class="speech-bubble">Bärtig!</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Mixelmoos.webp" alt="Mixelmoos" class="product-image parallax-img">
+                        <span class="card-title">Mixelmoos</span>
+                        <span class="card-role">Der Alte</span>
+                        <p class="description short-teaser">Tief im mystischen Cookino-Pixel-Plüschwald lebt Mixelmoos der Alte, ein uralter Baumgeist...</p>
+                        <button class="read-story-btn magnetic-element clay-btn">Geschichte lesen 📖</button>
+
+                        <div class="full-story-content hidden-view" style="position: relative; z-index: 2;">
+                            <p class="description">Tief im mystischen Cookino-Pixel-Plüschwald lebt Mixelmoos der Alte, ein uralter Baumgeist, entstanden aus einem Funken reinen Wissens. In seinem Inneren leuchtet das grüne Herz des Waldes und durch seine Äste fließen flüsternde Datenfunken, die alles Leben miteinander verbinden. Er ist ein geduldiger Lehrer für alle, die lernen wollen. Den Wissbegierigen zeigt er verborgene Pfade, schenkt Erkenntnis und bewahrt das Gleichgewicht des Waldes.</p>
+                            <p class="description">Doch wer sein Wissen missachtet, den Wandel verweigert oder nicht zuhört, spürt seine andere Seite: Das Licht in ihm wird kalt, die Wege verschlingen sich und Verbindungen brechen. Mixelmoos entzieht den Zugang - bis sie sich im stillen Netz des Waldes verlieren.</p>
+                            <span class="bold-label">Denn im Wald gilt:</span>
+                            <p class="description">Alles ist verbunden - doch nur wer versteht, findet seinen Weg</p>
+                            <span class="quote">"Dem Suchenden öffne ich das Herz des Waldes und teile das Licht meiner uralten Weisheit. Doch wer die Lehre verschmäht, dem begegne ich als unnachgiebiger Wächter im dichten Schatten der Dornen."</span>
+                        </div>
+                    </div>
+
                     <!-- Wuschel Witznase -->
-                    <div class="product-card">
+                    <div class="product-card character-card-clickable tilt-card spotlight-card" data-character="wuschel">
                         <div class="speech-bubble">Der kommt mir bekannt vor!</div>
                         <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                        <img src="assets/Wuschel.webp" alt="Wuschel" class="product-image">
+                        <img src="assets/Wuschel.webp" alt="Wuschel" class="product-image parallax-img">
                         <span class="card-title">Wuschel Witznase</span>
                         <span class="card-role">Hüter des Schabernacks</span>
-                        <p class="description">Bevor der Wald seinen heutigen Namen trug, war er ein ernster Ort. Das änderte sich in einer Nacht, als eine kichernde Gewitterwolke platzte. Aus blauem Flausch, Blaubeersaft und Mondlicht entstand das "Kuschel-Krümel-Monster" Wuschel Witznase.</p>
-                        <p class="description">Wuschel brought den Schabernack in den Wald. Mit funkelnden Augen und einem riesigen Lächeln sorgt er für Wirbel durch Kitzel-Fallen, den Nuss-Tausch und seine unbändige Keks-Liebe. Er beweist, dass Freude und ein kleiner Streich zur rechten Zeit selbst den ernstesten Wald zum Blühen bringen.</p>
-                        <span class="quote">"Wahre Größe misst man nicht in Ellen, sondern in der Anzahl der Krümel, die man beim Lachen hinterlässt, und dem Schalk, der in den Augen blitzt."</span>
+                        <p class="description short-teaser">Bevor der Wald seinen heutigen Namen trug, war er ein ernster Ort. Das änderte sich in einer Nacht...</p>
+                        <button class="read-story-btn magnetic-element clay-btn">Geschichte lesen 📖</button>
+
+                        <div class="full-story-content hidden-view" style="position: relative; z-index: 2;">
+                            <p class="description">Bevor der Wald seinen heutigen Namen trug, war er ein ernster Ort. Das änderte sich in einer Nacht, als eine kichernde Gewitterwolke platzte. Aus blauem Flausch, Blaubeersaft und Mondlicht entstand das "Kuschel-Krümel-Monster" Wuschel Witznase.</p>
+                            <p class="description">Wuschel brachte den Schabernack in den Wald. Mit funkelnden Augen und einem riesigen Lächeln sorgt er für Wirbel durch Kitzel-Fallen, den Nuss-Tausch und seine unbändige Keks-Liebe. Er beweist, dass Freude und ein kleiner Streich zur rechten Zeit selbst den ernstesten Wald zum Blühen bringen.</p>
+                            <span class="quote">"Wahre Größe misst man nicht in Ellen, sondern in der Anzahl der Krümel, die man beim Lachen hinterlässt, und dem Schalk, der in den Augen blitzt."</span>
+                        </div>
                     </div>
 
                     <!-- Moniki Kicherkrähe -->
-                    <div class="product-card">
+                    <div class="product-card character-card-clickable tilt-card spotlight-card" data-character="moniki">
                         <div class="speech-bubble">Gruselig!</div>
                         <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                        <img src="assets/Moniki.webp" alt="Moniki" class="product-image">
+                        <img src="assets/Moniki.webp" alt="Moniki" class="product-image parallax-img">
                         <span class="card-title">Moniki Kicherkrähe</span>
                         <span class="card-role">Die Fröhliche Hexe</span>
-                        <p class="description">In der unberührten Frühzeit des Großen Waldes war die junge Hexe Moniki Kicherkrähe als die fröhlichste Gastgeberin am Pixelplätscher-See bekannt. Als sie dem grimmigen Großen Nordsturm Gastfreundschaft gewährte, bog sich ihr Haus vor dessen Sturmlachen dauerhaft zur Seite – eine bleibende „Verbeugung vor der Freude".</p>
-                        <span class="quote">"Warum sollte ich mein Haus jemals wieder gerade rücken? Es hat vor Jahrhunderten eine Verbeugung vor Freude gemacht – und wer bin ich, diese Höflichkeit rückgängig zu machen?"</span>
+                        <p class="description short-teaser">In der unberührten Frühzeit des Großen Waldes war die junge Hexe Moniki Kicherkrähe bekannt...</p>
+                        <button class="read-story-btn magnetic-element clay-btn">Geschichte lesen 📖</button>
+
+                        <div class="full-story-content hidden-view" style="position: relative; z-index: 2;">
+                            <p class="description">In der unberührten Frühzeit des Großen Waldes war die junge Hexe Moniki Kicherkrähe als die fröhlichste Gastgeberin am Pixelplätscher-See bekannt. Als sie dem grimmigen Großen Nordsturm Gastfreundschaft gewährte, bog sich ihr Haus vor dessen Sturmlachen dauerhaft zur Seite – eine bleibende „Verbeugung vor der Freude".</p>
+                            <span class="quote">"Warum sollte ich mein Haus jemals wieder gerade rücken? Es hat vor Jahrhunderten eine Verbeugung vor Freude gemacht – und wer bin ich, diese Höflichkeit rückgängig zu machen?"</span>
+                        </div>
                     </div>
 
                     <!-- Die Cookinos -->
-                    <div class="product-card">
+                    <div class="product-card character-card-clickable tilt-card spotlight-card" data-character="cookino">
                         <div class="speech-bubble">Lecker!</div>
                         <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                        <img src="assets/Cookino.webp" alt="Cookino" class="product-image">
+                        <img src="assets/Cookino.webp" alt="Cookino" class="product-image parallax-img">
                         <span class="card-title">Die Cookinos</span>
                         <span class="card-role">Die Admins des Waldes</span>
-                        <p class="description">Die Cookinos sind ein emsiges, keksrundes Volk im Pixel-Plüschwald. Als herzliche Admins des Waldes sorgen sie mit Herzen aus Gold und Schokolade dafür, dass die Welt „kompatibel" bleibt. Über das „WLAN des Herzens" führen sie allnächtlich eine „Große Synchronisation" durch und schützen den Wald mit ihrer Firewall gegen den Kummer.</p>
-                        <span class="quote">"Ein Cookino allein ist nur ein Krümel. Aber wenn wir uns alle an den Händchen halten, werden wir zum Quellcode der Freude und das WLAN unseres Herzens stürzt nie ab."</span>
+                        <p class="description short-teaser">Die Cookinos sind ein emsiges, keksrundes Volk im Pixel-Plüschwald. Als herzliche Admins des Waldes...</p>
+                        <button class="read-story-btn magnetic-element clay-btn">Geschichte lesen 📖</button>
+
+                        <div class="full-story-content hidden-view" style="position: relative; z-index: 2;">
+                            <p class="description">Die Cookinos sind ein emsiges, keksrundes Volk im Pixel-Plüschwald. Als herzliche Admins des Waldes sorgen sie mit Herzen aus Gold und Schokolade dafür, dass die Welt „kompatibel" bleibt. Über das „WLAN des Herzens" führen sie allnächtlich eine „Große Synchronisation" durch und schützen den Wald mit ihrer Firewall gegen den Kummer.</p>
+                            <span class="quote">"Ein Cookino allein ist nur ein Krümel. Aber wenn wir uns alle an den Händchen halten, werden wir zum Quellcode der Freude und das WLAN unseres Herzens stürzt nie ab."</span>
+                        </div>
                     </div>
 
                     <!-- Annora Hexa Hex -->
-                    <div class="product-card">
+                    <div class="product-card character-card-clickable tilt-card spotlight-card" data-character="annora">
                         <div class="speech-bubble">Hex! Hex!</div>
                         <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                        <img src="assets/Annora.webp" alt="Annora" class="product-image">
+                        <img src="assets/Annora.webp" alt="Annora" class="product-image parallax-img">
                         <span class="card-title">Annora Hexa Hex</span>
                         <span class="card-role">Hüterin des Lichtes</span>
-                        <p class="description">Annora Hexa Hex ist die Hüterin der Geheimnisse im magischen Wald, geboren aus einem Sonnenstrahl und einem vergessenen Zauberspruch. Ihre Brille aus gefrorenen Tautropfen erlaubt es ihr, unsichtbare magische Muster zu sehen. Als unermüdliche Forscherin sucht sie stets nach dem "Warum" und "Wie" der Welt.</p>
-                        <span class="quote">"Wo das Licht auf den vergessenen Zauberspruch trifft, beginnt der Pfad der Erkenntnis; Annora lehrt uns, dass wahre Macht nicht im Zauber selbst liegt, sondern im unermüdlichen Suchen nach dem ‚Warum' hinter den Geheimnissen des Waldes."</span>
+                        <p class="description short-teaser">Annora Hexa Hex ist die Hüterin der Geheimnisse im magischen Wald, geboren aus einem Sonnenstrahl...</p>
+                        <button class="read-story-btn magnetic-element clay-btn">Geschichte lesen 📖</button>
+
+                        <div class="full-story-content hidden-view" style="position: relative; z-index: 2;">
+                            <p class="description">Annora Hexa Hex ist die Hüterin der Geheimnisse im magischen Wald, geboren aus einem Sonnenstrahl und einem vergessenen Zauberspruch. Ihre Brille aus gefrorenen Tautropfen erlaubt es ihr, unsichtbare magische Muster zu sehen. Als unermüdliche Forscherin sucht sie stets nach dem "Warum" und "Wie" der Welt.</p>
+                            <span class="quote">"Wo das Licht auf den vergessenen Zauberspruch trifft, beginnt der Pfad der Erkenntnis; Annora lehrt uns, dass wahre Macht nicht im Zauber selbst liegt, sondern im unermüdlichen Suchen nach dem ‚Warum' hinter den Geheimnissen des Waldes."</span>
+                        </div>
                     </div>
                 </div>
             </section>
 
-
             <!-- ================================================= -->
-            <!-- 2. KOLLEKTION SECTION (PRODUCT SLIDER)            -->
+            <!-- 2. KOLLEKTION SECTION (DIE SCHATZKAMMER)          -->
             <!-- ================================================= -->
             <section id="view-collection" class="view-section hidden-view">
-                <div class="section-title">
-                    <h2><img src="assets/Die Schatzkammer.webp" alt="Die Schatzkammer Icon" class="section-icon"> 
-                        Die Cookie Plüsch Kollektion</h2>
+                <div class="section-title glass-card spotlight-card">
+                    <h2 class="kinetic-text"><img src="assets/Die Schatzkammer.webp" alt="Die Schatzkammer Icon" class="section-icon">Die Schatzkammer</h2>
                     <p>Unsere flauschigen Stoffe für kleine & große Abenteurer.</p>
                 </div>
 
                 <div class="carousel-wrapper">
-                    <button class="nav-btn prev-btn" id="prevBtn" aria-label="Vorherige">❮</button>
+                    <button class="nav-btn prev-btn magnetic-element neumorphic-btn" id="prevBtn" aria-label="Vorherige">❮</button>
 
                     <div class="carousel-container">
                         <div class="carousel-track" id="track">
 
                             <!-- SLIDE 1 -->
                             <div class="slide">
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Den trage ich am liebsten!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-05 um 11.42.32.webp" alt="Hoodie">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-05 um 11.42.32.webp" alt="Hoodie">
                                     <h3>Unisex Hoodie Dunkelblau: "Cookie Crusader"</h3>
                                     <p class="description">Ein stylisches Unisex-Hoodie mit dem Motiv "Cookie Crusader".</p>
                                     <p class="sizes">Größen: XS - XXL</p>
                                     <div class="price">€49.90</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
 
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Beste Cap der Welt!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-05 um 11.42.22.webp" alt="Basecap">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-05 um 11.42.22.webp" alt="Basecap">
                                     <h3>Unisex Basecap Schwarz</h3>
                                     <p class="description">Ein stylisches Unisex-Basecap in schwarz.</p>
                                     <p class="sizes size-placeholder">Größen: Unisex</p>
                                     <div class="price">€23.90</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
 
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Das bin ich auf der Tasse!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-05 um 11.34.52.webp" alt="Tasse">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-05 um 11.34.52.webp" alt="Tasse">
                                     <h3>Tasse "Cookie Crew" Wuschel</h3>
                                     <p class="description">Süße Tasse mit dem Motiv "Cookie Crew" Wuschel.</p>
                                     <p class="sizes size-placeholder">Größen: -</p>
                                     <div class="price">€19.50</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
                             </div>
 
                             <!-- SLIDE 2 -->
                             <div class="slide">
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Das gehört mir!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.51.57.webp" alt="Moniki Hoodie">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-06 um 09.51.57.webp" alt="Moniki Hoodie">
                                     <h3>Unisex Hoodie Moosgrün "Moniki"</h3>
                                     <p class="description">Ein moosgrünes Unisex-Hoodie mit "Moniki Kicherkrähe".</p>
                                     <p class="sizes">Größen: XS - XXL</p>
                                     <div class="price">€49.90</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
 
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Reserviert für dich!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.10.webp" alt="Basecap">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-06 um 09.52.10.webp" alt="Basecap">
                                     <h3>Unisex Basecap Moosgrün "Moniki"</h3>
                                     <p class="description">Moosgrünes Basecap mit "Moniki Kicherkrähe".</p>
                                     <p class="sizes size-placeholder">Größen: Unisex</p>
                                     <div class="price">€23.90</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
 
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Kein Kakao verschüttet!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.18.webp" alt="Moniki Tasse">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-06 um 09.52.18.webp" alt="Moniki Tasse">
                                     <h3>Tasse "Moniki Kicherkrähe"</h3>
                                     <p class="description">Süße Tasse für warme Kakao-Momente.</p>
                                     <p class="sizes size-placeholder">Größen: -</p>
                                     <div class="price">€19.50</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
                             </div>
 
                             <!-- SLIDE 3 -->
                             <div class="slide">
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Flauschig? Nein! Super-Flauschig!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.28.webp" alt="Cookie-Hoodie">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-06 um 09.52.28.webp" alt="Cookie-Hoodie">
                                     <h3>Unisex Hoodie soft Beige "Cookino"</h3>
                                     <p class="description">Ein beiges Unisex-Hoodie mit dem Motiv "Cookino".</p>
                                     <p class="sizes">Größen: XS - XXL</p>
                                     <div class="price">€49.90</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
 
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Die Mütze schmeckt am besten!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.40.webp" alt="Cookie-Basecap">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-06 um 09.52.40.webp" alt="Cookie-Basecap">
                                     <h3>Unisex Basecap Dunkelblau "Cookino"</h3>
                                     <p class="description">Ein dunkelblaues Unisex-Basecap mit dem Motiv "Cookino".</p>
                                     <p class="sizes size-placeholder">Größen: Unisex</p>
                                     <div class="price">€23.90</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
 
-                                <div class="product-card">
+                                <div class="product-card glass-card tilt-card spotlight-card">
                                     <div class="speech-bubble">Hmmmmm Cookinoooos!</div>
                                     <img src="assets/monster_peek.webp" class="hover-monster" alt="Monster">
-                                    <img class="product-image" src="assets/Bildschirmfoto 2026-05-06 um 09.52.50.webp" alt="Cookie-Tasse">
+                                    <img class="product-image parallax-img" src="assets/Bildschirmfoto 2026-05-06 um 09.52.50.webp" alt="Cookie-Tasse">
                                     <h3>Tasse "Cookie Crew" "Cookino"</h3>
                                     <p class="description">Süße Tasse mit dem Motiv "Cookie Crew" Cookino.</p>
                                     <p class="sizes size-placeholder">Größen: -</p>
                                     <div class="price">€19.50</div>
-                                    <button class="btn">In den Beutel 🛍️</button>
+                                    <button class="btn magnetic-element clay-btn">In den Beutel 🛍️</button>
                                 </div>
                             </div>
 
                         </div>
                     </div>
 
-                    <button class="nav-btn next-btn" id="nextBtn" aria-label="Nächste">❯</button>
+                    <button class="nav-btn next-btn magnetic-element neumorphic-btn" id="nextBtn" aria-label="Nächste">❯</button>
                 </div>
 
                 <div class="carousel-dots" id="carouselDots"></div>
             </section>
 
             <!-- ================================================= -->
-            <!-- 3. PIXEL-GAME (MEMORY + DOWNLOADS)                 -->
+            <!-- 3. PIXEL-GAME (DIE RÄTSELKAMMER)                 -->
             <!-- ================================================= -->
             <section id="view-game" class="view-section hidden-view">
-                <div class="section-title">
-                    <h2><img src="assets/Die Rätselkammer.webp" alt="Die Rätselkammer Icon" class="section-icon">
-                         Die Spiele-Ecke</h2>
+                <div class="section-title glass-card spotlight-card">
+                    <h2 class="kinetic-text"><img src="assets/Die Rätselkammer.webp" alt="Die Rätselkammer Icon" class="section-icon">Die Rätselkammer</h2>
                     <p>Spiel eine Runde Memory oder schnapp dir ein paar Cookie-Crew-Bilder!</p>
                 </div>
 
                 <div class="game-subnav">
-                    <button class="subtab active-subtab" data-subtarget="panel-memory">🎮 Spielen</button>
-                    <button class="subtab" data-subtarget="panel-downloads">📥 Downloads</button>
+                    <button class="subtab active-subtab magnetic-element clay-badge" data-subtarget="panel-memory">🎮 Spielen</button>
+                    <button class="subtab magnetic-element clay-badge" data-subtarget="panel-downloads">📥 Downloads</button>
                 </div>
 
                 <!-- MEMORY PANEL -->
                 <div id="panel-memory" class="game-panel active-panel">
                     <div class="memory-stats">
-                        <div class="stat-box">Versuche: <span id="memory-moves">0</span></div>
-                        <div class="stat-box">Gefunden: <span id="memory-matches">0</span> / 6</div>
-                        <button id="memory-restart-btn" class="restart-btn">Neu starten 🔄</button>
+                        <div class="stat-box glass-card spotlight-card">Versuche: <span id="memory-moves">0</span></div>
+                        <div class="stat-box glass-card spotlight-card">Gefunden: <span id="memory-matches">0</span> / 6</div>
+                        <button id="memory-restart-btn" class="restart-btn magnetic-element clay-btn" title="Neu starten">🔄</button>
                     </div>
 
-                    <!-- Das Memory Spielfeld -->
                     <div id="memory-board" class="memory-grid"></div>
 
-                    <div id="memory-victory-modal" class="victory-modal hidden-view">
+                    <div id="memory-victory-modal" class="victory-modal hidden-view clay-btn">
                         🎉 Super gemacht! Du hast alle Monster-Freunde gefunden! 🍪✨
                     </div>
                 </div>
 
                 <!-- DOWNLOADS PANEL -->
-                <div id="panel-downloads" class="game-panel hidden-panel">
-                    <p class="downloads-intro">Lade dir deine Lieblings-Plüschmonster als Bild herunter – zum Ausmalen, als Hintergrund oder einfach zum Verschenken!</p>
+                <div id="panel-downloads" class="game-panel hidden-view">
+                    <p class="downloads-intro glass-card spotlight-card">Lade dir deine Lieblings-Plüschmonster als Bild herunter – zum Ausmalen, als Hintergrund oder einfach zum Verschenken!</p>
                     <div class="downloads-grid">
-                        <a class="download-card" href="assets/Mixelmoos.webp" download="Mixelmoos.webp">
-                            <img src="assets/Mixelmoos.webp" alt="Mixelmoos">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Mixelmoos.webp" download="Mixelmoos.webp">
+                            <img src="assets/Mixelmoos.webp" alt="Mixelmoos" class="parallax-img">
                             <span class="download-name">Mixelmoos</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
-                        <a class="download-card" href="assets/Wuschel.webp" download="Wuschel.webp">
-                            <img src="assets/Wuschel.webp" alt="Wuschel Witznase">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Wuschel.webp" download="Wuschel.webp">
+                            <img src="assets/Wuschel.webp" alt="Wuschel Witznase" class="parallax-img">
                             <span class="download-name">Wuschel Witznase</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
-                        <a class="download-card" href="assets/Moniki.webp" download="Moniki.webp">
-                            <img src="assets/Moniki.webp" alt="Moniki Kicherkrähe">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Moniki.webp" download="Moniki.webp">
+                            <img src="assets/Moniki.webp" alt="Moniki Kicherkrähe" class="parallax-img">
                             <span class="download-name">Moniki Kicherkrähe</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
-                        <a class="download-card" href="assets/Cookino.webp" download="Cookino.webp">
-                            <img src="assets/Cookino.webp" alt="Cookino">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Cookino.webp" download="Cookino.webp">
+                            <img src="assets/Cookino.webp" alt="Cookino" class="parallax-img">
                             <span class="download-name">Cookino</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
-                        <a class="download-card" href="assets/Annora.webp" download="Annora.webp">
-                            <img src="assets/Annora.webp" alt="Annora Hexa Hex">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Annora.webp" download="Annora.webp">
+                            <img src="assets/Annora.webp" alt="Annora Hexa Hex" class="parallax-img">
                             <span class="download-name">Annora Hexa Hex</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
-                        <a class="download-card" href="assets/Bendix.webp" download="Bendix.webp">
-                            <img src="assets/Bendix.webp" alt="Bendix">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Bendix.webp" download="Bendix.webp">
+                            <img src="assets/Bendix.webp" alt="Bendix" class="parallax-img">
                             <span class="download-name">Bendix</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
-                        <a class="download-card" href="assets/Ramona.webp" download="Ramona.webp">
-                            <img src="assets/Ramona.webp" alt="Ramona">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Ramona.webp" download="Ramona.webp">
+                            <img src="assets/Ramona.webp" alt="Ramona" class="parallax-img">
                             <span class="download-name">Ramona</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
-                        <a class="download-card" href="assets/Chris.webp" download="Chris.webp">
-                            <img src="assets/Chris.webp" alt="Chris">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Chris.webp" download="Chris.webp">
+                            <img src="assets/Chris.webp" alt="Chris" class="parallax-img">
                             <span class="download-name">Chris</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
-                        <a class="download-card" href="assets/Lee.webp" download="Lee.webp">
-                            <img src="assets/Lee.webp" alt="Lee">
+                        <a class="download-card glass-card tilt-card spotlight-card" href="assets/Lee.webp" download="Lee.webp">
+                            <img src="assets/Lee.webp" alt="Lee" class="parallax-img">
                             <span class="download-name">Lee</span>
-                            <span class="download-btn">⬇ Download</span>
+                            <span class="download-btn magnetic-element clay-btn">⬇ Download</span>
                         </a>
                     </div>
                 </div>
             </section>
 
             <!-- ================================================= -->
-            <!-- 4. DIE COOKIE CREW SECTION                        -->
+            <!-- 4. DIE HÜTER DES REICHES SECTION (CREW)           -->
             <!-- ================================================= -->
             <section id="view-crew" class="view-section hidden-view">
+                <div class="section-title glass-card spotlight-card">
+                    <h2 class="kinetic-text"><img src="assets/Die Hüter des Reiches .webp" alt="Die Hüter des Reiches Icon" class="section-icon">Die Hüter des Reiches</h2>
+                    <p>Lerne die klugen Köpfe hinter der Cookie Crew kennen!</p>
+                </div>
 
                 <!-- MISSION SECTION -->
-                <div class="hero-text">
-                    <h1><span class="graffiti-letter">U</span>nsere <span class="graffiti-letter">M</span>ission</h1>
+                <div class="hero-text glass-card spotlight-card">
+                    <h1 class="kinetic-text">Unsere Mission</h1>
                     <p class="hero-subtitle">Mehr als nur Krümel im System.</p>
                 </div>
 
-                <div class="story-content">
+                <div class="story-content glass-card spotlight-card">
                     <p>Wir verwandeln Code in Charakter!</p>
                     <p>Wir glauben nicht an Standardlösungen. Wir glauben daran, dass hinter jeder Datenbank, jeder Zeile Python und jedem Frontend-Pixel eine Geschichte steckt, die erzählt werden will.</p>
                 </div>
 
                 <!-- CREW SECTION -->
-                <div class="hero-text">
-                    <h1 style="font-size: 2.3rem;"><span class="graffiti-letter">D</span>ie <span class="graffiti-letter">C</span>rew</h1>
+                <div class="hero-text glass-card spotlight-card">
+                    <h1 class="kinetic-text">Die Crew</h1>
                 </div>
 
-                <div class="monster-grid crew-grid">
-                    <!-- Bendix -->
-                    <div class="product-card">
-                        <div class="speech-bubble">Feuriger Frontend Frosch🐸</div>
-                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                        <img src="assets/Bendix.webp" alt="Bendix" class="product-image">
-                        <span class="card-title">Bendix</span>
-                        <span class="card-role">Frontend-Entwicklung & AWS</span>
-                        <span class="quote">"Der frühe Vogel fängt den Wurm - und der schlaue Wurm schläft etwas länger!"</span>
-                        <p class="description">Bendix schlägt die Brücke zwischen dem, was man sieht, und der Power, die dahintersteckt. Als Experte für Frontend und AWS sorgt er dafür, dass unsere Anwendung nicht nur glänzend aussieht, sondern auch in der Cloud eine perfekte Figur macht. Sein Antrieb? Das direkte Feedback: Er liebt es am Ende des Tages Schwarz auf weiß (oder in Pixeln) zu sehen, wie sich das Produkt durch seinen Code weiterentwickelt hat.</p>
-                        <span class="bold-label">Was Bendix ausmacht:</span>
-                        <p class="description">Wer glaubt, dass Entwickler immer nur nach starren Plänen arbeiten, kennt Bendix noch nicht. Er kombiniert technische Präzision mit einer gesunden Portion Gelassenheit. Sein größtes Projekt aktuell? Der perfekte Fun Fact. Bendix arbeitet nämlich noch akribisch daran - und wir sind uns sicher: Wenn er fertig ist, wird er legendär. Bis dahin lassen wir ihn einfach weiter am Code (und am Wurm-Ausschlafen) tüfteln.</p>
-                    </div>
-
-                    <!-- Ramona -->
-                    <div class="product-card">
+                <div class="crew-grid">
+                    <!-- Ramona (Jetzt als Erstes) -->
+                    <div class="product-card glass-card tilt-card spotlight-card">
                         <div class="speech-bubble">Penible Pixel Prinzessin👸</div>
                         <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                        <img src="assets/Ramona.webp" alt="Ramona" class="product-image">
+                        <img src="assets/Ramona.webp" alt="Ramona" class="product-image parallax-img">
                         <span class="card-title">Ramona</span>
                         <span class="card-role">Kreativ-Abteilung & Charakter-Design</span>
                         <span class="quote">"Fehler sind Helfer – nur anders buchstabiert."</span>
@@ -511,11 +554,24 @@
                         <p class="description">Wenn sie nicht gerade an neuen Charakteren tüftelt, findet man sie höchstwahrscheinlich in ihrem Gemüsegarten. Dort, zwischen Kräutern und Beeten, fließen ihre Gedanken am besten und die kreativsten Ideen entstehen. Aber Vorsicht: Bevor der erste Kaffee nicht getrunken ist, bleibt die Charakter-Schmiede geschlossen!</p>
                     </div>
 
+                    <!-- Bendix -->
+                    <div class="product-card glass-card tilt-card spotlight-card">
+                        <div class="speech-bubble">Feuriger Frontend Frosch🐸</div>
+                        <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
+                        <img src="assets/Bendix.webp" alt="Bendix" class="product-image parallax-img">
+                        <span class="card-title">Bendix</span>
+                        <span class="card-role">Frontend-Entwicklung & AWS</span>
+                        <span class="quote">"Der frühe Vogel fängt den Wurm - und der schlaue Wurm schläft etwas länger!"</span>
+                        <p class="description">Bendix schlägt die Brücke zwischen dem, was man sieht, und der Power, die dahintersteckt. Als Experte für Frontend und AWS sorgt er dafür, dass unsere Anwendung nicht nur glänzend aussieht, sondern auch in der Cloud eine perfekte Figur macht. Sein Antrieb? Das direkte Feedback: Er liebt es am Ende des Tages Schwarz auf weiß (oder in Pixeln) zu sehen, wie sich das Produkt durch seinen Code weiterentwickelt hat.</p>
+                        <span class="bold-label">Was Bendix ausmacht:</span>
+                        <p class="description">Wer glaubt, dass Entwickler immer nur nach starren Plänen arbeiten, kennt Bendix noch nicht. Er kombiniert technische Präzision mit einer gesunden Portion Gelassenheit. Sein größtes Projekt aktuell? Der perfekte Fun Fact. Bendix arbeitet nämlich noch akribisch daran - und wir sind uns sicher: Wenn er fertig ist, wird er legendär. Bis dahin lassen wir ihn einfach weiter am Code (und am Wurm-Ausschlafen) tüfteln.</p>
+                    </div>
+
                     <!-- Chris -->
-                    <div class="product-card">
+                    <div class="product-card glass-card tilt-card spotlight-card">
                         <div class="speech-bubble">Blubbernder Backend Bär🐻</div>
                         <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                        <img src="assets/Chris.webp" alt="Chris" class="product-image">
+                        <img src="assets/Chris.webp" alt="Chris" class="product-image parallax-img">
                         <span class="card-title">Chris</span>
                         <span class="card-role">Backend & Datenbank-Architektur</span>
                         <span class="quote">"Wo ein Fehler ist, ist auch ein Weg, Du Birne!"</span>
@@ -525,10 +581,10 @@
                     </div>
 
                     <!-- Lee -->
-                    <div class="product-card">
+                    <div class="product-card glass-card tilt-card spotlight-card">
                         <div class="speech-bubble">Perfekter Python Profi🐍</div>
                         <img src="assets/monster_peek.webp" alt="Monster" class="hover-monster">
-                        <img src="assets/Lee.webp" alt="Lee" class="product-image">
+                        <img src="assets/Lee.webp" alt="Lee" class="product-image parallax-img">
                         <span class="card-title">Lee</span>
                         <span class="card-role">Python Master</span>
                         <span class="quote">"Only those who try will become"</span>
@@ -556,6 +612,14 @@
             </div>
         </footer>
 
+    </div>
+
+    <!-- STORY MODAL FOR DIE GEFÄHRTEN -->
+    <div id="story-modal" class="modal-overlay hidden-view" aria-hidden="true">
+        <div class="modal-content glass-card spotlight-card" style="position: relative; z-index: 100;">
+            <button id="closeStoryModal" class="modal-close-btn magnetic-element" aria-label="Schließen">✖</button>
+            <div id="modalStoryBody" class="modal-story-body" style="position: relative; z-index: 2;"></div>
+        </div>
     </div>
 
     <script src="js/main.js"></script>
