@@ -51,6 +51,28 @@ services:
     networks:
       - cookino_backend
 
+  api:
+      build:
+        context: .
+        dockerfile: Dockerfile
+
+      restart: unless-stopped
+      
+      environment:
+        - SECRET_KEY=${SECRET_KEY}
+      
+      ports:
+        - "8000:8000"
+      
+      networks:
+        - cookino_network
+      
+      depends_on:
+        - db:
+          condition: service_healthy
+        
+
+
 networks:
   cookino_backend:
     name: cookino_backend
@@ -58,3 +80,5 @@ networks:
 volumes:
   postgres_data:
   mongo_data:
+
+

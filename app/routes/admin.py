@@ -1,7 +1,6 @@
-from Cookino_shop_2.Datenbanken_phase2.konto_shop import hat_berechtigung, nutzer_nach_email, alle_nutzer_anzeigen, alle_bestellungen 
+from Cookino_shop_2.Datenbanken_phase2.konto_shop import hat_berechtigung, nutzer_nach_email, alle_nutzer_anzeigen, alle_bestellungen
 from fastapi import APIRouter, HTTPException, Depends
 from app.routes.auth import verify_token
-from Cookino_shop_2.Datenbanken_phase2.warenkorb
 
 router = APIRouter()
 
