@@ -274,3 +274,19 @@ Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit v
   - Charakter bearbeiten
   - Rubrik icons erstellen
   - Legenden Geschrieben
+  - Dokumentation
+
+#### *5.August*
+######  Bendix:
+  - frontend umstellen auf vite + react + tailwind css
+
+######  Chris:
+  - Readme Datenbanken verfasst
+
+######  Lee:
+  - Added Fastapi infos zur Yaml doc
+
+######  Ramona:
+  - Maribyte legende + Bild erstellen
+  - Download Objekte erstellt
+  - Dokumentation
