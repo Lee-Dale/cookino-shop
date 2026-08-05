@@ -1,6 +1,139 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ==========================================================================
+       0. INTERAKTIVE KINEMATIK & EFFECT INITIALIZATION (CURSOR, SPOTLIGHT, 3D TILT, MAGNETIC)
+       ========================================================================== */
+
+    // 1. CUSTOM CURSOR & CANVAS FLUID PARTICLES LOGIC
+    const cursorDot = document.getElementById('cursorDot');
+    const canvas = document.getElementById('fluid-canvas');
+
+    // Track Mouse - Direkt für höchste Präzision!
+    window.addEventListener('mousemove', (e) => {
+        if (cursorDot) {
+            cursorDot.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+        }
+        createParticle(e.clientX, e.clientY);
+    });
+
+    // Fluid / Magic Dust Canvas Simulation
+    let particles = [];
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        function createParticle(x, y) {
+            if (particles.length > 35) return;
+            particles.push({
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: (Math.random() - 0.5) * 1.5 - 0.5,
+                size: Math.random() * 4 + 2,
+                color: Math.random() > 0.5 ? '#8A2BE2' : '#F8CB54',
+                alpha: 1
+            });
+        }
+
+        function renderParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.02;
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                    continue;
+                }
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+            requestAnimationFrame(renderParticles);
+        }
+        renderParticles();
+    }
+
+    // 2. SPOTLIGHT BORDER GLOW UPDATER
+    const spotlightCards = document.querySelectorAll('.spotlight-card');
+    spotlightCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // 3. 3D TILT CARDS LOGIC
+    const tiltCards = document.querySelectorAll('.tilt-card');
+    tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -10;
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+
+            const parallaxImg = card.querySelector('.parallax-img');
+            if (parallaxImg) {
+                parallaxImg.style.transform = `translateZ(30px) rotateX(${-rotateX * 0.5}deg) rotateY(${-rotateY * 0.5}deg)`;
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            const parallaxImg = card.querySelector('.parallax-img');
+            if (parallaxImg) {
+                parallaxImg.style.transform = 'translateZ(0px)';
+            }
+        });
+    });
+
+    // 4. MAGNETIC BUTTONS LOGIC
+    const magneticBtns = document.querySelectorAll('.magnetic-element');
+    magneticBtns.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0px, 0px)';
+        });
+    });
+
+    // 5. UNMATCHED PARALLAX SCROLL LOGIC
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const aurora = document.querySelector('.aurora-container');
+        if (aurora) {
+            aurora.style.transform = `translateY(${scrolled * 0.15}px)`;
+        }
+    });
+
+
+    /* ==========================================================================
        1. AUDIO STEUERUNG (SCHALTET AUDIO DURCH USER-KLICK FREI)
        ========================================================================== */
     const bgAudio = document.getElementById('bgAudio');
@@ -43,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       2. INTRO SLIDESHOW & START-OVERLAY
+       2. INTRO SLIDESHOW & START-OVERLAY (MAGISCHER LICHTUNGS-ÜBERGANG)
        ========================================================================== */
     const introViewport = document.getElementById('intro-viewport');
     const startOverlay = document.getElementById('start-overlay');
@@ -51,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const introWelcomeText = document.getElementById('introWelcomeText');
     const skipBtn = document.getElementById('skipBtn');
     const appWrapper = document.getElementById('app-wrapper');
+    const lightOverlay = document.getElementById('clearing-light-overlay');
 
     let introFinished = false;
 
@@ -80,10 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Beim Klick auf "Reise starten" Start-Overlay ausblenden & Musik + Intro starten
     if (startJourneyBtn) {
         startJourneyBtn.addEventListener('click', () => {
-            playAudio(); // Startet Musik direkt im Klick-Event
+            playAudio();
 
             if (startOverlay) {
                 startOverlay.style.opacity = '0';
@@ -103,20 +236,51 @@ document.addEventListener('DOMContentLoaded', () => {
         if (introFinished) return;
         introFinished = true;
 
-        if (typeof gsap !== 'undefined') {
-            gsap.to(introViewport, {
-                opacity: 0,
-                duration: 0.8,
-                onComplete: () => {
-                    introViewport.style.display = 'none';
-                    appWrapper.classList.remove('content-hidden');
-                    initCookieBackground();
-                }
-            });
-        } else {
-            introViewport.style.display = 'none';
+        if (appWrapper) {
             appWrapper.classList.remove('content-hidden');
             initCookieBackground();
+        }
+
+        if (typeof gsap !== 'undefined') {
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    if (introViewport) introViewport.style.display = 'none';
+                    if (lightOverlay) lightOverlay.style.display = 'none';
+                }
+            });
+
+            // 1. Aufblühen des magischen Sonnenlichts
+            if (lightOverlay) {
+                tl.to(lightOverlay, { opacity: 0.85, duration: 0.5, ease: "power2.in" }, 0);
+            }
+
+            // 2. Vorwärtsbewegung durch das Baumdach hindurch
+            if (introViewport) {
+                tl.to(introViewport, {
+                    scale: 1.15,
+                    opacity: 0,
+                    filter: 'brightness(1.5) blur(8px)',
+                    duration: 1.1,
+                    ease: "power2.inOut"
+                }, 0.2);
+            }
+
+            // 3. Haupt-App / Lichtung tritt flüssig aus dem Sonnenlicht hervor
+            if (appWrapper) {
+                tl.fromTo(appWrapper, 
+                    { opacity: 0, scale: 1.05, filter: 'blur(10px) brightness(1.2)' },
+                    { opacity: 1, scale: 1, filter: 'blur(0px) brightness(1)', duration: 1.3, ease: "power2.out" },
+                    0.3
+                );
+            }
+
+            // 4. Lichtstrahl blendet weich aus
+            if (lightOverlay) {
+                tl.to(lightOverlay, { opacity: 0, duration: 0.8, ease: "power2.out" }, 0.7);
+            }
+        } else {
+            if (introViewport) introViewport.style.display = 'none';
+            if (lightOverlay) lightOverlay.style.display = 'none';
         }
     }
 
@@ -162,13 +326,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       4. VIEW & TAB NAVIGATION (INKL. TÜREN-ÖFFNEN ANIMATION)
+       4. VIEW & TAB NAVIGATION
        ========================================================================== */
     const navTabs = document.querySelectorAll('.nav-tab');
     const viewSections = document.querySelectorAll('.view-section');
     const doorFrames = document.querySelectorAll('.door-frame');
 
     function switchView(targetId) {
+        if (!targetId) return;
+
         navTabs.forEach(tab => {
             if (tab.getAttribute('data-target') === targetId) {
                 tab.classList.add('active-tab');
@@ -194,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const target = tab.getAttribute('data-target');
-            switchView(target);
+            if (target) switchView(target);
         });
     });
 
@@ -205,190 +371,233 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => {
                 switchView(target);
-            }, 550);
+            }, 600);
         });
     });
 
     /* ==========================================================================
-       5. PRODUCT CAROUSEL (KOLLEKTION)
+       5. CHARAKTER-GESCHICHTEN MODAL LOGIK
+       ========================================================================== */
+    const storyModal = document.getElementById('story-modal');
+    const closeStoryModalBtn = document.getElementById('closeStoryModal');
+    const modalStoryBody = document.getElementById('modalStoryBody');
+    const characterCards = document.querySelectorAll('.character-card-clickable');
+
+    function openStoryModal(card) {
+        const title = card.querySelector('.card-title')?.textContent || '';
+        const role = card.querySelector('.card-role')?.textContent || '';
+        const imgSrc = card.querySelector('.product-image')?.getAttribute('src') || '';
+        const fullContent = card.querySelector('.full-story-content')?.innerHTML || '';
+
+        modalStoryBody.innerHTML = `
+            <img src="${imgSrc}" alt="${title}" class="modal-hero-img">
+            <h2>${title}</h2>
+            <span class="modal-role">${role}</span>
+            <div class="modal-full-text">${fullContent}</div>
+        `;
+
+        storyModal.classList.remove('hidden-view');
+        storyModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeStoryModal() {
+        if (!storyModal) return;
+        storyModal.classList.add('hidden-view');
+        storyModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    characterCards.forEach(card => {
+        card.addEventListener('click', () => {
+            openStoryModal(card);
+        });
+    });
+
+    // Fehlender Code aus dem Snippet, ergänzt:
+    if (closeStoryModalBtn) {
+        closeStoryModalBtn.addEventListener('click', closeStoryModal);
+    }
+    
+    // Modal schließen, wenn außerhalb des Inhalts geklickt wird
+    if (storyModal) {
+        storyModal.addEventListener('click', (e) => {
+            if (e.target === storyModal) closeStoryModal();
+        });
+    }
+
+    /* ==========================================================================
+       6. CAROUSEL / SCHATZKAMMER LOGIK (NEU ERGÄNZT)
        ========================================================================== */
     const track = document.getElementById('track');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    const carouselDots = document.getElementById('carouselDots');
+    const dotsContainer = document.getElementById('carouselDots');
 
-    if (track && prevBtn && nextBtn) {
+    if (track) {
         const slides = Array.from(track.children);
-        let currentIndex = 0;
-
-        slides.forEach((_, idx) => {
-            const dot = document.createElement('button');
-            dot.className = `carousel-dot ${idx === 0 ? 'active-dot' : ''}`;
-            dot.setAttribute('aria-label', `Slide ${idx + 1}`);
-            dot.addEventListener('click', () => goToSlide(idx));
-            if (carouselDots) carouselDots.appendChild(dot);
-        });
+        let currentSlideIndex = 0;
 
         function updateCarousel() {
-            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            if (slides.length === 0) return;
+            // Verschiebt den Track um 100% pro Slide
+            track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
 
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex === slides.length - 1;
+            // Button States anpassen
+            if (prevBtn) prevBtn.disabled = currentSlideIndex === 0;
+            if (nextBtn) nextBtn.disabled = currentSlideIndex === slides.length - 1;
 
-            if (carouselDots) {
-                const dots = carouselDots.querySelectorAll('.carousel-dot');
-                dots.forEach((dot, idx) => {
-                    dot.classList.toggle('active-dot', idx === currentIndex);
+            // Dot States anpassen
+            if (dotsContainer) {
+                const dots = Array.from(dotsContainer.children);
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active-dot', index === currentSlideIndex);
                 });
             }
         }
 
-        function goToSlide(index) {
-            currentIndex = index;
-            updateCarousel();
+        // Init Dots
+        if (dotsContainer && slides.length > 0) {
+            dotsContainer.innerHTML = '';
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.classList.add('carousel-dot');
+                if (index === 0) dot.classList.add('active-dot');
+                dot.addEventListener('click', () => {
+                    currentSlideIndex = index;
+                    updateCarousel();
+                });
+                dotsContainer.appendChild(dot);
+            });
         }
 
-        prevBtn.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateCarousel();
-            }
-        });
+        // Init Prev/Next Buttons
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                if (currentSlideIndex > 0) {
+                    currentSlideIndex--;
+                    updateCarousel();
+                }
+            });
+        }
 
-        nextBtn.addEventListener('click', () => {
-            if (currentIndex < slides.length - 1) {
-                currentIndex++;
-                updateCarousel();
-            }
-        });
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (currentSlideIndex < slides.length - 1) {
+                    currentSlideIndex++;
+                    updateCarousel();
+                }
+            });
+        }
 
         updateCarousel();
     }
 
     /* ==========================================================================
-       6. GAME SUB-TABS (SPIELE-ECKE)
-       ========================================================================== */
-    const subtabs = document.querySelectorAll('.subtab');
-    const gamePanels = document.querySelectorAll('.game-panel');
-
-    subtabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const target = tab.getAttribute('data-subtarget');
-
-            subtabs.forEach(t => t.classList.remove('active-subtab'));
-            tab.classList.add('active-subtab');
-
-            gamePanels.forEach(panel => {
-                if (panel.id === target) {
-                    panel.classList.remove('hidden-panel');
-                    panel.classList.add('active-panel');
-                } else {
-                    panel.classList.add('hidden-panel');
-                    panel.classList.remove('active-panel');
-                }
-            });
-        });
-    });
-
-    /* ==========================================================================
-       7. PIXEL MEMORY GAME LOGIC
+       7. GAME SUBNAVI / TABS (NEU ERGÄNZT)
        ========================================================================== */
     const memoryBoard = document.getElementById('memory-board');
-    const movesDisplay = document.getElementById('memory-moves');
-    const matchesDisplay = document.getElementById('memory-matches');
+    const movesEl = document.getElementById('memory-moves');
+    const matchesEl = document.getElementById('memory-matches');
     const restartBtn = document.getElementById('memory-restart-btn');
     const victoryModal = document.getElementById('memory-victory-modal');
 
-    if (memoryBoard) {
-        const memoryImages = [
-            'assets/Rkopf.webp',
-            'assets/C_run.webp',
-            'assets/Bkopf.webp',
-            'assets/Ckopf.webp',
-            'assets/Lkopf.webp',
-            'assets/dein-bild.webp'
-        ];
+    const cardImages = [
+        'assets/Mixelmoos.webp', 'assets/Wuschel.webp', 'assets/Moniki.webp',
+        'assets/Cookino.webp', 'assets/Annora.webp', 'assets/Bendix.webp'
+    ];
+    
+    let cards = [];
+    let flippedCards = [];
+    let matches = 0;
+    let moves = 0;
+    let isLocked = false;
 
-        let cardsArray = [];
-        let flippedCards = [];
-        let moves = 0;
-        let matches = 0;
-        let lockBoard = false;
+    function initMemoryGame() {
+        if (!memoryBoard) return;
+        
+        memoryBoard.innerHTML = '';
+        cards = [...cardImages, ...cardImages].sort(() => 0.5 - Math.random());
+        matches = 0;
+        moves = 0;
+        movesEl.textContent = moves;
+        matchesEl.textContent = matches;
+        victoryModal.classList.add('hidden-view');
+        flippedCards = [];
+        isLocked = false;
 
-        function initMemoryGame() {
-            memoryBoard.innerHTML = '';
-            flippedCards = [];
-            moves = 0;
-            matches = 0;
-            lockBoard = false;
+        cards.forEach(imgSrc => {
+            const card = document.createElement('div');
+            card.classList.add('memory-card');
+            
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            card.appendChild(img);
 
-            if (movesDisplay) movesDisplay.textContent = moves;
-            if (matchesDisplay) matchesDisplay.textContent = matches;
-            if (victoryModal) victoryModal.classList.add('hidden-view');
-
-            cardsArray = [...memoryImages, ...memoryImages]
-                .sort(() => 0.5 - Math.random());
-
-            cardsArray.forEach((imgSrc, index) => {
-                const card = document.createElement('div');
-                card.className = 'memory-card';
-                card.dataset.symbol = imgSrc;
-                card.dataset.index = index;
-
-                const img = document.createElement('img');
-                img.src = imgSrc;
-                img.alt = "Memory Karte";
-
-                card.appendChild(img);
-                card.addEventListener('click', () => flipCard(card));
-                memoryBoard.appendChild(card);
-            });
-        }
-
-        function flipCard(card) {
-            if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-
-            card.classList.add('flipped');
-            flippedCards.push(card);
-
-            if (flippedCards.length === 2) {
-                moves++;
-                if (movesDisplay) movesDisplay.textContent = moves;
-                checkMatch();
-            }
-        }
-
-        function checkMatch() {
-            const [card1, card2] = flippedCards;
-            const isMatch = card1.dataset.symbol === card2.dataset.symbol;
-
-            if (isMatch) {
-                card1.classList.add('matched');
-                card2.classList.add('matched');
-                matches++;
-                if (matchesDisplay) matchesDisplay.textContent = matches;
-                flippedCards = [];
-
-                if (matches === memoryImages.length) {
-                    setTimeout(() => {
-                        if (victoryModal) victoryModal.classList.remove('hidden-view');
-                    }, 400);
-                }
-            } else {
-                lockBoard = true;
-                setTimeout(() => {
-                    card1.classList.remove('flipped');
-                    card2.classList.remove('flipped');
-                    flippedCards = [];
-                    lockBoard = false;
-                }, 900);
-            }
-        }
-
-        if (restartBtn) {
-            restartBtn.addEventListener('click', initMemoryGame);
-        }
-
-        initMemoryGame();
+            card.addEventListener('click', () => flipCard(card, imgSrc));
+            memoryBoard.appendChild(card);
+        });
     }
+
+    function flipCard(card, imgSrc) {
+        if (isLocked || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+        card.classList.add('flipped');
+        flippedCards.push({ card, imgSrc });
+
+        if (flippedCards.length === 2) {
+            moves++;
+            movesEl.textContent = moves;
+            checkMatch();
+        }
+    }
+
+    function checkMatch() {
+        isLocked = true;
+        const [card1, card2] = flippedCards;
+
+        if (card1.imgSrc === card2.imgSrc) {
+            card1.card.classList.add('matched', 'match-effect');
+            card2.card.classList.add('matched', 'match-effect');
+            matches++;
+            matchesEl.textContent = matches;
+            flippedCards = [];
+            isLocked = false;
+
+            if (matches === 6) {
+                setTimeout(() => {
+                    victoryModal.classList.remove('hidden-view');
+                }, 500);
+            }
+        } else {
+            setTimeout(() => {
+                card1.card.classList.remove('flipped');
+                card2.card.classList.remove('flipped');
+                flippedCards = [];
+                isLocked = false;
+            }, 1000);
+        }
+    }
+
+    if(restartBtn) restartBtn.addEventListener('click', initMemoryGame);
+    if(memoryBoard) initMemoryGame();
+
 });
+ /* ==========================================================================
+       6. GAME-SUBTAB & DOWNLOAD LOGIC
+       ========================================================================== */
+    const gameSubtabs = document.querySelectorAll('.subtab');
+    const gamePanels = document.querySelectorAll('.game-panel');
+
+    gameSubtabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            gameSubtabs.forEach(t => t.classList.remove('active-subtab'));
+            gamePanels.forEach(p => p.classList.add('hidden-view'));
+            
+            tab.classList.add('active-subtab');
+            const target = document.getElementById(tab.getAttribute('data-subtarget'));
+            if (target) {
+                target.classList.remove('hidden-view');
+            }
+        });
+    });
