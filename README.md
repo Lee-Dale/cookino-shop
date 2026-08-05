@@ -255,3 +255,22 @@ Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit v
   - Design Ideen
   - Charakter brainstorming
   - Dokumentation aufbau
+
+#### *4.August*
+######  Bendix:
+  - index.html, style.css, main.js ausgebaut und vervollständigt
+  - readme.md für das frontend verfasst
+
+######  Chris:
+  - MongoDB erstellt
+  - python dateien an neue Datenbanken angepasst
+  - Smoke Test geschrieben und durchgeführt
+
+######  Lee:
+  - Dockerfile eingebaut
+  - Routes zur PostgreSQL updated
+
+######  Ramona:
+  - Charakter bearbeiten
+  - Rubrik icons erstellen
+  - Legenden Geschrieben
