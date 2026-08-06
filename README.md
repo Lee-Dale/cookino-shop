@@ -276,6 +276,7 @@ Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit v
   - Legenden Geschrieben
   - Dokumentation
 
+
 #### *5.August*
 ######  Bendix:
   - frontend umstellen auf vite + react + tailwind css
@@ -287,6 +288,34 @@ Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit v
   - Added Fastapi infos zur Yaml doc
 
 ######  Ramona:
-  - Maribyte legende + Bild erstellen
+  - Maribyte legende + Bild erstellt
+  - Codex Eternis legende + Bild erstellt
+  - Fehlenden Merch erstellt (Maribyte, Mixelmoos, Annora, Codex) 
   - Download Objekte erstellt
   - Dokumentation
+
+#### *6.August*
+######  Bendix:
+  - frontend umstellen auf vite + react + tailwind css + GASP
+
+######  Chris:
+  - PostgreSQL und MongoDB auf aktuellen Projektstand gebracht
+  - Neuen Merch in die bestehenden Datenbanken integriert
+  - Bestehenden Merch vollständig beibehalten
+  - Fehlende Codex-Eternis-Bilder ergänzt
+  - S3-Bildpfade den richtigen Produkten zugeordnet
+  - Alle 21 Produkte besitzen jetzt eine Bildzuordnung
+  - MongoDB auf insgesamt 22 Medienverweise erweitert
+  - Wissensdatenbank für „Codex Eternis“ erweitert
+  - Informationen über Chris, Bendix, Lee und Ramona hinterlegt
+  - Insgesamt 12 Wissenseinträge für die spätere Gemini-Anbindung
+  - Smoke-Test an den neuen Datenbestand angepasst
+  - Datenbankdateien getestet und aktualisiert
+  - Datenbanken für die FastAPI- und KI-Anbindung vorbereitet
+
+######  Lee:
+  - Buch_api gestellt
+  - yaml doc korregiert
+
+######  Ramona:
+  - Readme Github 
