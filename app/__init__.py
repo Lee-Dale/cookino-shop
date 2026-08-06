@@ -4,13 +4,16 @@ from app.routes import shop
 from app.routes import auth
 from app.routes import warenkorb
 from app.routes import admin
-
+from app.routes import buch_api
+   
 
 
 app = FastAPI(swagger_ui_parameters={"persistAuthorization": True})
 app.include_router(shop.router)
 app.include_router(warenkorb.router)
 app.include_router(auth.router)
+app.include_router(buch_api.router, prefix="/api")
+
 
 
 origins = [
