@@ -37,7 +37,7 @@ from starlette.concurrency import run_in_threadpool
 
 try:
     # Passt direkt zum aktuell hochgeladenen Cookino-Shop-2.0-Ordner.
-    from Datenbanken_phase2.shop_main import (
+    from Cookino_shop_2.Datenbanken_phase2.shop_main import (
         alle_produkte,
         get_mongo_client,
         get_mongo_database,

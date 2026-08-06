@@ -70,6 +70,8 @@ services:
         - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
         - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
         - MONGO_DATABASE=${MONGO_DATABASE}
+        - GEMINI_API_KEY=${GEMINI_API_KEY}
+        - GEMINI_MODEL=${GEMINI_MODEL}
       
       ports:
         - "8000:8000"
