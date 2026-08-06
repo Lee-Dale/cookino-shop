@@ -49,7 +49,7 @@ except ImportError:
 
 router = APIRouter(prefix="/buch", tags=["Allwissendes Buch"])
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
-ANFRAGEN_PRO_MINUTE = int(os.getenv("BUCH_RATE_LIMIT_PRO_MINUTE", "10"))
+ANFRAGEN_PRO_MINUTE = int(os.getenv("BUCH_RATE_LIMIT_PRO_MINUTE", "25"))
 
 
 class BuchFrage(BaseModel):
