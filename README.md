@@ -319,3 +319,21 @@ Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit v
 
 ######  Ramona:
   - Readme Github 
+
+#### *7.August*
+######  Bendix:
+  - aws deployment und bug fixing
+
+######  Chris:
+  - Docker backend image erstellt
+  - docker für ec2 gepullt
+  - Bendix bei AWS unterstützt
+
+######  Lee:
+  - Frontend Dockerfile gemacht
+  - Docker api Image erstellt
+
+######  Ramona:
+  - Design für Präsentation folien erarbeitet - Wochenend aufgabe -
+  - Dokumentation
+
