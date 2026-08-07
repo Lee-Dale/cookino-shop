@@ -1,218 +1,176 @@
 -- =========================================================
--- Cookino Shop – Startdaten
+-- Cookino Shop – feste Seed-Daten
+-- 4 Rollen, 9 Größen, 7 Kollektionen, 21 Produkte,
+-- 51 Produktvarianten
 -- =========================================================
 
-BEGIN;
+
+-- Rollen ---------------------------------------------------
+
+INSERT INTO rollen (id, name, beschreibung) VALUES
+    (1, 'admin',   'Vollzugriff auf Nutzer, Produkte und Bestellungen'),
+    (2, 'leiter',  'Darf Lagerbestand und Bestellstatus verwalten'),
+    (3, 'kunde',   'Registrierter Nutzer mit Bestellberechtigung'),
+    (4, 'gast',    'Nicht bestellberechtigter Gastzugang')
+ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    beschreibung = EXCLUDED.beschreibung;
+
+SELECT setval(pg_get_serial_sequence('rollen', 'id'), 4, TRUE);
 
 
--- Rollen
-INSERT INTO rollen (name, beschreibung)
+-- Größen ---------------------------------------------------
+
+INSERT INTO groessen (id, code, anzeigename, sortierung) VALUES
+    (1, 'XS',  'Extra Small',   1),
+    (2, 'S',   'Small',         2),
+    (3, 'M',   'Medium',        3),
+    (4, 'L',   'Large',         4),
+    (5, 'XL',  'Extra Large',   5),
+    (6, 'XXL', '2x Extra Large',6),
+    (7, 'ONE', 'Einheitsgröße', 7),
+    (8, 'XXXL','3x Extra Large',8),
+    (9, 'A5',  'DIN A5',        9)
+ON CONFLICT (id) DO UPDATE SET
+    code = EXCLUDED.code,
+    anzeigename = EXCLUDED.anzeigename,
+    sortierung = EXCLUDED.sortierung;
+
+SELECT setval(pg_get_serial_sequence('groessen', 'id'), 9, TRUE);
+
+
+-- Kollektionen --------------------------------------------
+
+INSERT INTO kollektionen (id, name, slug, aktiv) VALUES
+    ('10000000-0000-4000-8000-000000000001', 'Wuschel Witznase',    'wuschel-witznase',    TRUE),
+    ('10000000-0000-4000-8000-000000000002', 'Cookino',             'cookino',             TRUE),
+    ('10000000-0000-4000-8000-000000000003', 'Moniki Kicherkrähe',  'moniki-kicherkraehe', TRUE),
+    ('10000000-0000-4000-8000-000000000004', 'Maribyte',            'maribyte',             TRUE),
+    ('10000000-0000-4000-8000-000000000005', 'Mixelmoos der Alte',  'mixelmoos-der-alte',   TRUE),
+    ('10000000-0000-4000-8000-000000000006', 'Annora Hexa Hex',     'annora-hexa-hex',      TRUE),
+    ('10000000-0000-4000-8000-000000000007', 'Codex Eternis',       'codex-eternis',        TRUE)
+ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    slug = EXCLUDED.slug,
+    aktiv = EXCLUDED.aktiv;
+
+
+-- Produkte -------------------------------------------------
+
+INSERT INTO produkte (id, kollektion_id, name, preis, aktiv) VALUES
+    ('20000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-000000000001', 'Cookie Crusader',     49.90, TRUE),
+    ('20000000-0000-4000-8000-000000000002', '10000000-0000-4000-8000-000000000001', 'Wuschel Cap',         23.90, TRUE),
+    ('20000000-0000-4000-8000-000000000003', '10000000-0000-4000-8000-000000000001', 'Wuschel Tasse',       19.50, TRUE),
+    ('20000000-0000-4000-8000-000000000004', '10000000-0000-4000-8000-000000000002', 'Cookino Hoodie',      49.90, TRUE),
+    ('20000000-0000-4000-8000-000000000005', '10000000-0000-4000-8000-000000000002', 'Cookino Cap',         23.90, TRUE),
+    ('20000000-0000-4000-8000-000000000006', '10000000-0000-4000-8000-000000000002', 'Cookino Tasse',       19.50, TRUE),
+    ('20000000-0000-4000-8000-000000000007', '10000000-0000-4000-8000-000000000003', 'Kicherkrähe Hoodie',  49.90, TRUE),
+    ('20000000-0000-4000-8000-000000000008', '10000000-0000-4000-8000-000000000003', 'Krähen Cap',          23.90, TRUE),
+    ('20000000-0000-4000-8000-000000000009', '10000000-0000-4000-8000-000000000003', 'Krähen-Tasse',        19.50, TRUE),
+
+    -- Maribyte
+    ('20000000-0000-4000-8000-000000000010', '10000000-0000-4000-8000-000000000004', 'The Pixel Keeper Hoodie', 49.90, TRUE),
+    ('20000000-0000-4000-8000-000000000011', '10000000-0000-4000-8000-000000000004', 'Maribyte Basecap',        23.90, TRUE),
+    ('20000000-0000-4000-8000-000000000012', '10000000-0000-4000-8000-000000000004', 'The Pixel Keeper Tasse',  19.50, TRUE),
+
+    -- Mixelmoos der Alte
+    ('20000000-0000-4000-8000-000000000013', '10000000-0000-4000-8000-000000000005', 'The Rootkeeper Hoodie', 49.90, TRUE),
+    ('20000000-0000-4000-8000-000000000014', '10000000-0000-4000-8000-000000000005', 'Mixelmoos Basecap',      23.90, TRUE),
+    ('20000000-0000-4000-8000-000000000015', '10000000-0000-4000-8000-000000000005', 'Mixelmoos Tasse',        19.50, TRUE),
+
+    -- Annora Hexa Hex
+    ('20000000-0000-4000-8000-000000000016', '10000000-0000-4000-8000-000000000006', 'Annora Hexa Hex Hoodie',  49.90, TRUE),
+    ('20000000-0000-4000-8000-000000000017', '10000000-0000-4000-8000-000000000006', 'Annora Hexa Hex Basecap', 23.90, TRUE),
+    ('20000000-0000-4000-8000-000000000018', '10000000-0000-4000-8000-000000000006', 'Annora Hexa Hex Tasse',   19.50, TRUE),
+
+    -- Codex Eternis
+    ('20000000-0000-4000-8000-000000000019', '10000000-0000-4000-8000-000000000007', 'Codex Eternis Notizbuch mit Stift', 22.80, TRUE),
+    ('20000000-0000-4000-8000-000000000020', '10000000-0000-4000-8000-000000000007', 'Codex Eternis Tasse',               19.50, TRUE),
+    ('20000000-0000-4000-8000-000000000021', '10000000-0000-4000-8000-000000000007', 'Codex Eternis Buchumschlag',        12.90, TRUE)
+ON CONFLICT (id) DO UPDATE SET
+    kollektion_id = EXCLUDED.kollektion_id,
+    name = EXCLUDED.name,
+    preis = EXCLUDED.preis,
+    aktiv = EXCLUDED.aktiv;
+
+
+-- Produktvarianten ----------------------------------------
+-- Alter Merch bleibt unverändert erhalten.
+-- Neue Hoodies: XS bis XXXL. Caps/Tassen: Einheitsgröße.
+-- Codex Notizbuch/Buchumschlag: DIN A5.
+-- Für den neuen Merch wird ein Demo-Lagerbestand von 10 verwendet.
+
+INSERT INTO produkt_varianten
+    (id, produkt_id, groesse_id, farbe, artikelnummer, lagerbestand, aktiv)
 VALUES
-    ('admin', 'Darf Nutzer, Produkte und Bestellungen verwalten'),
-    ('leiter', 'Darf Lagerbestände und Bestellstatus bearbeiten'),
-    ('kunde', 'Darf Produkte kaufen und Bestellungen einsehen'),
-    ('gast', 'Darf den Shop ansehen, aber nicht bestellen')
-ON CONFLICT (name) DO NOTHING;
+    -- Cookie Crusader / Wuschel Hoodie
+    ('30000000-0000-4000-8000-000000000001', '20000000-0000-4000-8000-000000000001', 2, 'Dunkelblau', 'WUS-HOOD-S',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000001', 3, 'Dunkelblau', 'WUS-HOOD-M',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000003', '20000000-0000-4000-8000-000000000001', 4, 'Dunkelblau', 'WUS-HOOD-L',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000004', '20000000-0000-4000-8000-000000000001', 5, 'Dunkelblau', 'WUS-HOOD-XL',  10, TRUE),
+    ('30000000-0000-4000-8000-000000000005', '20000000-0000-4000-8000-000000000001', 6, 'Dunkelblau', 'WUS-HOOD-XXL', 10, TRUE),
+    ('30000000-0000-4000-8000-000000000006', '20000000-0000-4000-8000-000000000002', 7, 'Schwarz',     'WUS-CAP-ONE', 100, TRUE),
+    ('30000000-0000-4000-8000-000000000007', '20000000-0000-4000-8000-000000000003', 7, 'Weiß',        'WUS-MUG-ONE',  60, TRUE),
 
+    -- Cookino
+    ('30000000-0000-4000-8000-000000000008', '20000000-0000-4000-8000-000000000004', 2, 'Beige',       'COO-HOOD-S',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000009', '20000000-0000-4000-8000-000000000004', 3, 'Beige',       'COO-HOOD-M',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000010', '20000000-0000-4000-8000-000000000004', 4, 'Beige',       'COO-HOOD-L',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000011', '20000000-0000-4000-8000-000000000004', 5, 'Beige',       'COO-HOOD-XL',  10, TRUE),
+    ('30000000-0000-4000-8000-000000000012', '20000000-0000-4000-8000-000000000004', 6, 'Beige',       'COO-HOOD-XXL', 10, TRUE),
+    ('30000000-0000-4000-8000-000000000013', '20000000-0000-4000-8000-000000000005', 7, 'Dunkelblau',  'COO-CAP-ONE',  40, TRUE),
+    ('30000000-0000-4000-8000-000000000014', '20000000-0000-4000-8000-000000000006', 7, 'Weiß',        'COO-MUG-ONE',  55, TRUE),
 
--- Größen
-INSERT INTO groessen (code, anzeigename, sortierung)
-VALUES
-    ('XS', 'XS', 1),
-    ('S', 'S', 2),
-    ('M', 'M', 3),
-    ('L', 'L', 4),
-    ('XL', 'XL', 5),
-    ('XXL', 'XXL', 6),
-    ('ONE_SIZE', 'Einheitsgröße', 7)
-ON CONFLICT (code) DO NOTHING;
+    -- Moniki Kicherkrähe
+    ('30000000-0000-4000-8000-000000000015', '20000000-0000-4000-8000-000000000007', 2, 'Moosgrün',    'MON-HOOD-S',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000016', '20000000-0000-4000-8000-000000000007', 3, 'Moosgrün',    'MON-HOOD-M',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000017', '20000000-0000-4000-8000-000000000007', 4, 'Moosgrün',    'MON-HOOD-L',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000018', '20000000-0000-4000-8000-000000000007', 5, 'Moosgrün',    'MON-HOOD-XL',  10, TRUE),
+    ('30000000-0000-4000-8000-000000000019', '20000000-0000-4000-8000-000000000007', 6, 'Moosgrün',    'MON-HOOD-XXL', 10, TRUE),
+    ('30000000-0000-4000-8000-000000000020', '20000000-0000-4000-8000-000000000008', 7, 'Moosgrün',    'MON-CAP-ONE',  90, TRUE),
+    ('30000000-0000-4000-8000-000000000021', '20000000-0000-4000-8000-000000000009', 7, 'Weiß',        'MON-MUG-ONE',  50, TRUE),
 
+    -- Maribyte / The Pixel Keeper
+    ('30000000-0000-4000-8000-000000000022', '20000000-0000-4000-8000-000000000010', 1, 'Salbeigrün', 'MAR-HOOD-XS',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000023', '20000000-0000-4000-8000-000000000010', 2, 'Salbeigrün', 'MAR-HOOD-S',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000024', '20000000-0000-4000-8000-000000000010', 3, 'Salbeigrün', 'MAR-HOOD-M',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000025', '20000000-0000-4000-8000-000000000010', 4, 'Salbeigrün', 'MAR-HOOD-L',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000026', '20000000-0000-4000-8000-000000000010', 5, 'Salbeigrün', 'MAR-HOOD-XL',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000027', '20000000-0000-4000-8000-000000000010', 6, 'Salbeigrün', 'MAR-HOOD-XXL',  10, TRUE),
+    ('30000000-0000-4000-8000-000000000028', '20000000-0000-4000-8000-000000000010', 8, 'Salbeigrün', 'MAR-HOOD-XXXL', 10, TRUE),
+    ('30000000-0000-4000-8000-000000000029', '20000000-0000-4000-8000-000000000011', 7, 'Salbeigrün', 'MAR-CAP-ONE',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000030', '20000000-0000-4000-8000-000000000012', 7, 'Salbeigrün', 'MAR-MUG-ONE',   10, TRUE),
 
--- Kollektionen
-INSERT INTO kollektionen (id, name, slug)
-VALUES
-    (
-        '10000000-0000-0000-0000-000000000001',
-        'Wuschel Witznase',
-        'wuschel-witznase'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000002',
-        'Cookino',
-        'cookino'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000003',
-        'Moniki Kicherkrähe',
-        'moniki-kicherkraehe'
-    )
-ON CONFLICT (id) DO NOTHING;
+    -- Mixelmoos der Alte / The Rootkeeper
+    ('30000000-0000-4000-8000-000000000031', '20000000-0000-4000-8000-000000000013', 1, 'Waldgrün', 'MIX-HOOD-XS',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000032', '20000000-0000-4000-8000-000000000013', 2, 'Waldgrün', 'MIX-HOOD-S',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000033', '20000000-0000-4000-8000-000000000013', 3, 'Waldgrün', 'MIX-HOOD-M',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000034', '20000000-0000-4000-8000-000000000013', 4, 'Waldgrün', 'MIX-HOOD-L',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000035', '20000000-0000-4000-8000-000000000013', 5, 'Waldgrün', 'MIX-HOOD-XL',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000036', '20000000-0000-4000-8000-000000000013', 6, 'Waldgrün', 'MIX-HOOD-XXL',  10, TRUE),
+    ('30000000-0000-4000-8000-000000000037', '20000000-0000-4000-8000-000000000013', 8, 'Waldgrün', 'MIX-HOOD-XXXL', 10, TRUE),
+    ('30000000-0000-4000-8000-000000000038', '20000000-0000-4000-8000-000000000014', 7, 'Waldgrün', 'MIX-CAP-ONE',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000039', '20000000-0000-4000-8000-000000000015', 7, 'Waldgrün', 'MIX-MUG-ONE',   10, TRUE),
 
+    -- Annora Hexa Hex
+    ('30000000-0000-4000-8000-000000000040', '20000000-0000-4000-8000-000000000016', 1, 'Deep Plum', 'ANN-HOOD-XS',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000041', '20000000-0000-4000-8000-000000000016', 2, 'Deep Plum', 'ANN-HOOD-S',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000042', '20000000-0000-4000-8000-000000000016', 3, 'Deep Plum', 'ANN-HOOD-M',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000043', '20000000-0000-4000-8000-000000000016', 4, 'Deep Plum', 'ANN-HOOD-L',    10, TRUE),
+    ('30000000-0000-4000-8000-000000000044', '20000000-0000-4000-8000-000000000016', 5, 'Deep Plum', 'ANN-HOOD-XL',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000045', '20000000-0000-4000-8000-000000000016', 6, 'Deep Plum', 'ANN-HOOD-XXL',  10, TRUE),
+    ('30000000-0000-4000-8000-000000000046', '20000000-0000-4000-8000-000000000016', 8, 'Deep Plum', 'ANN-HOOD-XXXL', 10, TRUE),
+    ('30000000-0000-4000-8000-000000000047', '20000000-0000-4000-8000-000000000017', 7, 'Deep Plum', 'ANN-CAP-ONE',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000048', '20000000-0000-4000-8000-000000000018', 7, 'Deep Plum', 'ANN-MUG-ONE',   10, TRUE),
 
--- Produkte
-INSERT INTO produkte (id, kollektion_id, name, preis)
-VALUES
-    (
-        '20000000-0000-0000-0000-000000000001',
-        '10000000-0000-0000-0000-000000000001',
-        'Cookie Crusader',
-        49.90
-    ),
-    (
-        '20000000-0000-0000-0000-000000000002',
-        '10000000-0000-0000-0000-000000000001',
-        'Wuschel Cap',
-        23.90
-    ),
-    (
-        '20000000-0000-0000-0000-000000000003',
-        '10000000-0000-0000-0000-000000000001',
-        'Wuschel Tasse',
-        19.50
-    ),
-    (
-        '20000000-0000-0000-0000-000000000004',
-        '10000000-0000-0000-0000-000000000002',
-        'Cookino Hoodie',
-        49.90
-    ),
-    (
-        '20000000-0000-0000-0000-000000000005',
-        '10000000-0000-0000-0000-000000000002',
-        'Cookino Cap',
-        23.90
-    ),
-    (
-        '20000000-0000-0000-0000-000000000006',
-        '10000000-0000-0000-0000-000000000002',
-        'Cookino Tasse',
-        19.50
-    ),
-    (
-        '20000000-0000-0000-0000-000000000007',
-        '10000000-0000-0000-0000-000000000003',
-        'Kicherkrähe Hoodie',
-        49.90
-    ),
-    (
-        '20000000-0000-0000-0000-000000000008',
-        '10000000-0000-0000-0000-000000000003',
-        'Krähen Cap',
-        23.90
-    ),
-    (
-        '20000000-0000-0000-0000-000000000009',
-        '10000000-0000-0000-0000-000000000003',
-        'Krähen-Tasse',
-        19.50
-    )
-ON CONFLICT (id) DO NOTHING;
-
-
--- Hoodie-Varianten in S, M, L, XL und XXL
-INSERT INTO produkt_varianten (
-    produkt_id,
-    groesse_id,
-    farbe,
-    artikelnummer,
-    lagerbestand
-)
-SELECT
-    hoodie.produkt_id,
-    groessen.id,
-    hoodie.farbe,
-    hoodie.artikel_prefix || '-' || groessen.code,
-    CASE groessen.code
-        WHEN 'S' THEN 8
-        WHEN 'M' THEN 12
-        WHEN 'L' THEN 12
-        WHEN 'XL' THEN 10
-        WHEN 'XXL' THEN 8
-    END
-FROM (
-    VALUES
-        (
-            '20000000-0000-0000-0000-000000000001'::UUID,
-            'Dunkelblau',
-            'WW-HOODIE'
-        ),
-        (
-            '20000000-0000-0000-0000-000000000004'::UUID,
-            'Beige',
-            'CO-HOODIE'
-        ),
-        (
-            '20000000-0000-0000-0000-000000000007'::UUID,
-            'Moosgrün',
-            'MK-HOODIE'
-        )
-) AS hoodie (produkt_id, farbe, artikel_prefix)
-JOIN groessen
-    ON groessen.code IN ('S', 'M', 'L', 'XL', 'XXL')
-ON CONFLICT (artikelnummer) DO NOTHING;
-
-
--- Caps und Tassen mit Einheitsgröße
-INSERT INTO produkt_varianten (
-    produkt_id,
-    groesse_id,
-    farbe,
-    artikelnummer,
-    lagerbestand
-)
-SELECT
-    artikel.produkt_id,
-    groessen.id,
-    artikel.farbe,
-    artikel.artikelnummer,
-    artikel.lagerbestand
-FROM (
-    VALUES
-        (
-            '20000000-0000-0000-0000-000000000002'::UUID,
-            'Schwarz',
-            'WW-CAP-ONE',
-            100
-        ),
-        (
-            '20000000-0000-0000-0000-000000000003'::UUID,
-            'Weiß',
-            'WW-TASSE-ONE',
-            60
-        ),
-        (
-            '20000000-0000-0000-0000-000000000005'::UUID,
-            'Dunkelblau',
-            'CO-CAP-ONE',
-            40
-        ),
-        (
-            '20000000-0000-0000-0000-000000000006'::UUID,
-            'Weiß',
-            'CO-TASSE-ONE',
-            55
-        ),
-        (
-            '20000000-0000-0000-0000-000000000008'::UUID,
-            'Moosgrün',
-            'MK-CAP-ONE',
-            90
-        ),
-        (
-            '20000000-0000-0000-0000-000000000009'::UUID,
-            'Weiß',
-            'MK-TASSE-ONE',
-            50
-        )
-) AS artikel (
-    produkt_id,
-    farbe,
-    artikelnummer,
-    lagerbestand
-)
-JOIN groessen
-    ON groessen.code = 'ONE_SIZE'
-ON CONFLICT (artikelnummer) DO NOTHING;
-
-
-COMMIT;
+    -- Codex Eternis
+    ('30000000-0000-4000-8000-000000000049', '20000000-0000-4000-8000-000000000019', 9, 'Standard', 'COD-NOTE-A5',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000050', '20000000-0000-4000-8000-000000000020', 7, 'Standard', 'COD-MUG-ONE',   10, TRUE),
+    ('30000000-0000-4000-8000-000000000051', '20000000-0000-4000-8000-000000000021', 9, 'Standard', 'COD-COVER-A5',  10, TRUE)
+ON CONFLICT (id) DO UPDATE SET
+    produkt_id = EXCLUDED.produkt_id,
+    groesse_id = EXCLUDED.groesse_id,
+    farbe = EXCLUDED.farbe,
+    artikelnummer = EXCLUDED.artikelnummer,
+    lagerbestand = EXCLUDED.lagerbestand,
+    aktiv = EXCLUDED.aktiv;

@@ -85,6 +85,50 @@ collectionSicherAnlegen("medien", {
   validationAction: "error",
 });
 
+// Wissen, das das allwissende Buch bei jeder Antwort als Cookino-Kontext erhält.
+collectionSicherAnlegen("buch_wissen", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["slug", "titel", "kategorie", "inhalt", "schluesselwoerter", "aktiv"],
+      properties: {
+        slug: { bsonType: "string", minLength: 1 },
+        titel: { bsonType: "string", minLength: 1 },
+        kategorie: { bsonType: "string", minLength: 1 },
+        inhalt: { bsonType: "string", minLength: 1 },
+        schluesselwoerter: {
+          bsonType: "array",
+          items: { bsonType: "string" },
+        },
+        prioritaet: { bsonType: "int", minimum: 0 },
+        aktiv: { bsonType: "bool" },
+        aktualisiert_am: { bsonType: "date" },
+      },
+    },
+  },
+  validationLevel: "strict",
+  validationAction: "error",
+});
+
+// Optionaler, anonymer Gesprächsverlauf. Standardmäßig speichert FastAPI nichts.
+collectionSicherAnlegen("buch_dialoge", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["sitzungs_id", "frage", "antwort", "erstellt_am"],
+      properties: {
+        sitzungs_id: { bsonType: "string", minLength: 1 },
+        frage: { bsonType: "string", minLength: 1 },
+        antwort: { bsonType: "string", minLength: 1 },
+        modell: { bsonType: "string" },
+        erstellt_am: { bsonType: "date" },
+      },
+    },
+  },
+  validationLevel: "strict",
+  validationAction: "error",
+});
+
 cookinoDb.produkt_inhalte.createIndex(
   { produkt_id: 1 },
   { unique: true, name: "uq_produkt_inhalte_produkt_id" }
@@ -110,10 +154,24 @@ cookinoDb.medien.createIndex(
   { unique: true, name: "uq_medien_s3_key" }
 );
 
+cookinoDb.buch_wissen.createIndex(
+  { slug: 1 },
+  { unique: true, name: "uq_buch_wissen_slug" }
+);
+
+cookinoDb.buch_wissen.createIndex(
+  { schluesselwoerter: 1, aktiv: 1 },
+  { name: "idx_buch_wissen_suche" }
+);
+
+cookinoDb.buch_dialoge.createIndex(
+  { erstellt_am: 1 },
+  { expireAfterSeconds: 604800, name: "ttl_buch_dialoge_7_tage" }
+);
+
 cookinoDb.medien.createIndex(
   { owner_typ: 1, owner_id: 1, position: 1 },
   { name: "idx_medien_owner" }
 );
 
 print(`MongoDB '${datenbankName}' für den Cookino Shop vorbereitet.`);
-

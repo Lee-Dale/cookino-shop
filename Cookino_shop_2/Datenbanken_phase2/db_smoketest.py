@@ -13,16 +13,17 @@ from shop_main import get_connection, get_mongo_client, get_mongo_database
 
 ERWARTETE_ANZAHLEN = {
     "rollen": 4,
-    "groessen": 7,
-    "kollektionen": 3,
-    "produkte": 9,
-    "produkt_varianten": 21,
+    "groessen": 9,
+    "kollektionen": 7,
+    "produkte": 21,
+    "produkt_varianten": 51,
 }
 
 ERWARTETE_MONGO_ANZAHLEN = {
-    "produkt_inhalte": 9,
-    "kollektion_inhalte": 3,
-    "medien": 10,
+    "produkt_inhalte": 21,
+    "kollektion_inhalte": 7,
+    "medien": 22,
+    "buch_wissen": 12,
 }
 
 
