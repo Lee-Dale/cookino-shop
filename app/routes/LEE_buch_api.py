@@ -44,7 +44,7 @@ try:
     )
 except ImportError:
     # Falls Chris' Datenbankmodule später sauber ins Backend verschoben werden.
-    from app.db.shop_main import alle_produkte, get_mongo_client, get_mongo_database
+    from Cookino_shop_2.Datenbanken_phase2.shop_main import alle_produkte, get_mongo_client, get_mongo_database
 
 
 router = APIRouter(prefix="/buch", tags=["Allwissendes Buch"])
