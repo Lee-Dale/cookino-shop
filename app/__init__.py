@@ -14,10 +14,10 @@ app.include_router(warenkorb.router)
 app.include_router(auth.router)
 app.include_router(buch_api.router, prefix="/api")
 
-
-
 origins = [
-    "http://cookieno-shop.s3-website.eu-central-1.amazonaws.com",
+    "https://cookino-shop.de",
+    "https://www.cookino-shop.de",
+    "https://dpierpxha84mf.cloudfront.net",
 ]
 
 app.add_middleware(
