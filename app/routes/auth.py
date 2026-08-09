@@ -30,7 +30,7 @@ def verify_token(token: str = Depends(oauth2_scheme)):
 
 @router.post("/register")
 def user_registration(user: UserRegister):
-    nutzer = konto_login(user.email, user.password)
+    nutzer = registrieren(user.vorname, user.nachname, user.email, user.password)
     if nutzer is None:
         raise HTTPException(status_code=400, detail="Registrierung fehlgeschlagen")
     return {"message": "Registrierung erfolgreich!"}
