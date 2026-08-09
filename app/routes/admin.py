@@ -1,4 +1,4 @@
-from Cookino_shop_2.Datenbanken_phase2.konto_shop import hat_berechtigung, nutzer_nach_email, alle_nutzer_anzeigen, alle_bestellungen
+from Cookino_shop_2.Datenbanken_phase2.konto_shop import hat_berechtigung, nutzer_nach_email, alle_nutzer_anzeigen
 from fastapi import APIRouter, HTTPException, Depends
 from app.routes.auth import verify_token
 
@@ -18,4 +18,4 @@ def alle_nutzer(admin_id: int = Depends(require_admin)):
 
 @router.get("/admin/bestellungen")
 def get_alle_bestellungen(admin_id: str = Depends(require_admin), status: str = None):
-    return alle_bestellungen(status)
+    raise HTTPException(status_code=501, detail="Noch nicht implementiert")

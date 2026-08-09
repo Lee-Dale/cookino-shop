@@ -4,7 +4,7 @@ from app.routes import shop
 from app.routes import auth
 from app.routes import warenkorb
 from app.routes import admin
-from app.routes import buch_api
+from app.routes import LEE_buch_api as buch_api
    
 
 
