@@ -337,3 +337,20 @@ Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit v
   - Design für Präsentation folien erarbeitet - Wochenend aufgabe -
   - Dokumentation
 
+#### *10.August*
+######  Bendix:
+  - Bugfix Frontend - vite + react + tailwind css + GSAP -
+
+######  Chris:
+  - Atlas aufgesetzt
+  - Präsentations Folien bearbeitet
+  - Wording erstellt
+
+######  Lee:
+  - Bugfix
+  - Präsentations Bearbeitung + Wording
+
+######  Ramona:
+  - Präsentations Folien Design
+  - Wording Planung
+  - Gesamt wording Planung Ablauf
