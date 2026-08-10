@@ -92,8 +92,24 @@ services:
         timeout: 5s
         retries: 10
         start_period: 15s
-      
-
+  
+  frontend:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.frontend
+    
+    restart: unless-stopped
+    
+    ports:
+      - "80:80"
+    
+    networks:
+      - cookino_backend
+    
+    depends_on:
+      api:
+        condition: service_healthy 
+    
 
 networks:
   cookino_backend:

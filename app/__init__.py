@@ -9,6 +9,7 @@ from app.routes import LEE_buch_api as buch_api
 
 
 app = FastAPI(swagger_ui_parameters={"persistAuthorization": True})
+app.include_router(admin.router)
 app.include_router(shop.router)
 app.include_router(warenkorb.router)
 app.include_router(auth.router)
@@ -31,3 +32,7 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"Message": "LET'S GO COOKINO!"}
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
