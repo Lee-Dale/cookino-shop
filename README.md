@@ -354,3 +354,21 @@ Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit v
   - Präsentations Folien Design
   - Wording Planung
   - Gesamt wording Planung Ablauf
+
+#### *11.August*
+######  Bendix:
+  - BugFix
+  - Präsentationsfolien Erstellt
+  - Wording angepasst
+
+######  Chris:
+  - BugFix CORS
+  - Präsentationsfolien Erstellt
+  - Wording angepasst
+
+
+######  Ramona:
+  - Präsentationsfolien Erstellt
+  - Wording anpassen
+  - Sprecherwechsel Koordiniert & Übergänge geplant
+  - Wording für Komplette Präsentation sortiert
