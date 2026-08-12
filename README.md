@@ -372,3 +372,10 @@ Gemeinsam als Lerngruppe  tüfteln Bendix, Chris, Lee und Ramona weiterhin mit v
   - Wording anpassen
   - Sprecherwechsel Koordiniert & Übergänge geplant
   - Wording für Komplette Präsentation sortiert
+
+#### *12.August*
+##### Alle:
+  - Generalprobe Präsentation
+  - Wording Einkürzen
+  - erneutes üben der Präsentation
+  - Wording lernen
